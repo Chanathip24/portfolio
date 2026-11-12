@@ -1,0 +1,107 @@
+{
+  "data": {
+    "id": "00000000-0000-4000-8000-000000000300",
+    "display_name": "Your Name",
+    "role": "Full-stack developer",
+    "location": "Bangkok, Thailand",
+    "headline": "I build the whole product, then sweat the small parts.",
+    "status_note": "Open to small projects from January (sample)",
+    "years_experience": 8,
+    "image_url": "/mock/portrait.svg",
+    "bio": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "This is placeholder text for your story. Say where you started, what keeps you building, and what a good week looks like. A few honest sentences read better than a long list of titles."
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "I work across the stack: "
+            },
+            {
+              "type": "text",
+              "text": "TypeScript on both sides",
+              "marks": [
+                {
+                  "type": "bold"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": ", Postgres underneath, and the details a user notices on a phone at the end of a long day. Replace this with your own words."
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Away from the keyboard: sample hobbies go here. Keep it specific."
+            }
+          ]
+        }
+      ]
+    },
+    "socials": [
+      {
+        "id": "00000000-0000-4000-8000-000000000301",
+        "platform": "github",
+        "label": "GitHub",
+        "handle": "@your-handle",
+        "url": "https://github.com/your-handle",
+        "sort_order": 1
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000302",
+        "platform": "linkedin",
+        "label": "LinkedIn",
+        "handle": "in/your-name",
+        "url": "https://linkedin.com/in/your-name",
+        "sort_order": 2
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000303",
+        "platform": "x",
+        "label": "X",
+        "handle": "@your_handle",
+        "url": "https://x.com/your_handle",
+        "sort_order": 3
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000304",
+        "platform": "youtube",
+        "label": "YouTube",
+        "handle": "@yourchannel",
+        "url": "https://youtube.com/@yourchannel",
+        "sort_order": 4
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000305",
+        "platform": "bluesky",
+        "label": "Bluesky",
+        "handle": "@you.bsky.social",
+        "url": "https://bsky.app/profile/you.bsky.social",
+        "sort_order": 5
+      },
+      {
+        "id": "00000000-0000-4000-8000-000000000306",
+        "platform": "email",
+        "label": "Email",
+        "handle": "you@example.com",
+        "url": "mailto:you@example.com",
+        "sort_order": 6
+      }
+    ]
+  }
+}

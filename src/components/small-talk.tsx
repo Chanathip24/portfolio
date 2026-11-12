@@ -6,6 +6,7 @@ import { useId, useState } from "react";
 import { owner, smallTalk } from "@/content/site";
 import { cn } from "@/lib/utils";
 import { EASE } from "@/lib/constants";
+import { SectionId } from "@/lib/enums";
 
 
 /**
@@ -25,7 +26,7 @@ export function SmallTalk() {
   };
 
   return (
-    <section id="small-talk" aria-labelledby="talk-title" className="page-x grid scroll-mt-24 gap-10 pt-32 lg:grid-cols-2">
+    <section id={SectionId.SmallTalk} aria-labelledby="talk-title" className="page-x grid scroll-mt-24 gap-10 pt-32 lg:grid-cols-2">
       <div>
         <h2 id="talk-title" className="text-[clamp(3rem,8vw,6.5rem)] font-medium leading-[0.9] tracking-[-0.03em]">{smallTalk.heading}</h2>
         <p className="mt-4 max-w-[18rem] text-sm text-muted-foreground">{smallTalk.blurb}</p>

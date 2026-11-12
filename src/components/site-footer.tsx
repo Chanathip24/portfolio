@@ -4,6 +4,7 @@ import { Moon, Sun } from "lucide-react";
 import { useSyncExternalStore } from "react";
 import { clocks, nav, owner } from "@/content/site";
 import { HatchMark } from "@/components/hatch-mark";
+import { SiteLink } from "@/components/site-link";
 import { cn } from "@/lib/utils";
 
 const subscribe = (cb: () => void) => {
@@ -40,7 +41,7 @@ export function SiteFooter() {
         <nav aria-label="Footer">
           <ul className="space-y-1.5 text-sm">
             {nav.map((l) => (
-              <li key={l.href}><a href={l.href} className="no-underline transition-opacity duration-100 ease-out hover:opacity-40">{l.label}</a></li>
+              <li key={l.href}><SiteLink href={l.href} className="no-underline transition-opacity duration-100 ease-out hover:opacity-40">{l.label}</SiteLink></li>
             ))}
           </ul>
         </nav>

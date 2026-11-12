@@ -9,6 +9,7 @@ import { ScrollRestore } from "@/components/scroll-restore";
 import "./globals.css";
 import "./navigation.css";
 import { Providers } from "./providers";
+import { Theme } from "@/lib/enums";
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 // Runs before paint so the saved or system theme never flashes.
-const themeScript = `try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}`;
+const themeScript = `try{var t=localStorage.getItem("theme");if(t==="${Theme.Dark}"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("${Theme.Dark}")}catch(e){}`;
 
 // Landing on /#section would let the browser jump straight past the hero. Take the hash off the URL
 // before the browser can scroll to it and remember it; HashEntry scrolls there after the intro.

@@ -1,0 +1,59 @@
+{
+  "data": [
+    {
+      "id": "00000000-0000-4000-8000-000000000601",
+      "quote": "Sample quote: shipped the hard part early, and the rest of the project got calmer for it.",
+      "author_name": "Sample Person",
+      "author_role": "Product lead",
+      "company": "Sample Co",
+      "avatar_url": null,
+      "sort_order": 1
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000602",
+      "quote": "Sample quote: writes down what they decided and why. Handover took an afternoon.",
+      "author_name": "Sample Person",
+      "author_role": "Engineering manager",
+      "company": "Example Studio",
+      "avatar_url": null,
+      "sort_order": 2
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000603",
+      "quote": "Sample quote: the interface felt finished long before the launch date.",
+      "author_name": "Sample Person",
+      "author_role": "Founder",
+      "company": "Placeholder Labs",
+      "avatar_url": null,
+      "sort_order": 3
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000604",
+      "quote": "Sample quote: reviews were kind, specific and fast.",
+      "author_name": "Sample Person",
+      "author_role": "Staff engineer",
+      "company": "Sample Co",
+      "avatar_url": null,
+      "sort_order": 4
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000605",
+      "quote": "Sample quote: took a vague idea and turned it into something our clinics could use.",
+      "author_name": "Sample Person",
+      "author_role": "Operations director",
+      "company": "Example Health",
+      "avatar_url": null,
+      "sort_order": 5
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000606",
+      "quote": "Sample quote: calm in a crunch, and the migration shipped without a single page.",
+      "author_name": "Sample Person",
+      "author_role": "CTO",
+      "company": "Placeholder Labs",
+      "avatar_url": null,
+      "sort_order": 6
+    }
+  ],
+  "count": 6
+}

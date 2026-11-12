@@ -4,6 +4,7 @@ import { Moon, Sun } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useRef } from "react";
 import { useSiteStore } from "@/lib/site-store";
+import { Theme } from "@/lib/enums";
 
 const BOUNCE = { type: "spring", stiffness: 520, damping: 13, mass: 0.7 } as const;
 
@@ -14,13 +15,13 @@ const BOUNCE = { type: "spring", stiffness: 520, damping: 13, mass: 0.7 } as con
 export function ThemeToggle() {
   const ref = useRef<HTMLButtonElement>(null);
   const reduce = useReducedMotion();
-  const dark = useSiteStore((s) => s.theme === "dark");
+  const dark = useSiteStore((s) => s.theme === Theme.Dark);
 
   function toggle() {
     const flip = () => {
       const next = document.documentElement.classList.toggle("dark");
       try {
-        localStorage.setItem("theme", next ? "dark" : "light");
+        localStorage.setItem("theme", next ? Theme.Dark : Theme.Light);
       } catch {}
     };
     const doc = document as Document & {

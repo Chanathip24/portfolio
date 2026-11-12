@@ -1,0 +1,6826 @@
+{
+  "tidewater": {
+    "data": {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "slug": "tidewater",
+      "title": "A shift planner clinics edit offline, with zero sync conflicts",
+      "client": "Tidewater · sample",
+      "tags": [
+        "Product",
+        "Sync",
+        "Postgres"
+      ],
+      "status": "published",
+      "is_signature": true,
+      "sort_order": 1,
+      "image_url": "/mock/work-tidewater.svg",
+      "summary": "Clinics edit rosters on a ward with no signal; changes merge cleanly when the tablet reconnects.",
+      "created_at": "2026-01-01T09:00:00Z",
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "The problem"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sample copy for "
+              },
+              {
+                "type": "text",
+                "text": "A shift planner clinics edit offline, with zero sync conflicts",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Describe who it was for and why it was worth solving. Text can be "
+              },
+              {
+                "type": "text",
+                "text": "italic",
+                "marks": [
+                  {
+                    "type": "italic"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "underlined",
+                "marks": [
+                  {
+                    "type": "underline"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "struck",
+                "marks": [
+                  {
+                    "type": "strike"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "highlighted",
+                "marks": [
+                  {
+                    "type": "highlight"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", inline "
+              },
+              {
+                "type": "text",
+                "text": "code()",
+                "marks": [
+                  {
+                    "type": "code"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", or a "
+              },
+              {
+                "type": "text",
+                "text": "link",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://example.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Chemistry works too: H"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "subscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "O and E = mc"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "superscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "."
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "attrs": {
+              "tone": "info"
+            },
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Heads up. ",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "A callout draws attention to one thing the reader should not miss."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "blockquote",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A short pull quote from a user or teammate goes here."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Approach"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Explain the decisions that mattered. Keep it concrete: what you tried, what you dropped, what you measured."
+              }
+            ]
+          },
+          {
+            "type": "bulletList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Scoped the smallest version that could ship"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Moved the slow path off the request"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Wrote the migration before the feature"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "image",
+            "attrs": {
+              "src": "/mock/work-tidewater.svg",
+              "alt": "A shift planner clinics edit offline, with zero sync conflicts detail",
+              "width": 1600,
+              "height": 1100
+            }
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": "center"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Figure: the main screen, sample image."
+              }
+            ]
+          },
+          {
+            "type": "horizontalRule"
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "By the numbers"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "content": [
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Metric"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Before"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "After"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "First load"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "4.1 s"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "1.2 s"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Sync conflicts"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "31 / week"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Support tickets"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "120 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "38 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 3
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Under the hood"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A snippet or two helps readers who care about the details:"
+              }
+            ]
+          },
+          {
+            "type": "codeBlock",
+            "attrs": {
+              "language": "ts"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "const result = await plan(shifts, { offline: true });"
+              }
+            ]
+          },
+          {
+            "type": "details",
+            "attrs": {
+              "open": false
+            },
+            "content": [
+              {
+                "type": "detailsSummary",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Why not a queue?"
+                  }
+                ]
+              },
+              {
+                "type": "detailsContent",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A collapsible block keeps asides out of the main flow until the reader asks for them."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "What shipped"
+              }
+            ]
+          },
+          {
+            "type": "taskList",
+            "content": [
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Offline editing"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Conflict-free merge"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": false
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Export to calendar"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "orderedList",
+            "attrs": {
+              "start": 1
+            },
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Fewer support tickets"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Faster first load"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A team that deploys on Fridays"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "ledgerline": {
+    "data": {
+      "id": "00000000-0000-4000-8000-000000000002",
+      "slug": "ledgerline",
+      "title": "A bookkeeping API freelancers trust with their taxes",
+      "client": "Ledgerline · sample",
+      "tags": [
+        "API",
+        "Payments"
+      ],
+      "status": "published",
+      "is_signature": true,
+      "sort_order": 2,
+      "image_url": "/mock/work-ledgerline.svg",
+      "summary": "An invoicing and ledger API where every cent is an integer and every write is auditable.",
+      "created_at": "2026-02-01T09:00:00Z",
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "The problem"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sample copy for "
+              },
+              {
+                "type": "text",
+                "text": "A bookkeeping API freelancers trust with their taxes",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Describe who it was for and why it was worth solving. Text can be "
+              },
+              {
+                "type": "text",
+                "text": "italic",
+                "marks": [
+                  {
+                    "type": "italic"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "underlined",
+                "marks": [
+                  {
+                    "type": "underline"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "struck",
+                "marks": [
+                  {
+                    "type": "strike"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "highlighted",
+                "marks": [
+                  {
+                    "type": "highlight"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", inline "
+              },
+              {
+                "type": "text",
+                "text": "code()",
+                "marks": [
+                  {
+                    "type": "code"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", or a "
+              },
+              {
+                "type": "text",
+                "text": "link",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://example.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Chemistry works too: H"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "subscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "O and E = mc"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "superscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "."
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "attrs": {
+              "tone": "warning"
+            },
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Heads up. ",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "A callout draws attention to one thing the reader should not miss."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "blockquote",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A short pull quote from a user or teammate goes here."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Approach"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Explain the decisions that mattered. Keep it concrete: what you tried, what you dropped, what you measured."
+              }
+            ]
+          },
+          {
+            "type": "bulletList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Scoped the smallest version that could ship"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Moved the slow path off the request"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Wrote the migration before the feature"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "image",
+            "attrs": {
+              "src": "/mock/work-ledgerline.svg",
+              "alt": "A bookkeeping API freelancers trust with their taxes detail",
+              "width": 1600,
+              "height": 1100
+            }
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": "center"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Figure: the main screen, sample image."
+              }
+            ]
+          },
+          {
+            "type": "horizontalRule"
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "By the numbers"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "content": [
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Metric"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Before"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "After"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "First load"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "4.1 s"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "1.2 s"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Sync conflicts"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "31 / week"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Support tickets"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "120 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "38 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 3
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Under the hood"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A snippet or two helps readers who care about the details:"
+              }
+            ]
+          },
+          {
+            "type": "codeBlock",
+            "attrs": {
+              "language": "ts"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "const result = await plan(shifts, { offline: true });"
+              }
+            ]
+          },
+          {
+            "type": "details",
+            "attrs": {
+              "open": false
+            },
+            "content": [
+              {
+                "type": "detailsSummary",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Why not a queue?"
+                  }
+                ]
+              },
+              {
+                "type": "detailsContent",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A collapsible block keeps asides out of the main flow until the reader asks for them."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "What shipped"
+              }
+            ]
+          },
+          {
+            "type": "taskList",
+            "content": [
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Offline editing"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Conflict-free merge"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": false
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Export to calendar"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "orderedList",
+            "attrs": {
+              "start": 1
+            },
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Fewer support tickets"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Faster first load"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A team that deploys on Fridays"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "pantry-search": {
+    "data": {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "slug": "pantry-search",
+      "title": "Pantry search",
+      "client": "Sample",
+      "tags": [
+        "Product"
+      ],
+      "status": "published",
+      "is_signature": false,
+      "sort_order": 3,
+      "image_url": "/mock/work-pantry.svg",
+      "summary": "Type three letters, find the tin at the back of the cupboard.",
+      "created_at": "2026-03-01T09:00:00Z",
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "The problem"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sample copy for "
+              },
+              {
+                "type": "text",
+                "text": "Pantry search",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Describe who it was for and why it was worth solving. Text can be "
+              },
+              {
+                "type": "text",
+                "text": "italic",
+                "marks": [
+                  {
+                    "type": "italic"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "underlined",
+                "marks": [
+                  {
+                    "type": "underline"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "struck",
+                "marks": [
+                  {
+                    "type": "strike"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "highlighted",
+                "marks": [
+                  {
+                    "type": "highlight"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", inline "
+              },
+              {
+                "type": "text",
+                "text": "code()",
+                "marks": [
+                  {
+                    "type": "code"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", or a "
+              },
+              {
+                "type": "text",
+                "text": "link",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://example.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Chemistry works too: H"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "subscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "O and E = mc"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "superscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "."
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "attrs": {
+              "tone": "success"
+            },
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Heads up. ",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "A callout draws attention to one thing the reader should not miss."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "blockquote",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A short pull quote from a user or teammate goes here."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Approach"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Explain the decisions that mattered. Keep it concrete: what you tried, what you dropped, what you measured."
+              }
+            ]
+          },
+          {
+            "type": "bulletList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Scoped the smallest version that could ship"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Moved the slow path off the request"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Wrote the migration before the feature"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "image",
+            "attrs": {
+              "src": "/mock/work-pantry.svg",
+              "alt": "Pantry search detail",
+              "width": 1600,
+              "height": 1100
+            }
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": "center"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Figure: the main screen, sample image."
+              }
+            ]
+          },
+          {
+            "type": "horizontalRule"
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "By the numbers"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "content": [
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Metric"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Before"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "After"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "First load"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "4.1 s"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "1.2 s"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Sync conflicts"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "31 / week"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Support tickets"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "120 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "38 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 3
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Under the hood"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A snippet or two helps readers who care about the details:"
+              }
+            ]
+          },
+          {
+            "type": "codeBlock",
+            "attrs": {
+              "language": "ts"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "const result = await plan(shifts, { offline: true });"
+              }
+            ]
+          },
+          {
+            "type": "details",
+            "attrs": {
+              "open": false
+            },
+            "content": [
+              {
+                "type": "detailsSummary",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Why not a queue?"
+                  }
+                ]
+              },
+              {
+                "type": "detailsContent",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A collapsible block keeps asides out of the main flow until the reader asks for them."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "What shipped"
+              }
+            ]
+          },
+          {
+            "type": "taskList",
+            "content": [
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Offline editing"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Conflict-free merge"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": false
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Export to calendar"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "orderedList",
+            "attrs": {
+              "start": 1
+            },
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Fewer support tickets"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Faster first load"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A team that deploys on Fridays"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "hearth-ci": {
+    "data": {
+      "id": "00000000-0000-4000-8000-000000000004",
+      "slug": "hearth-ci",
+      "title": "Hearth CI",
+      "client": "Sample",
+      "tags": [
+        "API"
+      ],
+      "status": "published",
+      "is_signature": false,
+      "sort_order": 4,
+      "image_url": "/mock/work-hearth.svg",
+      "summary": "A CI runner that caches like a fireplace: warm after the first fire.",
+      "created_at": "2026-04-01T09:00:00Z",
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "The problem"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sample copy for "
+              },
+              {
+                "type": "text",
+                "text": "Hearth CI",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Describe who it was for and why it was worth solving. Text can be "
+              },
+              {
+                "type": "text",
+                "text": "italic",
+                "marks": [
+                  {
+                    "type": "italic"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "underlined",
+                "marks": [
+                  {
+                    "type": "underline"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "struck",
+                "marks": [
+                  {
+                    "type": "strike"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "highlighted",
+                "marks": [
+                  {
+                    "type": "highlight"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", inline "
+              },
+              {
+                "type": "text",
+                "text": "code()",
+                "marks": [
+                  {
+                    "type": "code"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", or a "
+              },
+              {
+                "type": "text",
+                "text": "link",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://example.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Chemistry works too: H"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "subscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "O and E = mc"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "superscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "."
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "attrs": {
+              "tone": "warning"
+            },
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Heads up. ",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "A callout draws attention to one thing the reader should not miss."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "blockquote",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A short pull quote from a user or teammate goes here."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Approach"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Explain the decisions that mattered. Keep it concrete: what you tried, what you dropped, what you measured."
+              }
+            ]
+          },
+          {
+            "type": "bulletList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Scoped the smallest version that could ship"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Moved the slow path off the request"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Wrote the migration before the feature"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "image",
+            "attrs": {
+              "src": "/mock/work-hearth.svg",
+              "alt": "Hearth CI detail",
+              "width": 1600,
+              "height": 1100
+            }
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": "center"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Figure: the main screen, sample image."
+              }
+            ]
+          },
+          {
+            "type": "horizontalRule"
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "By the numbers"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "content": [
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Metric"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Before"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "After"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "First load"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "4.1 s"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "1.2 s"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Sync conflicts"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "31 / week"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Support tickets"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "120 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "38 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 3
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Under the hood"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A snippet or two helps readers who care about the details:"
+              }
+            ]
+          },
+          {
+            "type": "codeBlock",
+            "attrs": {
+              "language": "ts"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "const result = await plan(shifts, { offline: true });"
+              }
+            ]
+          },
+          {
+            "type": "details",
+            "attrs": {
+              "open": false
+            },
+            "content": [
+              {
+                "type": "detailsSummary",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Why not a queue?"
+                  }
+                ]
+              },
+              {
+                "type": "detailsContent",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A collapsible block keeps asides out of the main flow until the reader asks for them."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "What shipped"
+              }
+            ]
+          },
+          {
+            "type": "taskList",
+            "content": [
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Offline editing"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Conflict-free merge"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": false
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Export to calendar"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "orderedList",
+            "attrs": {
+              "start": 1
+            },
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Fewer support tickets"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Faster first load"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A team that deploys on Fridays"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "signal": {
+    "data": {
+      "id": "00000000-0000-4000-8000-000000000005",
+      "slug": "signal",
+      "title": "Signal",
+      "client": "Sample",
+      "tags": [
+        "Sync"
+      ],
+      "status": "published",
+      "is_signature": false,
+      "sort_order": 5,
+      "image_url": "/mock/work-signal.svg",
+      "summary": "Presence and typing indicators on a websocket that survives flaky Wi-Fi.",
+      "created_at": "2026-05-01T09:00:00Z",
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "The problem"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sample copy for "
+              },
+              {
+                "type": "text",
+                "text": "Signal",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Describe who it was for and why it was worth solving. Text can be "
+              },
+              {
+                "type": "text",
+                "text": "italic",
+                "marks": [
+                  {
+                    "type": "italic"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "underlined",
+                "marks": [
+                  {
+                    "type": "underline"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "struck",
+                "marks": [
+                  {
+                    "type": "strike"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "highlighted",
+                "marks": [
+                  {
+                    "type": "highlight"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", inline "
+              },
+              {
+                "type": "text",
+                "text": "code()",
+                "marks": [
+                  {
+                    "type": "code"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", or a "
+              },
+              {
+                "type": "text",
+                "text": "link",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://example.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Chemistry works too: H"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "subscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "O and E = mc"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "superscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "."
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "attrs": {
+              "tone": "info"
+            },
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Heads up. ",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "A callout draws attention to one thing the reader should not miss."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "blockquote",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A short pull quote from a user or teammate goes here."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Approach"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Explain the decisions that mattered. Keep it concrete: what you tried, what you dropped, what you measured."
+              }
+            ]
+          },
+          {
+            "type": "bulletList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Scoped the smallest version that could ship"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Moved the slow path off the request"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Wrote the migration before the feature"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "image",
+            "attrs": {
+              "src": "/mock/work-signal.svg",
+              "alt": "Signal detail",
+              "width": 1600,
+              "height": 1100
+            }
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": "center"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Figure: the main screen, sample image."
+              }
+            ]
+          },
+          {
+            "type": "horizontalRule"
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "By the numbers"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "content": [
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Metric"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Before"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "After"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "First load"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "4.1 s"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "1.2 s"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Sync conflicts"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "31 / week"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Support tickets"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "120 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "38 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 3
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Under the hood"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A snippet or two helps readers who care about the details:"
+              }
+            ]
+          },
+          {
+            "type": "codeBlock",
+            "attrs": {
+              "language": "ts"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "const result = await plan(shifts, { offline: true });"
+              }
+            ]
+          },
+          {
+            "type": "details",
+            "attrs": {
+              "open": false
+            },
+            "content": [
+              {
+                "type": "detailsSummary",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Why not a queue?"
+                  }
+                ]
+              },
+              {
+                "type": "detailsContent",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A collapsible block keeps asides out of the main flow until the reader asks for them."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "What shipped"
+              }
+            ]
+          },
+          {
+            "type": "taskList",
+            "content": [
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Offline editing"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Conflict-free merge"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": false
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Export to calendar"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "orderedList",
+            "attrs": {
+              "start": 1
+            },
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Fewer support tickets"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Faster first load"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A team that deploys on Fridays"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "atlas": {
+    "data": {
+      "id": "00000000-0000-4000-8000-000000000006",
+      "slug": "atlas",
+      "title": "Atlas",
+      "client": "Sample",
+      "tags": [
+        "Postgres"
+      ],
+      "status": "published",
+      "is_signature": false,
+      "sort_order": 6,
+      "image_url": "/mock/work-atlas.svg",
+      "summary": "A map-first dashboard over a few million rows, still snappy on a laptop.",
+      "created_at": "2026-06-01T09:00:00Z",
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "The problem"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sample copy for "
+              },
+              {
+                "type": "text",
+                "text": "Atlas",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Describe who it was for and why it was worth solving. Text can be "
+              },
+              {
+                "type": "text",
+                "text": "italic",
+                "marks": [
+                  {
+                    "type": "italic"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "underlined",
+                "marks": [
+                  {
+                    "type": "underline"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "struck",
+                "marks": [
+                  {
+                    "type": "strike"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "highlighted",
+                "marks": [
+                  {
+                    "type": "highlight"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", inline "
+              },
+              {
+                "type": "text",
+                "text": "code()",
+                "marks": [
+                  {
+                    "type": "code"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", or a "
+              },
+              {
+                "type": "text",
+                "text": "link",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://example.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Chemistry works too: H"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "subscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "O and E = mc"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "superscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "."
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "attrs": {
+              "tone": "success"
+            },
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Heads up. ",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "A callout draws attention to one thing the reader should not miss."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "blockquote",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A short pull quote from a user or teammate goes here."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Approach"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Explain the decisions that mattered. Keep it concrete: what you tried, what you dropped, what you measured."
+              }
+            ]
+          },
+          {
+            "type": "bulletList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Scoped the smallest version that could ship"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Moved the slow path off the request"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Wrote the migration before the feature"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "image",
+            "attrs": {
+              "src": "/mock/work-atlas.svg",
+              "alt": "Atlas detail",
+              "width": 1600,
+              "height": 1100
+            }
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": "center"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Figure: the main screen, sample image."
+              }
+            ]
+          },
+          {
+            "type": "horizontalRule"
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "By the numbers"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "content": [
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Metric"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Before"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "After"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "First load"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "4.1 s"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "1.2 s"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Sync conflicts"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "31 / week"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Support tickets"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "120 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "38 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 3
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Under the hood"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A snippet or two helps readers who care about the details:"
+              }
+            ]
+          },
+          {
+            "type": "codeBlock",
+            "attrs": {
+              "language": "ts"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "const result = await plan(shifts, { offline: true });"
+              }
+            ]
+          },
+          {
+            "type": "details",
+            "attrs": {
+              "open": false
+            },
+            "content": [
+              {
+                "type": "detailsSummary",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Why not a queue?"
+                  }
+                ]
+              },
+              {
+                "type": "detailsContent",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A collapsible block keeps asides out of the main flow until the reader asks for them."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "What shipped"
+              }
+            ]
+          },
+          {
+            "type": "taskList",
+            "content": [
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Offline editing"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Conflict-free merge"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": false
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Export to calendar"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "orderedList",
+            "attrs": {
+              "start": 1
+            },
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Fewer support tickets"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Faster first load"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A team that deploys on Fridays"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "relay": {
+    "data": {
+      "id": "00000000-0000-4000-8000-000000000007",
+      "slug": "relay",
+      "title": "Relay",
+      "client": "Sample",
+      "tags": [
+        "API"
+      ],
+      "status": "published",
+      "is_signature": false,
+      "sort_order": 7,
+      "image_url": "/mock/work-hearth.svg",
+      "summary": "Webhook delivery with retries, replay and a log a human can read.",
+      "created_at": "2026-07-01T09:00:00Z",
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "The problem"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sample copy for "
+              },
+              {
+                "type": "text",
+                "text": "Relay",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Describe who it was for and why it was worth solving. Text can be "
+              },
+              {
+                "type": "text",
+                "text": "italic",
+                "marks": [
+                  {
+                    "type": "italic"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "underlined",
+                "marks": [
+                  {
+                    "type": "underline"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "struck",
+                "marks": [
+                  {
+                    "type": "strike"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "highlighted",
+                "marks": [
+                  {
+                    "type": "highlight"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", inline "
+              },
+              {
+                "type": "text",
+                "text": "code()",
+                "marks": [
+                  {
+                    "type": "code"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", or a "
+              },
+              {
+                "type": "text",
+                "text": "link",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://example.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Chemistry works too: H"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "subscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "O and E = mc"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "superscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "."
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "attrs": {
+              "tone": "info"
+            },
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Heads up. ",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "A callout draws attention to one thing the reader should not miss."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "blockquote",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A short pull quote from a user or teammate goes here."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Approach"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Explain the decisions that mattered. Keep it concrete: what you tried, what you dropped, what you measured."
+              }
+            ]
+          },
+          {
+            "type": "bulletList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Scoped the smallest version that could ship"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Moved the slow path off the request"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Wrote the migration before the feature"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "image",
+            "attrs": {
+              "src": "/mock/work-hearth.svg",
+              "alt": "Relay detail",
+              "width": 1600,
+              "height": 1100
+            }
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": "center"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Figure: the main screen, sample image."
+              }
+            ]
+          },
+          {
+            "type": "horizontalRule"
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "By the numbers"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "content": [
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Metric"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Before"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "After"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "First load"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "4.1 s"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "1.2 s"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Sync conflicts"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "31 / week"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Support tickets"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "120 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "38 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 3
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Under the hood"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A snippet or two helps readers who care about the details:"
+              }
+            ]
+          },
+          {
+            "type": "codeBlock",
+            "attrs": {
+              "language": "ts"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "const result = await plan(shifts, { offline: true });"
+              }
+            ]
+          },
+          {
+            "type": "details",
+            "attrs": {
+              "open": false
+            },
+            "content": [
+              {
+                "type": "detailsSummary",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Why not a queue?"
+                  }
+                ]
+              },
+              {
+                "type": "detailsContent",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A collapsible block keeps asides out of the main flow until the reader asks for them."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "What shipped"
+              }
+            ]
+          },
+          {
+            "type": "taskList",
+            "content": [
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Offline editing"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Conflict-free merge"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": false
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Export to calendar"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "orderedList",
+            "attrs": {
+              "start": 1
+            },
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Fewer support tickets"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Faster first load"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A team that deploys on Fridays"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "lumen": {
+    "data": {
+      "id": "00000000-0000-4000-8000-000000000008",
+      "slug": "lumen",
+      "title": "Lumen",
+      "client": "Sample",
+      "tags": [
+        "Product"
+      ],
+      "status": "published",
+      "is_signature": false,
+      "sort_order": 8,
+      "image_url": "/mock/work-signal.svg",
+      "summary": "A design-token pipeline from Figma to a Tailwind theme in one command.",
+      "created_at": "2026-08-01T09:00:00Z",
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "The problem"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sample copy for "
+              },
+              {
+                "type": "text",
+                "text": "Lumen",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Describe who it was for and why it was worth solving. Text can be "
+              },
+              {
+                "type": "text",
+                "text": "italic",
+                "marks": [
+                  {
+                    "type": "italic"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "underlined",
+                "marks": [
+                  {
+                    "type": "underline"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "struck",
+                "marks": [
+                  {
+                    "type": "strike"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "highlighted",
+                "marks": [
+                  {
+                    "type": "highlight"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", inline "
+              },
+              {
+                "type": "text",
+                "text": "code()",
+                "marks": [
+                  {
+                    "type": "code"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", or a "
+              },
+              {
+                "type": "text",
+                "text": "link",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://example.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Chemistry works too: H"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "subscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "O and E = mc"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "superscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "."
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "attrs": {
+              "tone": "success"
+            },
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Heads up. ",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "A callout draws attention to one thing the reader should not miss."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "blockquote",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A short pull quote from a user or teammate goes here."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Approach"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Explain the decisions that mattered. Keep it concrete: what you tried, what you dropped, what you measured."
+              }
+            ]
+          },
+          {
+            "type": "bulletList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Scoped the smallest version that could ship"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Moved the slow path off the request"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Wrote the migration before the feature"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "image",
+            "attrs": {
+              "src": "/mock/work-signal.svg",
+              "alt": "Lumen detail",
+              "width": 1600,
+              "height": 1100
+            }
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": "center"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Figure: the main screen, sample image."
+              }
+            ]
+          },
+          {
+            "type": "horizontalRule"
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "By the numbers"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "content": [
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Metric"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Before"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "After"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "First load"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "4.1 s"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "1.2 s"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Sync conflicts"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "31 / week"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Support tickets"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "120 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "38 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 3
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Under the hood"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A snippet or two helps readers who care about the details:"
+              }
+            ]
+          },
+          {
+            "type": "codeBlock",
+            "attrs": {
+              "language": "ts"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "const result = await plan(shifts, { offline: true });"
+              }
+            ]
+          },
+          {
+            "type": "details",
+            "attrs": {
+              "open": false
+            },
+            "content": [
+              {
+                "type": "detailsSummary",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Why not a queue?"
+                  }
+                ]
+              },
+              {
+                "type": "detailsContent",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A collapsible block keeps asides out of the main flow until the reader asks for them."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "What shipped"
+              }
+            ]
+          },
+          {
+            "type": "taskList",
+            "content": [
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Offline editing"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Conflict-free merge"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": false
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Export to calendar"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "orderedList",
+            "attrs": {
+              "start": 1
+            },
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Fewer support tickets"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Faster first load"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A team that deploys on Fridays"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "orchard": {
+    "data": {
+      "id": "00000000-0000-4000-8000-000000000009",
+      "slug": "orchard",
+      "title": "Orchard",
+      "client": "Sample",
+      "tags": [
+        "Postgres",
+        "Sync"
+      ],
+      "status": "published",
+      "is_signature": false,
+      "sort_order": 9,
+      "image_url": "/mock/work-atlas.svg",
+      "summary": "Row-level security and realtime for a small marketplace.",
+      "created_at": "2026-09-01T09:00:00Z",
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "The problem"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sample copy for "
+              },
+              {
+                "type": "text",
+                "text": "Orchard",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Describe who it was for and why it was worth solving. Text can be "
+              },
+              {
+                "type": "text",
+                "text": "italic",
+                "marks": [
+                  {
+                    "type": "italic"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "underlined",
+                "marks": [
+                  {
+                    "type": "underline"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "struck",
+                "marks": [
+                  {
+                    "type": "strike"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "highlighted",
+                "marks": [
+                  {
+                    "type": "highlight"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", inline "
+              },
+              {
+                "type": "text",
+                "text": "code()",
+                "marks": [
+                  {
+                    "type": "code"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", or a "
+              },
+              {
+                "type": "text",
+                "text": "link",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://example.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Chemistry works too: H"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "subscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "O and E = mc"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "superscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "."
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "attrs": {
+              "tone": "warning"
+            },
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Heads up. ",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "A callout draws attention to one thing the reader should not miss."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "blockquote",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A short pull quote from a user or teammate goes here."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Approach"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Explain the decisions that mattered. Keep it concrete: what you tried, what you dropped, what you measured."
+              }
+            ]
+          },
+          {
+            "type": "bulletList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Scoped the smallest version that could ship"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Moved the slow path off the request"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Wrote the migration before the feature"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "image",
+            "attrs": {
+              "src": "/mock/work-atlas.svg",
+              "alt": "Orchard detail",
+              "width": 1600,
+              "height": 1100
+            }
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": "center"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Figure: the main screen, sample image."
+              }
+            ]
+          },
+          {
+            "type": "horizontalRule"
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "By the numbers"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "content": [
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Metric"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Before"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "After"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "First load"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "4.1 s"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "1.2 s"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Sync conflicts"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "31 / week"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Support tickets"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "120 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "38 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 3
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Under the hood"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A snippet or two helps readers who care about the details:"
+              }
+            ]
+          },
+          {
+            "type": "codeBlock",
+            "attrs": {
+              "language": "ts"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "const result = await plan(shifts, { offline: true });"
+              }
+            ]
+          },
+          {
+            "type": "details",
+            "attrs": {
+              "open": false
+            },
+            "content": [
+              {
+                "type": "detailsSummary",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Why not a queue?"
+                  }
+                ]
+              },
+              {
+                "type": "detailsContent",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A collapsible block keeps asides out of the main flow until the reader asks for them."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "What shipped"
+              }
+            ]
+          },
+          {
+            "type": "taskList",
+            "content": [
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Offline editing"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Conflict-free merge"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": false
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Export to calendar"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "orderedList",
+            "attrs": {
+              "start": 1
+            },
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Fewer support tickets"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Faster first load"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A team that deploys on Fridays"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "kiln": {
+    "data": {
+      "id": "00000000-0000-4000-8000-000000000010",
+      "slug": "kiln",
+      "title": "Kiln",
+      "client": "Sample",
+      "tags": [
+        "Payments"
+      ],
+      "status": "published",
+      "is_signature": false,
+      "sort_order": 10,
+      "image_url": "/mock/work-pantry.svg",
+      "summary": "A checkout that fires, cools and settles without double charges.",
+      "created_at": "2026-01-01T09:00:00Z",
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "The problem"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Sample copy for "
+              },
+              {
+                "type": "text",
+                "text": "Kiln",
+                "marks": [
+                  {
+                    "type": "bold"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Describe who it was for and why it was worth solving. Text can be "
+              },
+              {
+                "type": "text",
+                "text": "italic",
+                "marks": [
+                  {
+                    "type": "italic"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "underlined",
+                "marks": [
+                  {
+                    "type": "underline"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "struck",
+                "marks": [
+                  {
+                    "type": "strike"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", "
+              },
+              {
+                "type": "text",
+                "text": "highlighted",
+                "marks": [
+                  {
+                    "type": "highlight"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", inline "
+              },
+              {
+                "type": "text",
+                "text": "code()",
+                "marks": [
+                  {
+                    "type": "code"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ", or a "
+              },
+              {
+                "type": "text",
+                "text": "link",
+                "marks": [
+                  {
+                    "type": "link",
+                    "attrs": {
+                      "href": "https://example.com"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": ". Chemistry works too: H"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "subscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "O and E = mc"
+              },
+              {
+                "type": "text",
+                "text": "2",
+                "marks": [
+                  {
+                    "type": "superscript"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "."
+              }
+            ]
+          },
+          {
+            "type": "callout",
+            "attrs": {
+              "tone": "info"
+            },
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Heads up. ",
+                    "marks": [
+                      {
+                        "type": "bold"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "text": "A callout draws attention to one thing the reader should not miss."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "blockquote",
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "A short pull quote from a user or teammate goes here."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Approach"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Explain the decisions that mattered. Keep it concrete: what you tried, what you dropped, what you measured."
+              }
+            ]
+          },
+          {
+            "type": "bulletList",
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Scoped the smallest version that could ship"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Moved the slow path off the request"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Wrote the migration before the feature"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "image",
+            "attrs": {
+              "src": "/mock/work-pantry.svg",
+              "alt": "Kiln detail",
+              "width": 1600,
+              "height": 1100
+            }
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": "center"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Figure: the main screen, sample image."
+              }
+            ]
+          },
+          {
+            "type": "horizontalRule"
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "By the numbers"
+              }
+            ]
+          },
+          {
+            "type": "table",
+            "content": [
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Metric"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Before"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableHeader",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "After"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "First load"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "4.1 s"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "1.2 s"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Sync conflicts"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "31 / week"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "tableRow",
+                "content": [
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Support tickets"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "120 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "tableCell",
+                    "content": [
+                      {
+                        "type": "paragraph",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "38 / mo"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 3
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "Under the hood"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "A snippet or two helps readers who care about the details:"
+              }
+            ]
+          },
+          {
+            "type": "codeBlock",
+            "attrs": {
+              "language": "ts"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "const result = await plan(shifts, { offline: true });"
+              }
+            ]
+          },
+          {
+            "type": "details",
+            "attrs": {
+              "open": false
+            },
+            "content": [
+              {
+                "type": "detailsSummary",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Why not a queue?"
+                  }
+                ]
+              },
+              {
+                "type": "detailsContent",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A collapsible block keeps asides out of the main flow until the reader asks for them."
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 2
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "What shipped"
+              }
+            ]
+          },
+          {
+            "type": "taskList",
+            "content": [
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Offline editing"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": true
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Conflict-free merge"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "taskItem",
+                "attrs": {
+                  "checked": false
+                },
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Export to calendar"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "orderedList",
+            "attrs": {
+              "start": 1
+            },
+            "content": [
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Fewer support tickets"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "Faster first load"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "listItem",
+                "content": [
+                  {
+                    "type": "paragraph",
+                    "content": [
+                      {
+                        "type": "text",
+                        "text": "A team that deploys on Fridays"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

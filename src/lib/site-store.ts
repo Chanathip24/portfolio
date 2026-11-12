@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-
-export type Theme = "light" | "dark";
+import { Theme } from "@/lib/enums";
 
 /** Shared with the inline script in layout.tsx, which runs before React and can't import this. */
 export const ENTRY_KEY = "entry-hash";
@@ -60,7 +59,7 @@ export const useSiteStore = create<SiteState>()(
 
       // Always "light" at creation, on the server and on the client: it is also the hydration snapshot,
       // so the first client render matches the server HTML. StoreSync reads the real theme after mount.
-      theme: "light",
+      theme: Theme.Light,
       themeSwaps: 0,
       beginThemeSwap: () => set((s) => ({ themeSwaps: s.themeSwaps + 1 })),
       endThemeSwap: () => set((s) => ({ themeSwaps: Math.max(0, s.themeSwaps - 1) })),

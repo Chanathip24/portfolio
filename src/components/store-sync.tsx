@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useSiteStore } from "@/lib/site-store";
+import { Theme } from "@/lib/enums";
 
 /**
  * Connects the store to the document, once, for the whole app:
@@ -14,7 +15,7 @@ import { useSiteStore } from "@/lib/site-store";
 export function StoreSync() {
   useEffect(() => {
     const html = document.documentElement;
-    const syncTheme = () => useSiteStore.setState({ theme: html.classList.contains("dark") ? "dark" : "light" });
+    const syncTheme = () => useSiteStore.setState({ theme: html.classList.contains("dark") ? Theme.Dark : Theme.Light });
     syncTheme();
     const mo = new MutationObserver(syncTheme);
     mo.observe(html, { attributes: true, attributeFilter: ["class"] });

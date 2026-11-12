@@ -2,10 +2,14 @@
 
 import { ArrowRight } from "lucide-react";
 import { motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { SiteLink } from "@/components/site-link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { nav, owner } from "@/content/site";
 import { useSiteStore } from "@/lib/site-store";
+import { cn } from "@/lib/utils";
+import { hash, SectionId } from "@/lib/enums";
 
 /**
  * Logo + links pill on the left, call to action on the right, both inset to the
@@ -14,6 +18,7 @@ import { useSiteStore } from "@/lib/site-store";
  */
 export function SiteNav() {
   const reduce = useReducedMotion();
+  const pathname = usePathname();
   const introDone = useSiteStore((s) => s.introDone);
   const [timedOut, setTimedOut] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -30,7 +35,8 @@ export function SiteNav() {
     setHidden(y > 120 && y > prev);
   });
 
-  const visible = (introDone || timedOut || !!reduce) && !hidden;
+  // Only the home page has an intro to wait for.
+  const visible = (introDone || timedOut || !!reduce || pathname !== "/") && !hidden;
 
   return (
     <motion.header
@@ -42,13 +48,13 @@ export function SiteNav() {
     >
       <div className="page-x flex items-center justify-between">
         <nav aria-label="Main" className="pointer-events-auto flex items-center gap-0.5 rounded-full border border-border/60 bg-card/85 py-1.5 pl-1.5 pr-2 shadow-[0_6px_24px_-12px_rgba(0,0,0,0.25)] backdrop-blur-md">
-          <a href="#top" aria-label={`${owner.name}, home`} className="mr-1 flex size-8 items-center justify-center rounded-full bg-foreground font-display text-lg italic text-background no-underline">
+          <SiteLink href={hash(SectionId.Top)} aria-label={`${owner.name}, home`} className="mr-1 flex size-8 items-center justify-center rounded-full bg-foreground font-display text-lg italic text-background no-underline">
             {owner.firstName[0]}
-          </a>
+          </SiteLink>
           {nav.map((l) => (
-            <a key={l.href} href={l.href} className="hidden rounded-full px-3 py-1.5 text-sm no-underline transition-colors hover:bg-muted md:block">
+            <SiteLink key={l.href} href={l.href} aria-current={l.href === pathname ? "page" : undefined} className={cn("rounded-full px-3 py-1.5 text-sm no-underline transition-colors hover:bg-muted aria-[current=page]:bg-muted", !l.href.startsWith("/") && "hidden md:block")}>
               {l.label}
-            </a>
+            </SiteLink>
           ))}
           <ThemeToggle />
         </nav>

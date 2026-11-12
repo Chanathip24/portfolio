@@ -1,0 +1,115 @@
+{
+  "data": [
+    {
+      "id": "00000000-0000-4000-8000-000000000201",
+      "slug": "sync-without-fear",
+      "title": "Sync without fear",
+      "excerpt": "How an offline-first planner merges edits from three tablets without ever asking a nurse to resolve a conflict.",
+      "category": "engineering",
+      "status": "published",
+      "reading_minutes": 9,
+      "image_url": "/mock/note-1.svg",
+      "published_at": "2026-10-14T09:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000202",
+      "slug": "ship-the-boring-part",
+      "title": "Ship the boring part",
+      "excerpt": "The login form, the empty state, the password reset. Why they decide whether anyone stays.",
+      "category": "process",
+      "status": "published",
+      "reading_minutes": 5,
+      "image_url": "/mock/note-2.svg",
+      "published_at": "2026-08-22T09:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000203",
+      "slug": "money-is-an-integer",
+      "title": "Money is an integer",
+      "excerpt": "Floats lose cents. A short tour of the bugs that taught me to store minor units and name the currency.",
+      "category": "data",
+      "status": "published",
+      "reading_minutes": 7,
+      "image_url": "/mock/note-3.svg",
+      "published_at": "2026-05-30T09:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000204",
+      "slug": "small-diffs-calm-days",
+      "title": "Small diffs, calm days",
+      "excerpt": "A week of pull requests under a hundred lines, and what it did to review time and my stress level.",
+      "category": "process",
+      "status": "published",
+      "reading_minutes": 4,
+      "image_url": "/mock/note-4.svg",
+      "published_at": "2026-02-09T09:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000205",
+      "slug": "hello-world",
+      "title": "Hello, world",
+      "excerpt": "Why this site exists, what I will write here, and what I will leave out.",
+      "category": "process",
+      "status": "published",
+      "reading_minutes": 2,
+      "image_url": "/mock/note-5.svg",
+      "published_at": "2025-11-03T09:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000206",
+      "slug": "the-hover-that-wasnt",
+      "title": "The hover that wasn't",
+      "excerpt": "Designing for touch screens when half your delight lives in :hover. Notes from rebuilding a project grid.",
+      "category": "design",
+      "status": "published",
+      "reading_minutes": 6,
+      "image_url": "/mock/note-2.svg",
+      "published_at": "2026-09-18T09:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000207",
+      "slug": "indexes-are-a-promise",
+      "title": "Indexes are a promise",
+      "excerpt": "Reading EXPLAIN until it stops being scary, and the three indexes that fixed a slow dashboard.",
+      "category": "data",
+      "status": "published",
+      "reading_minutes": 8,
+      "image_url": "/mock/note-3.svg",
+      "published_at": "2026-07-02T09:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000208",
+      "slug": "motion-with-a-budget",
+      "title": "Motion with a budget",
+      "excerpt": "One authored moment per section. How I decide where animation earns its frame time.",
+      "category": "design",
+      "status": "published",
+      "reading_minutes": 5,
+      "image_url": "/mock/note-1.svg",
+      "published_at": "2026-04-11T09:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000209",
+      "slug": "typescript-at-the-edges",
+      "title": "TypeScript at the edges",
+      "excerpt": "Parse, don't validate: keeping types honest where data enters the app.",
+      "category": "engineering",
+      "status": "published",
+      "reading_minutes": 10,
+      "image_url": "/mock/note-4.svg",
+      "published_at": "2026-01-20T09:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000299",
+      "slug": "unfinished-draft",
+      "title": "Unfinished draft",
+      "excerpt": "Not published.",
+      "category": "process",
+      "status": "draft",
+      "reading_minutes": 1,
+      "image_url": "/mock/note-1.svg",
+      "published_at": "2026-11-01T09:00:00Z"
+    }
+  ],
+  "count": 10
+}
