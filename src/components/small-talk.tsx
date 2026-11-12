@@ -5,8 +5,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { useId, useState } from "react";
 import { owner, smallTalk } from "@/content/site";
 import { cn } from "@/lib/utils";
+import { EASE } from "@/lib/constants";
 
-const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
  * Two columns: heading on the left, an accordion of short answers on the right.

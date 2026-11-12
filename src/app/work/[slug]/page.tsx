@@ -1,6 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
+import { SiteImage } from "@/components/ui/site-image";
 import { notFound } from "next/navigation";
+import { BackToWork } from "@/components/back-to-work";
 import { work } from "@/content/site";
 
 const projects = work.flatMap(({ lead, wall }) => [lead, ...wall]);
@@ -18,7 +18,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   return (
     <main className="page-x flex-1 pb-24 pt-28 sm:pt-36">
       <article className="mx-auto max-w-5xl">
-        <Link href="/#work" className="mb-12 inline-flex size-11 items-center justify-center rounded-full bg-muted text-xl no-underline transition-colors hover:bg-brand hover:text-white" aria-label="Back to selected projects">←</Link>
+        <BackToWork className="mb-12 inline-flex size-11 items-center justify-center rounded-full bg-muted text-xl no-underline transition-colors hover:bg-brand hover:text-white" />
         <div className="grid gap-12 md:grid-cols-[minmax(0,1.5fr)_minmax(12rem,0.7fr)] md:items-start">
           <div>
             <p className="mb-5 text-sm text-muted-foreground">{project.client} · Sample project</p>
@@ -31,7 +31,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             <div><dt className="text-muted-foreground">Status</dt><dd className="mt-1">Placeholder</dd></div>
           </dl>
         </div>
-          <Image src={project.image} alt={`${project.title} project preview`} width={1600} height={1100} unoptimized className="mt-16 aspect-[7/5] w-full rounded-[1.75rem] bg-tile object-cover sm:mt-24" />
+          <SiteImage src={project.image} alt={`${project.title} project preview`} width={1600} height={1100} sizes="100vw" className="mt-16 aspect-[7/5] w-full rounded-[1.75rem] bg-tile object-cover sm:mt-24" />
       </article>
     </main>
   );

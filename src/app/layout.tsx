@@ -1,9 +1,14 @@
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import Script from "next/script";
-import "./globals.css?theme=sky-blue-navigation-v2";
+import { ViewTransitions } from "next-view-transitions";
+import { Suspense } from "react";
+import { ScrollRestore } from "@/components/scroll-restore";
+import "./globals.css";
+import "./navigation.css";
 import { Providers } from "./providers";
-import { PageNavigation } from "@/components/page-navigation";
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -23,8 +28,13 @@ export const metadata: Metadata = {
 // Runs before paint so the saved or system theme never flashes.
 const themeScript = `try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}`;
 
+// Landing on /#section would let the browser jump straight past the hero. Take the hash off the URL
+// before the browser can scroll to it and remember it; HashEntry scrolls there after the intro.
+const entryScript = `try{var h=location.hash;if(h.length>1&&location.pathname==="/"){sessionStorage.setItem("entry-hash",h);history.replaceState(history.state,"",location.pathname+location.search)}}catch(e){}`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
+    <ViewTransitions>
     <html
       lang="en"
       suppressHydrationWarning
@@ -33,9 +43,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         {/* beforeInteractive: Next injects it into <head> ahead of hydration, without React's script-tag warning. */}
         <Script id="theme" strategy="beforeInteractive">{themeScript}</Script>
-        <Script id="history-transition" strategy="beforeInteractive">{`window.addEventListener("popstate",function(){window.dispatchEvent(new Event("portfolio:before-history"))},true)`}</Script>
-        <Providers><PageNavigation>{children}</PageNavigation></Providers>
+        <Script id="entry" strategy="beforeInteractive">{entryScript}</Script>
+        <Suspense fallback={null}>
+          <ScrollRestore />
+        </Suspense>
+        <Providers>{children}</Providers>
+        {/* Vercel Web Analytics + real-user Web Vitals; both are no-ops off Vercel. */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
+    </ViewTransitions>
   );
 }

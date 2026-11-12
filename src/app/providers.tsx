@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ReactLenis } from "lenis/react";
 import { MotionConfig, useReducedMotion } from "motion/react";
 import { useState } from "react";
+import { StoreSync } from "@/components/store-sync";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   // useState so each request/user gets its own client and it survives re-renders
@@ -16,7 +17,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {!reduceMotion && <ReactLenis root options={{ lerp: 0.12, anchors: true }} />}
+      <StoreSync />
+      {!reduceMotion && <ReactLenis root options={{ lerp: 0.12 }} />}
       <MotionConfig reducedMotion="user">{children}</MotionConfig>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

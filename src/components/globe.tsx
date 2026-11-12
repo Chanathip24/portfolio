@@ -5,8 +5,9 @@ import { useEffect, useRef } from "react";
 import { feature } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import landTopo from "world-atlas/land-110m.json";
+import { onThemeChange } from "@/lib/site-store";
+import { BAYER } from "@/lib/constants";
 
-const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((n) => (n + 0.5) / 16);
 const RAD = Math.PI / 180;
 const MAP_W = 720, MAP_H = 360; // land mask resolution: 0.5 degree per pixel
 
@@ -210,12 +211,11 @@ export function Globe({ focus, pin, cell = 6, outerScale, className }: {
     io.observe(canvas);
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
-    const mo = new MutationObserver(readColors);
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    const offTheme = onThemeChange(readColors);
     raf = requestAnimationFrame(loop);
     return () => {
       cancelAnimationFrame(raf);
-      io.disconnect(); ro.disconnect(); mo.disconnect();
+      io.disconnect(); ro.disconnect(); offTheme();
       canvas.removeEventListener("pointerenter", enter);
       canvas.removeEventListener("pointerleave", leave);
       canvas.removeEventListener("pointerdown", down);

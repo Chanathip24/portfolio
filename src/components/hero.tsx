@@ -12,16 +12,15 @@ import {
 } from "motion/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { DitherField, type World } from "@/components/dither-field";
+import { useSiteStore } from "@/lib/site-store";
+import { EASE } from "@/lib/constants";
 
 const PIN = 720; // px of scroll the stage stays pinned, as on the reference
 const BASE = 22; // sky block size in px
 const SQ = 14; // the square is 14 blocks across, at every size
-const EASE = [0.16, 1, 0.3, 1] as const;
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
 const easeInOut = (t: number) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
-
-export const HERO_INTRO_DONE = "hero:intro-done";
 
 type Swap = { before: string; after: string; line2: string };
 type Rect = { x: number; y: number; w: number; h: number };
@@ -52,7 +51,9 @@ export function Hero({ lines, swap, intro, note }: { lines: string[]; swap: Swap
   const sqClear = useRef(1);
   const sqCell = useRef(BASE);
 
-  const [introDone, setIntroDone] = useState(false);
+  // Shared with the nav and the section entry, which both wait for it.
+  const introDone = useSiteStore((s) => s.introDone);
+  const setIntroDone = useSiteStore((s) => s.setIntroDone);
   const [landed, setLanded] = useState(false);
 
   useLayoutEffect(() => {
@@ -76,20 +77,22 @@ export function Hero({ lines, swap, intro, note }: { lines: string[]; swap: Swap
   // Load intro: 0 = no blocks yet, 1 = the sky fully built.
   const introT = useMotionValue(0);
   useEffect(() => {
-    const done = () => {
-      setIntroDone(true);
-      (window as unknown as { __heroIntroDone?: boolean }).__heroIntroDone = true;
-      window.dispatchEvent(new Event(HERO_INTRO_DONE));
-    };
+    // Reset on the way out too, so a return to this page plays the intro again and anything waiting
+    // on it (the nav, a section entry) waits again instead of seeing the previous visit's "done".
     if (reduce) {
       introT.set(1);
-      done();
-      return;
+      setIntroDone(true);
+      return () => setIntroDone(false);
     }
+    let cancelled = false;
     const c = animate(introT, 1, { duration: 1.4, delay: 0.2, ease: [0.33, 0, 0.2, 1] });
-    c.then(done);
-    return () => c.stop();
-  }, [introT, reduce]);
+    c.then(() => !cancelled && setIntroDone(true));
+    return () => {
+      cancelled = true;
+      c.stop();
+      setIntroDone(false);
+    };
+  }, [introT, reduce, setIntroDone]);
 
   const { scrollYProgress } = useScroll({ target: wrapRef, offset: ["start start", "end end"] });
   const p = useSpring(scrollYProgress, { stiffness: 110, damping: 26, mass: 0.7 });
@@ -137,9 +140,14 @@ export function Hero({ lines, swap, intro, note }: { lines: string[]; swap: Swap
   });
   useEffect(sync); // first frame, before any change events
 
-  const wordsA = lines.map((l) => l.split(" "));
-  const line2 = swap.line2.split(" ");
-  let n = 0;
+  // Key = word + how many times it has appeared so far, so repeated words stay unique without using the index.
+  const keyed = (text: string) => {
+    const seen: Record<string, number> = {};
+    return text.split(" ").map((w) => ({ w, key: `${w}-${(seen[w] = (seen[w] ?? 0) + 1)}` }));
+  };
+  const wordsA = lines.map(keyed);
+  const line2 = keyed(swap.line2);
+  const startOf = wordsA.map((_, li) => wordsA.slice(0, li).reduce((sum, ws) => sum + ws.length, 0));
 
   return (
     <div ref={wrapRef} style={{ height: reduce ? "100svh" : `calc(100svh + ${PIN}px)` }}>
@@ -159,9 +167,9 @@ export function Hero({ lines, swap, intro, note }: { lines: string[]; swap: Swap
         <h1 className="relative grid font-display text-[clamp(2.5rem,10.5vw,8.25rem)] italic leading-[0.95] tracking-[-0.03em] [text-shadow:0_0_28px_var(--background),0_0_10px_var(--background)]">
           <motion.span style={reduce ? undefined : { opacity: aOpacity, y: aY, filter: aBlur }} className="[grid-area:1/1]">
             {wordsA.map((ws, li) => (
-              <span key={li} className="block">
-                {ws.map((w) => (
-                  <TileWord key={n} delay={0.08 + n++ * 0.1} show={introDone} reduce={!!reduce}>{w}</TileWord>
+              <span key={lines[li]} className="block">
+                {ws.map(({ w, key }, wi) => (
+                  <TileWord key={key} delay={0.08 + (startOf[li] + wi) * 0.1} show={introDone} reduce={!!reduce}>{w}</TileWord>
                 ))}
               </span>
             ))}
@@ -176,8 +184,8 @@ export function Hero({ lines, swap, intro, note }: { lines: string[]; swap: Swap
               <TileWord delay={0.1} show={landed && !reduce} reduce={!!reduce}>{swap.after}</TileWord>
             </span>
             <span className="block">
-              {line2.map((w, i) => (
-                <TileWord key={i} delay={0.2 + i * 0.1} show={landed && !reduce} reduce={!!reduce}>{w}</TileWord>
+              {line2.map(({ w, key }, i) => (
+                <TileWord key={key} delay={0.2 + i * 0.1} show={landed && !reduce} reduce={!!reduce}>{w}</TileWord>
               ))}
             </span>
           </span>

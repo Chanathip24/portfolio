@@ -2,8 +2,8 @@
 
 import { ArrowUpRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import Image from "next/image";
-import Link from "next/link";
+import { SiteImage } from "@/components/ui/site-image";
+import { Link } from "next-view-transitions";
 import type { WorkItem } from "@/content/site";
 import { cn } from "@/lib/utils";
 
@@ -37,17 +37,17 @@ function Flow({ id, i, className, children }: { id: string; i: number; className
 
 export function WorkRow({ lead, wall }: { lead: WorkItem; wall: WorkItem[] }) {
   return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+    <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
       <Flow id={lead.slug} i={0}>
         <Lead item={lead} />
       </Flow>
       <ul className="grid grid-cols-2 gap-4 self-start">
         {wall.map((w, i) => (
-          <li key={i}>
+          <li key={w.slug}>
             <Flow id={`${lead.slug}-${w.slug}`} i={i + 1}>
               <Link href={w.href} aria-label={`${w.title} (${w.client})`} className="dim-item group block rounded-2xl focus-visible:outline-offset-[3px]">
                 <span className="block overflow-hidden rounded-2xl bg-tile transition-transform duration-300 group-active:scale-[0.98]">
-                    <Image src={w.image} alt="" width={800} height={560} unoptimized
+                    <SiteImage src={w.image} alt="" width={800} height={560} sizes="(min-width: 1024px) 33vw, 100vw"
                       className="aspect-[3/2] w-full object-cover transition-[scale] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]" />
                 </span>
               </Link>
@@ -63,7 +63,7 @@ function Lead({ item }: { item: WorkItem }) {
   return (
     <Link href={item.href} className="dim-item group block rounded-[1.75rem] no-underline">
       <span className="relative block overflow-hidden rounded-[1.75rem] bg-tile transition-transform duration-300 group-active:scale-[0.98]">
-          <Image src={item.image} alt="" width={1400} height={1000} unoptimized priority
+          <SiteImage src={item.image} alt="" width={1400} height={1000} sizes="100vw" priority
             className="aspect-[7/5] w-full object-cover transition-[scale] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]" />
         <span aria-hidden className="absolute right-4 top-4 size-10 overflow-hidden rounded-full bg-foreground text-background">
           <ArrowUpRight strokeWidth={2} className={cn("absolute inset-0 m-auto size-5 transition-transform group-hover:translate-x-[150%] group-hover:-translate-y-[150%] group-focus-visible:translate-x-[150%] group-focus-visible:-translate-y-[150%]", SWAP)} />

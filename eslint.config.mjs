@@ -5,6 +5,12 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  {
+    rules: {
+      "no-restricted-imports": ["error", { paths: [{ name: "next/image", message: "Use SiteImage from @/components/ui/site-image (blur preview + sizes)." }] }],
+    },
+  },
+  { files: ["src/components/ui/site-image.tsx"], rules: { "no-restricted-imports": "off" } },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

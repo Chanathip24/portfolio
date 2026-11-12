@@ -4,8 +4,9 @@ import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 import { useEffect, useRef, type CSSProperties } from "react";
 import { Globe } from "@/components/globe";
+import { onThemeChange } from "@/lib/site-store";
+import { EASE } from "@/lib/constants";
 
-const EASE = [0.16, 1, 0.3, 1] as const;
 // Keep the globe, scene and fringe on one local sky-blue palette.
 const SKY_PALETTE = {
   "--brand-ink": "#00a8f5",
@@ -155,11 +156,10 @@ function PixelEdge({ className }: { className?: string }) {
     const refresh = () => { colors(); draw(reduce ? 0 : last / 1000); };
     const ro = new ResizeObserver(() => draw(reduce ? 0 : last / 1000));
     ro.observe(canvas);
-    const mo = new MutationObserver(refresh);
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    const offTheme = onThemeChange(refresh);
     draw(0);
     raf = requestAnimationFrame(loop);
-    return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); mo.disconnect(); };
+    return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); offTheme(); };
   }, []);
   return <canvas ref={ref} aria-hidden className={className} />;
 }

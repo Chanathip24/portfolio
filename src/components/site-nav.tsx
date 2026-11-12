@@ -3,9 +3,9 @@
 import { ArrowRight } from "lucide-react";
 import { motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
 import { useEffect, useState } from "react";
-import { HERO_INTRO_DONE } from "@/components/hero";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { nav, owner } from "@/content/site";
+import { useSiteStore } from "@/lib/site-store";
 
 /**
  * Logo + links pill on the left, call to action on the right, both inset to the
@@ -14,19 +14,14 @@ import { nav, owner } from "@/content/site";
  */
 export function SiteNav() {
   const reduce = useReducedMotion();
-  const [ready, setReady] = useState(false);
+  const introDone = useSiteStore((s) => s.introDone);
+  const [timedOut, setTimedOut] = useState(false);
   const [hidden, setHidden] = useState(false);
   const { scrollY } = useScroll();
 
   useEffect(() => {
-    const show = () => setReady(true);
-    if ((window as unknown as { __heroIntroDone?: boolean }).__heroIntroDone) show();
-    window.addEventListener(HERO_INTRO_DONE, show);
-    const fallback = setTimeout(show, 2500); // never leave the page without navigation
-    return () => {
-      window.removeEventListener(HERO_INTRO_DONE, show);
-      clearTimeout(fallback);
-    };
+    const fallback = setTimeout(() => setTimedOut(true), 2500); // never leave the page without navigation
+    return () => clearTimeout(fallback);
   }, []);
 
   useMotionValueEvent(scrollY, "change", (y) => {
@@ -35,7 +30,7 @@ export function SiteNav() {
     setHidden(y > 120 && y > prev);
   });
 
-  const visible = (ready || !!reduce) && !hidden;
+  const visible = (introDone || timedOut || !!reduce) && !hidden;
 
   return (
     <motion.header

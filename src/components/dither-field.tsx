@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { onThemeChange } from "@/lib/site-store";
+import { BAYER } from "@/lib/constants";
 
 // 4x4 Bayer matrix, normalised to 0..1: ordered dithering decides each block's tone.
-const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((n) => (n + 0.5) / 16);
 
 /** Resolve any CSS colour (oklch included) to an rgb() string the canvas understands everywhere. */
 function toRgb(css: string) {
@@ -179,13 +180,12 @@ export function DitherField({ cell = 22, cellRef, clearCenter = false, clearAmou
     io.observe(canvas);
     const ro = new ResizeObserver(() => { resize(); draw(last / 1000); });
     ro.observe(canvas);
-    const mo = new MutationObserver(() => { readColors(); draw(last / 1000); });
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    const offTheme = onThemeChange(() => { readColors(); draw(last / 1000); });
     if (pointer && !reduce) window.addEventListener("pointermove", onMove, { passive: true });
     raf = requestAnimationFrame(loop);
     return () => {
       cancelAnimationFrame(raf);
-      io.disconnect(); ro.disconnect(); mo.disconnect();
+      io.disconnect(); ro.disconnect(); offTheme();
       window.removeEventListener("pointermove", onMove);
     };
   }, [cell, cellRef, clearCenter, clearAmount, spread, dissolve, build, world, skip, keep, detail, pointer]);

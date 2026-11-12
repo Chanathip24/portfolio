@@ -1,3 +1,4 @@
+import { HashEntry, HashLinks } from "@/components/hash-entry";
 import { Hero } from "@/components/hero";
 import { NotesStrip } from "@/components/notes-strip";
 import { GlobeScene } from "@/components/scroll-effects";
@@ -10,6 +11,8 @@ import { about, hero, owner, work } from "@/content/site";
 export default function Home() {
   return (
     <>
+      <HashEntry />
+      <HashLinks />
       <SiteNav />
       <main id="top">
         <Hero lines={hero.lines} swap={hero.swap} intro={hero.intro} note="Sample content · edit src/content/site.ts" />
@@ -18,8 +21,8 @@ export default function Home() {
             Clipped sideways: cards fly in from 1.5x and must not widen the page while they do. */}
         <section id="work" aria-label="Selected projects" className="page-x relative z-10 scroll-mt-24 overflow-x-clip bg-background pb-24 pt-12">
           <div className="dim-others space-y-16">
-            {work.map((row, i) => (
-              <WorkRow key={i} lead={row.lead} wall={row.wall} />
+            {work.map((row) => (
+              <WorkRow key={row.lead.slug} lead={row.lead} wall={row.wall} />
             ))}
           </div>
         </section>

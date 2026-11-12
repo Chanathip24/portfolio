@@ -2,15 +2,8 @@
 
 import { Moon, Sun } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useRef, useSyncExternalStore } from "react";
-
-// The theme lives on <html class="dark">; layout.tsx sets it before paint.
-const subscribe = (cb: () => void) => {
-  const mo = new MutationObserver(cb);
-  mo.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-  return () => mo.disconnect();
-};
-const isDark = () => document.documentElement.classList.contains("dark");
+import { useRef } from "react";
+import { useSiteStore } from "@/lib/site-store";
 
 const BOUNCE = { type: "spring", stiffness: 520, damping: 13, mass: 0.7 } as const;
 
@@ -21,7 +14,7 @@ const BOUNCE = { type: "spring", stiffness: 520, damping: 13, mass: 0.7 } as con
 export function ThemeToggle() {
   const ref = useRef<HTMLButtonElement>(null);
   const reduce = useReducedMotion();
-  const dark = useSyncExternalStore(subscribe, isDark, () => false);
+  const dark = useSiteStore((s) => s.theme === "dark");
 
   function toggle() {
     const flip = () => {
@@ -30,19 +23,28 @@ export function ThemeToggle() {
         localStorage.setItem("theme", next ? "dark" : "light");
       } catch {}
     };
-    const doc = document as Document & { startViewTransition?: (cb: () => void) => { ready: Promise<void> } };
+    const doc = document as Document & {
+      startViewTransition?: (cb: () => void) => { ready: Promise<void>; finished: Promise<void> };
+    };
     if (!doc.startViewTransition || reduce) return flip();
 
     const r = ref.current!.getBoundingClientRect();
     const x = r.left + r.width / 2, y = r.top + r.height / 2;
     const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-    document.documentElement.classList.add("theme-changing");
-    doc.startViewTransition(flip).ready.then(() => {
-      document.documentElement.animate(
-        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
-        { duration: 650, easing: "cubic-bezier(0.34, 1.56, 0.64, 1)", pseudoElement: "::view-transition-new(root)" },
-      ).finished.finally(() => document.documentElement.classList.remove("theme-changing"));
-    }).catch(() => document.documentElement.classList.remove("theme-changing"));
+    // While a swap runs the store keeps the navigation animation off (StoreSync -> `theme-changing`);
+    // it must outlive the circle, so it ends on `finished`, not when the circle does.
+    const { beginThemeSwap, endThemeSwap } = useSiteStore.getState();
+    beginThemeSwap();
+    const transition = doc.startViewTransition(flip);
+    transition.ready
+      .then(() =>
+        document.documentElement.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
+          { duration: 650, easing: "cubic-bezier(0.34, 1.56, 0.64, 1)", pseudoElement: "::view-transition-new(root)" },
+        ),
+      )
+      .catch(() => {}); // skipped transition (hidden tab, superseded): nothing to animate
+    transition.finished.then(endThemeSwap, endThemeSwap);
   }
 
   return (

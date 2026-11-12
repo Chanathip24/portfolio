@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
+import { SiteImage } from "@/components/ui/site-image";
 import { useRef } from "react";
 import { notes } from "@/content/site";
 
@@ -54,7 +54,7 @@ export function NotesStrip() {
         onPointerUp={up}
         onPointerLeave={up}
         onClickCapture={click}
-        className="mt-12 cursor-grab snap-x overflow-x-auto py-6 [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
+        className="mt-12 max-w-full cursor-grab snap-x overflow-x-auto overscroll-x-contain py-6 [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
       >
       <ul className="dim-others mx-auto flex w-max gap-6 px-[max(1rem,6vw)] xl:px-4">
         {notes.items.map((n) => (
@@ -65,7 +65,7 @@ export function NotesStrip() {
               style={{ "--turn": `${n.turn}deg`, "--hue": n.hue } as React.CSSProperties}
               className="stamp dim-item block w-56 rotate-[var(--turn)] bg-white p-3 text-black no-underline shadow-[0_10px_30px_-18px_rgba(0,0,0,0.45)] hover:-translate-y-2 hover:rotate-0 focus-visible:-translate-y-2 focus-visible:rotate-0 xl:w-60"
             >
-              <Image src={n.image} alt="" width={480} height={400} unoptimized draggable={false} className="aspect-[6/5] w-full select-none object-cover" />
+              <SiteImage src={n.image} alt="" width={480} height={400} sizes="240px" draggable={false} className="aspect-[6/5] w-full select-none object-cover" />
               <span className="mt-3 flex items-end justify-between gap-3">
                 <span className="min-w-0">
                   <span className="block font-mono text-[0.625rem] tracking-wide text-[var(--hue)]">{n.date}</span>
