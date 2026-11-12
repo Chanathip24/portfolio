@@ -1,26 +1,218 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "lenis/dist/lenis.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@custom-variant dark (&:is(.dark *));
+
+/* Licensed display face. TRJN DaVinci is a commercial font: buy a web licence and put the
+   files at these paths. Until they exist, the stack falls back to Instrument Serif. */
+@font-face {
+  font-family: "TRJN DaVinci";
+  src: url("/fonts/trjn-davinci-italic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "TRJN DaVinci";
+  src: url("/fonts/trjn-davinci-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-geist);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-geist);
+  --font-display: "TRJN DaVinci", var(--font-instrument);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  /* brand: one accent, used as an ordered-dither field and for live states */
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-ink: var(--brand-ink);
+  --color-tile: var(--tile);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2.5);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Read on a bright desk screen in daytime: near-white paper, black ink. */
+:root {
+  --background: oklch(0.982 0.002 286);
+  --foreground: oklch(0.15 0 0);
+  --tile: oklch(0.955 0.003 286);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--foreground);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.15 0 0);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.94 0.003 286);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.94 0.003 286);
+  --muted-foreground: oklch(0.45 0.005 286);
+  --accent: oklch(0.94 0.003 286);
+  --accent-foreground: var(--foreground);
+  --destructive: oklch(0.58 0.2 27);
+  --border: oklch(0.9 0.003 286);
+  --input: oklch(0.9 0.003 286);
+  --ring: #0078b8;
+  --brand: #00a8f5;
+  --brand-soft: #83d5fb;
+  --brand-ink: #075985;
+  --radius: 1rem;
+}
+
+.dark {
+  --background: oklch(0.16 0.003 286);
+  --foreground: oklch(0.96 0 0);
+  --tile: oklch(0.21 0.004 286);
+  --card: oklch(0.2 0.004 286);
+  --card-foreground: var(--foreground);
+  --popover: oklch(0.2 0.004 286);
+  --popover-foreground: var(--foreground);
+  --primary: oklch(0.96 0 0);
+  --primary-foreground: oklch(0.16 0.003 286);
+  --secondary: oklch(0.25 0.004 286);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.25 0.004 286);
+  --muted-foreground: oklch(0.72 0.005 286);
+  --accent: oklch(0.25 0.004 286);
+  --accent-foreground: var(--foreground);
+  --destructive: oklch(0.7 0.17 27);
+  --border: oklch(0.28 0.004 286);
+  --input: oklch(0.28 0.004 286);
+  --ring: #83d5fb;
+  --brand: #00a8f5;
+  --brand-soft: #164e70;
+  --brand-ink: #83d5fb;
+}
+
+/* Shared page gutter: content and nav sit inset from the edges, as on the reference (~6vw). */
+@utility page-x {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 96rem;
+  padding-inline: max(1rem, 6vw);
+}
+
+@layer components {
+  /* Postage-stamp perforations: page-coloured circles centred on each edge. */
+  .stamp {
+    position: relative;
+  }
+  .stamp::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    pointer-events: none;
+    --hole: radial-gradient(circle, var(--background) 5px, transparent 5.5px);
+    background:
+      var(--hole) top / 16px 12px repeat-x,
+      var(--hole) bottom / 16px 12px repeat-x,
+      var(--hole) left / 12px 16px repeat-y,
+      var(--hole) right / 12px 16px repeat-y;
+  }
+
+  /* Two-tone pixel tile in the brand colours, for word reveals and small marks. */
+  .dither-tile {
+    background-color: var(--brand-soft);
+    background-image: repeating-conic-gradient(var(--brand) 0 25%, transparent 0 50%);
+    background-size: 0.14em 0.14em;
+    image-rendering: pixelated;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Spotlight: hovering one item in a .dim-others group blurs and recedes the rest. */
+.dim-item {
+  transition:
+    filter 350ms ease,
+    opacity 350ms ease,
+    scale 420ms cubic-bezier(0.23, 1, 0.32, 1),
+    translate 420ms cubic-bezier(0.23, 1, 0.32, 1),
+    rotate 420ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dim-others:has(.dim-item:hover) .dim-item:not(:hover) {
+    filter: blur(3px) saturate(0.7);
+    opacity: 0.55;
+    scale: 0.97;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dim-item {
+    transition: none;
+  }
+}
+
+/* Theme switch: the theme toggle animates the new view's clip-path itself. */
+::view-transition {
+  background: var(--brand);
+}
+@keyframes page-leave {
+  to { transform: scale(0.82); opacity: 0; }
+}
+@keyframes page-arrive {
+  from { transform: scale(0.82); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html::view-transition-old(root),
+  html::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    scrollbar-color: var(--border) var(--background);
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  ::selection {
+    background: var(--brand);
+    color: #082e49;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+  a {
+    text-underline-offset: 0.2em;
+  }
 }
