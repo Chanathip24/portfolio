@@ -15,7 +15,9 @@
       "sort_order": 1,
       "image_url": "/mock/work-tidewater.svg",
       "summary": "Clinics edit rosters on a ward with no signal; changes merge cleanly when the tablet reconnects.",
-      "created_at": "2026-01-01T09:00:00Z"
+      "created_at": "2026-01-01T09:00:00Z",
+      "live_url": "https://example.com/?project=tidewater",
+      "preview_url": "/demo/tidewater/index.html"
     },
     {
       "id": "00000000-0000-4000-8000-000000000002",
@@ -31,7 +33,9 @@
       "sort_order": 2,
       "image_url": "/mock/work-ledgerline.svg",
       "summary": "An invoicing and ledger API where every cent is an integer and every write is auditable.",
-      "created_at": "2026-02-01T09:00:00Z"
+      "created_at": "2026-02-01T09:00:00Z",
+      "live_url": "https://example.com/?project=ledgerline",
+      "preview_url": "/demo/ledgerline/index.html"
     },
     {
       "id": "00000000-0000-4000-8000-000000000003",
@@ -46,7 +50,9 @@
       "sort_order": 3,
       "image_url": "/mock/work-pantry.svg",
       "summary": "Type three letters, find the tin at the back of the cupboard.",
-      "created_at": "2026-03-01T09:00:00Z"
+      "created_at": "2026-03-01T09:00:00Z",
+      "live_url": "https://example.com/?project=pantry-search",
+      "preview_url": "/demo/pantry-search/index.html"
     },
     {
       "id": "00000000-0000-4000-8000-000000000004",
@@ -61,7 +67,9 @@
       "sort_order": 4,
       "image_url": "/mock/work-hearth.svg",
       "summary": "A CI runner that caches like a fireplace: warm after the first fire.",
-      "created_at": "2026-04-01T09:00:00Z"
+      "created_at": "2026-04-01T09:00:00Z",
+      "live_url": "https://example.com/?project=hearth-ci",
+      "preview_url": "/demo/hearth-ci/index.html"
     },
     {
       "id": "00000000-0000-4000-8000-000000000005",
@@ -76,7 +84,9 @@
       "sort_order": 5,
       "image_url": "/mock/work-signal.svg",
       "summary": "Presence and typing indicators on a websocket that survives flaky Wi-Fi.",
-      "created_at": "2026-05-01T09:00:00Z"
+      "created_at": "2026-05-01T09:00:00Z",
+      "live_url": "https://example.com/?project=signal",
+      "preview_url": "/demo/signal/index.html"
     },
     {
       "id": "00000000-0000-4000-8000-000000000006",
@@ -91,7 +101,9 @@
       "sort_order": 6,
       "image_url": "/mock/work-atlas.svg",
       "summary": "A map-first dashboard over a few million rows, still snappy on a laptop.",
-      "created_at": "2026-06-01T09:00:00Z"
+      "created_at": "2026-06-01T09:00:00Z",
+      "live_url": "https://example.com/?project=atlas",
+      "preview_url": "/demo/atlas/index.html"
     },
     {
       "id": "00000000-0000-4000-8000-000000000007",
@@ -106,7 +118,9 @@
       "sort_order": 7,
       "image_url": "/mock/work-hearth.svg",
       "summary": "Webhook delivery with retries, replay and a log a human can read.",
-      "created_at": "2026-07-01T09:00:00Z"
+      "created_at": "2026-07-01T09:00:00Z",
+      "live_url": "https://example.com/?project=relay",
+      "preview_url": "/demo/relay/index.html"
     },
     {
       "id": "00000000-0000-4000-8000-000000000008",
@@ -121,7 +135,9 @@
       "sort_order": 8,
       "image_url": "/mock/work-signal.svg",
       "summary": "A design-token pipeline from Figma to a Tailwind theme in one command.",
-      "created_at": "2026-08-01T09:00:00Z"
+      "created_at": "2026-08-01T09:00:00Z",
+      "live_url": "https://example.com/?project=lumen",
+      "preview_url": "/demo/lumen/index.html"
     },
     {
       "id": "00000000-0000-4000-8000-000000000009",
@@ -137,7 +153,9 @@
       "sort_order": 9,
       "image_url": "/mock/work-atlas.svg",
       "summary": "Row-level security and realtime for a small marketplace.",
-      "created_at": "2026-09-01T09:00:00Z"
+      "created_at": "2026-09-01T09:00:00Z",
+      "live_url": "https://example.com/?project=orchard",
+      "preview_url": "/demo/orchard/index.html"
     },
     {
       "id": "00000000-0000-4000-8000-000000000010",
@@ -152,7 +170,9 @@
       "sort_order": 10,
       "image_url": "/mock/work-pantry.svg",
       "summary": "A checkout that fires, cools and settles without double charges.",
-      "created_at": "2026-01-01T09:00:00Z"
+      "created_at": "2026-01-01T09:00:00Z",
+      "live_url": "https://example.com/?project=kiln",
+      "preview_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000099",
@@ -167,7 +187,9 @@
       "sort_order": 99,
       "image_url": "/mock/work-signal.svg",
       "summary": "Not published yet.",
-      "created_at": "2026-09-01T09:00:00Z"
+      "created_at": "2026-09-01T09:00:00Z",
+      "live_url": "https://example.com/?project=night-shift",
+      "preview_url": null
     }
   ],
   "count": 11

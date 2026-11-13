@@ -1,4 +1,6 @@
 import axios, { AxiosError, type AxiosAdapter, type InternalAxiosRequestConfig } from "axios";
+import career from "@/mock/api/career.json";
+import postDetails from "@/mock/api/post-details.json";
 import posts from "@/mock/api/posts.json";
 import details from "@/mock/api/project-details.json";
 import projects from "@/mock/api/projects.json";
@@ -13,6 +15,7 @@ const routes: Record<string, unknown> = {
   "/projects": projects,
   "/posts": posts,
   "/profile": profile,
+  "/career": career,
   "/skills": skills,
   "/tools": tools,
   "/testimonials": testimonials,
@@ -27,9 +30,13 @@ const respond = (config: InternalAxiosRequestConfig, status: number, data: unkno
 const mockAdapter: AxiosAdapter = (config) => {
   const url = config.url ?? "";
   if (url in routes) return respond(config, 200, routes[url]);
-  const slug = /^\/projects\/([^/]+)$/.exec(url)?.[1];
-  const detail = slug && Object.hasOwn(details, slug) ? (details as Record<string, unknown>)[slug] : null;
-  if (slug) return respond(config, detail ? 200 : 404, detail ?? { error: "Not found" });
+  // /projects/:slug and /posts/:slug
+  const [, kind, slug] = /^\/(projects|posts)\/([^/]+)$/.exec(url) ?? [];
+  if (kind) {
+    const table: Record<string, unknown> = kind === "projects" ? details : postDetails;
+    const detail = Object.hasOwn(table, slug) ? table[slug] : null;
+    return respond(config, detail ? 200 : 404, detail ?? { error: "Not found" });
+  }
   return respond(config, 404, { error: "Not found" });
 };
 

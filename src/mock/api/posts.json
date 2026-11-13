@@ -9,7 +9,18 @@
       "status": "published",
       "reading_minutes": 9,
       "image_url": "/mock/note-1.svg",
-      "published_at": "2026-10-14T09:00:00Z"
+      "published_at": "2026-10-14T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000701",
+      "updated_at": "2026-11-02T09:00:00Z",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000701",
+        "name": "Your Name",
+        "role": "Full-stack developer",
+        "bio": "Placeholder bio. Builds web products end to end and writes down what surprised them along the way.",
+        "avatar_url": "/mock/portrait.svg",
+        "profile_href": "/about"
+      },
+      "views": 4210
     },
     {
       "id": "00000000-0000-4000-8000-000000000202",
@@ -20,7 +31,18 @@
       "status": "published",
       "reading_minutes": 5,
       "image_url": "/mock/note-2.svg",
-      "published_at": "2026-08-22T09:00:00Z"
+      "published_at": "2026-08-22T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000701",
+      "updated_at": "2026-08-22T09:00:00Z",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000701",
+        "name": "Your Name",
+        "role": "Full-stack developer",
+        "bio": "Placeholder bio. Builds web products end to end and writes down what surprised them along the way.",
+        "avatar_url": "/mock/portrait.svg",
+        "profile_href": "/about"
+      },
+      "views": 12840
     },
     {
       "id": "00000000-0000-4000-8000-000000000203",
@@ -31,7 +53,18 @@
       "status": "published",
       "reading_minutes": 7,
       "image_url": "/mock/note-3.svg",
-      "published_at": "2026-05-30T09:00:00Z"
+      "published_at": "2026-05-30T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000701",
+      "updated_at": "2026-06-18T09:00:00Z",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000701",
+        "name": "Your Name",
+        "role": "Full-stack developer",
+        "bio": "Placeholder bio. Builds web products end to end and writes down what surprised them along the way.",
+        "avatar_url": "/mock/portrait.svg",
+        "profile_href": "/about"
+      },
+      "views": 18620
     },
     {
       "id": "00000000-0000-4000-8000-000000000204",
@@ -42,7 +75,18 @@
       "status": "published",
       "reading_minutes": 4,
       "image_url": "/mock/note-4.svg",
-      "published_at": "2026-02-09T09:00:00Z"
+      "published_at": "2026-02-09T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000701",
+      "updated_at": "2026-02-09T09:00:00Z",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000701",
+        "name": "Your Name",
+        "role": "Full-stack developer",
+        "bio": "Placeholder bio. Builds web products end to end and writes down what surprised them along the way.",
+        "avatar_url": "/mock/portrait.svg",
+        "profile_href": "/about"
+      },
+      "views": 3150
     },
     {
       "id": "00000000-0000-4000-8000-000000000205",
@@ -53,7 +97,18 @@
       "status": "published",
       "reading_minutes": 2,
       "image_url": "/mock/note-5.svg",
-      "published_at": "2025-11-03T09:00:00Z"
+      "published_at": "2025-11-03T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000701",
+      "updated_at": "2025-11-03T09:00:00Z",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000701",
+        "name": "Your Name",
+        "role": "Full-stack developer",
+        "bio": "Placeholder bio. Builds web products end to end and writes down what surprised them along the way.",
+        "avatar_url": "/mock/portrait.svg",
+        "profile_href": "/about"
+      },
+      "views": 980
     },
     {
       "id": "00000000-0000-4000-8000-000000000206",
@@ -64,7 +119,18 @@
       "status": "published",
       "reading_minutes": 6,
       "image_url": "/mock/note-2.svg",
-      "published_at": "2026-09-18T09:00:00Z"
+      "published_at": "2026-09-18T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000701",
+      "updated_at": "2026-10-05T09:00:00Z",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000701",
+        "name": "Your Name",
+        "role": "Full-stack developer",
+        "bio": "Placeholder bio. Builds web products end to end and writes down what surprised them along the way.",
+        "avatar_url": "/mock/portrait.svg",
+        "profile_href": "/about"
+      },
+      "views": 7390
     },
     {
       "id": "00000000-0000-4000-8000-000000000207",
@@ -75,7 +141,18 @@
       "status": "published",
       "reading_minutes": 8,
       "image_url": "/mock/note-3.svg",
-      "published_at": "2026-07-02T09:00:00Z"
+      "published_at": "2026-07-02T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000702",
+      "updated_at": "2026-07-02T09:00:00Z",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000702",
+        "name": "Sample Guest",
+        "role": "Guest writer",
+        "bio": "Placeholder bio for a guest author. Replace with a real person and a real link.",
+        "avatar_url": null,
+        "profile_href": null
+      },
+      "views": 9575
     },
     {
       "id": "00000000-0000-4000-8000-000000000208",
@@ -86,7 +163,18 @@
       "status": "published",
       "reading_minutes": 5,
       "image_url": "/mock/note-1.svg",
-      "published_at": "2026-04-11T09:00:00Z"
+      "published_at": "2026-04-11T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000702",
+      "updated_at": "2026-04-11T09:00:00Z",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000702",
+        "name": "Sample Guest",
+        "role": "Guest writer",
+        "bio": "Placeholder bio for a guest author. Replace with a real person and a real link.",
+        "avatar_url": null,
+        "profile_href": null
+      },
+      "views": 5120
     },
     {
       "id": "00000000-0000-4000-8000-000000000209",
@@ -97,7 +185,18 @@
       "status": "published",
       "reading_minutes": 10,
       "image_url": "/mock/note-4.svg",
-      "published_at": "2026-01-20T09:00:00Z"
+      "published_at": "2026-01-20T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000701",
+      "updated_at": "2026-01-20T09:00:00Z",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000701",
+        "name": "Your Name",
+        "role": "Full-stack developer",
+        "bio": "Placeholder bio. Builds web products end to end and writes down what surprised them along the way.",
+        "avatar_url": "/mock/portrait.svg",
+        "profile_href": "/about"
+      },
+      "views": 15300
     },
     {
       "id": "00000000-0000-4000-8000-000000000299",
@@ -108,8 +207,107 @@
       "status": "draft",
       "reading_minutes": 1,
       "image_url": "/mock/note-1.svg",
-      "published_at": "2026-11-01T09:00:00Z"
+      "published_at": "2026-11-01T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000701",
+      "updated_at": "2026-11-01T09:00:00Z",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000701",
+        "name": "Your Name",
+        "role": "Full-stack developer",
+        "bio": "Placeholder bio. Builds web products end to end and writes down what surprised them along the way.",
+        "avatar_url": "/mock/portrait.svg",
+        "profile_href": "/about"
+      },
+      "views": 0
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000220",
+      "slug": "refactoring-without-a-safety-net",
+      "title": "Refactoring without a safety net",
+      "excerpt": "What I do first when a codebase has no tests and a deadline: characterise, wrap, then change one thing.",
+      "category": "engineering",
+      "status": "published",
+      "reading_minutes": 8,
+      "image_url": "/mock/note-3.svg",
+      "published_at": "2026-12-02T09:00:00Z",
+      "updated_at": "2026-12-02T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000701",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000701",
+        "name": "Your Name",
+        "role": "Full-stack developer",
+        "bio": "Placeholder bio. Builds web products end to end and writes down what surprised them along the way.",
+        "avatar_url": "/mock/portrait.svg",
+        "profile_href": "/about"
+      },
+      "views": 2260
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000221",
+      "slug": "designing-empty-states",
+      "title": "Designing empty states",
+      "excerpt": "The screen nobody screenshots is the first one every new user sees. Notes on making it useful.",
+      "category": "design",
+      "status": "published",
+      "reading_minutes": 5,
+      "image_url": "/mock/note-5.svg",
+      "published_at": "2026-11-20T09:00:00Z",
+      "updated_at": "2026-11-20T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000702",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000702",
+        "name": "Sample Guest",
+        "role": "Guest writer",
+        "bio": "Placeholder bio for a guest author. Replace with a real person and a real link.",
+        "avatar_url": null,
+        "profile_href": null
+      },
+      "views": 6840
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000222",
+      "slug": "what-a-migration-taught-me",
+      "title": "What a migration taught me",
+      "excerpt": "Moving a live table without downtime, and the three checks I now run before touching production data.",
+      "category": "data",
+      "status": "published",
+      "reading_minutes": 9,
+      "image_url": "/mock/note-2.svg",
+      "published_at": "2026-03-27T09:00:00Z",
+      "updated_at": "2026-03-27T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000701",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000701",
+        "name": "Your Name",
+        "role": "Full-stack developer",
+        "bio": "Placeholder bio. Builds web products end to end and writes down what surprised them along the way.",
+        "avatar_url": "/mock/portrait.svg",
+        "profile_href": "/about"
+      },
+      "views": 11050
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000223",
+      "slug": "my-week-in-public",
+      "title": "My week in public",
+      "excerpt": "I wrote down every decision for seven days. What it changed about how I work, and what I stopped doing.",
+      "category": "process",
+      "status": "published",
+      "reading_minutes": 4,
+      "image_url": "/mock/note-1.svg",
+      "published_at": "2026-01-08T09:00:00Z",
+      "updated_at": "2026-01-08T09:00:00Z",
+      "author_id": "00000000-0000-4000-8000-000000000701",
+      "author": {
+        "id": "00000000-0000-4000-8000-000000000701",
+        "name": "Your Name",
+        "role": "Full-stack developer",
+        "bio": "Placeholder bio. Builds web products end to end and writes down what surprised them along the way.",
+        "avatar_url": "/mock/portrait.svg",
+        "profile_href": "/about"
+      },
+      "views": 1720
     }
   ],
-  "count": 10
+  "count": 14
 }

@@ -1,0 +1,130 @@
+// Writes a small interactive demo site per project to public/demo/<slug>/index.html.
+// These stand in for the real projects until there are some: the project preview dialog frames them, and they are
+// self-contained (no network, no dependencies) and obviously samples. Run: node scripts/mock-demos.mjs
+import { mkdir, writeFile } from "node:fs/promises";
+
+const projects = [
+  { slug: "tidewater", name: "Tidewater", tagline: "Shift planning that works offline", accent: "#0f9d82", noun: "shift", stats: ["Open shifts", "Swaps today", "Sync conflicts"], items: ["Ward A, early", "Ward B, late", "Night cover", "Weekend float"] },
+  { slug: "ledgerline", name: "Ledgerline", tagline: "A ledger API freelancers trust", accent: "#3d5afe", noun: "invoice", stats: ["Open invoices", "Paid this week", "Disputes"], items: ["INV-1042 Studio Nine", "INV-1043 Kappa Co", "INV-1044 Fern & Fox", "INV-1045 Lumen Labs"] },
+  { slug: "pantry-search", name: "Pantry search", tagline: "Find the tin at the back of the cupboard", accent: "#f59e0b", noun: "item", stats: ["Items stored", "Expiring soon", "Searches today"], items: ["Chickpeas", "Rice, 2 kg", "Tomato passata", "Olive oil"] },
+  { slug: "hearth-ci", name: "Hearth CI", tagline: "A runner that caches like a fireplace", accent: "#16a34a", noun: "build", stats: ["Builds today", "Cache hits", "Median time"], items: ["main · a41f9c2", "feat/auth · 77be10d", "fix/migrate · c09a3e1", "chore/deps · 5d2f8aa"] },
+  { slug: "signal", name: "Signal", tagline: "Presence that survives flaky Wi-Fi", accent: "#ec4899", noun: "channel", stats: ["Online now", "Typing", "Reconnects"], items: ["#general", "#design", "#on-call", "#random"] },
+  { slug: "atlas", name: "Atlas", tagline: "A map-first dashboard for big tables", accent: "#0284c7", noun: "region", stats: ["Rows loaded", "Regions", "Query time"], items: ["Southeast Asia", "Western Europe", "North America", "Oceania"] },
+  { slug: "relay", name: "Relay", tagline: "Webhook delivery you can read", accent: "#16a34a", noun: "delivery", stats: ["Delivered", "Retrying", "Replayed"], items: ["order.created → shop.example", "invoice.paid → crm.example", "user.deleted → mail.example", "ping → status.example"] },
+  { slug: "lumen", name: "Lumen", tagline: "Design tokens from Figma to Tailwind", accent: "#ec4899", noun: "token", stats: ["Tokens", "Changed", "Components"], items: ["color.brand.500", "space.4", "radius.lg", "font.display"] },
+  { slug: "orchard", name: "Orchard", tagline: "Row-level security for a small marketplace", accent: "#0284c7", noun: "listing", stats: ["Listings", "Sellers", "Policies"], items: ["Heirloom apples", "Pressed cider", "Quince jelly", "Wild honey"] },
+];
+
+const page = (p) => `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${p.name} · sample demo</title>
+<style>
+  :root { --accent: ${p.accent}; --ink: #14151a; --muted: #5b6070; --line: #e4e6ec; --bg: #f7f8fa; --card: #fff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--bg); }
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 20px; background: var(--card); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .logo { width: 28px; height: 28px; border-radius: 8px; background: var(--accent); }
+  h1 { font-size: 16px; margin: 0; }
+  header p { margin: 0; color: var(--muted); font-size: 13px; }
+  nav { margin-left: auto; display: flex; gap: 4px; }
+  nav button { border: 0; background: none; padding: 8px 12px; border-radius: 8px; font: inherit; color: var(--muted); cursor: pointer; }
+  nav button[aria-selected="true"] { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); font-weight: 600; }
+  main { max-width: 760px; margin: 0 auto; padding: 20px; }
+  section[hidden] { display: none; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+  .stat b { display: block; font-size: 28px; letter-spacing: -0.02em; }
+  .stat span { color: var(--muted); font-size: 13px; }
+  .bars { display: flex; align-items: flex-end; gap: 8px; height: 140px; margin-top: 12px; }
+  .bars div { flex: 1; background: color-mix(in srgb, var(--accent) 35%, transparent); border-radius: 6px 6px 0 0; position: relative; transition: background .2s; }
+  .bars div:hover { background: var(--accent); }
+  .bars div:hover::after { content: attr(data-v); position: absolute; top: -26px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; font-size: 12px; padding: 2px 6px; border-radius: 6px; }
+  form { display: flex; gap: 8px; margin: 12px 0; }
+  input[type="text"], input[type="search"], select { flex: 1; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; font: inherit; background: var(--card); }
+  .btn { padding: 10px 14px; border: 0; border-radius: 10px; background: var(--accent); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li.row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; margin-top: 8px; cursor: pointer; }
+  li.row[data-done="true"] span { text-decoration: line-through; color: var(--muted); }
+  .chip { display: flex; gap: 6px; margin: 10px 0 2px; }
+  .chip button { border: 1px solid var(--line); background: var(--card); padding: 6px 12px; border-radius: 999px; font: inherit; font-size: 13px; cursor: pointer; }
+  .chip button[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .switch { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .switch button { width: 44px; height: 26px; border-radius: 999px; border: 0; background: var(--line); position: relative; cursor: pointer; transition: background .2s; }
+  .switch button::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .2s; }
+  .switch button[aria-checked="true"] { background: var(--accent); }
+  .switch button[aria-checked="true"]::after { transform: translateX(18px); }
+  body.compact li.row { padding: 6px 12px; }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" aria-hidden="true"></div>
+  <div><h1>${p.name}</h1><p>${p.tagline}</p></div>
+  <nav role="tablist" aria-label="Sections">
+    <button role="tab" aria-selected="true" data-tab="overview">Overview</button>
+    <button role="tab" aria-selected="false" data-tab="items">${p.noun[0].toUpperCase() + p.noun.slice(1)}s</button>
+    <button role="tab" aria-selected="false" data-tab="settings">Settings</button>
+  </nav>
+</header>
+<main>
+  <section id="overview">
+    <div class="stats">
+      ${p.stats.map((s, i) => `<div class="card stat"><b data-count="${[128, 42, 7][i]}">0</b><span>${s}</span></div>`).join("\n      ")}
+    </div>
+    <div class="card" style="margin-top:12px"><strong>This week</strong>
+      <div class="bars">${[40, 62, 35, 80, 55, 90, 48].map((v, i) => `<div style="height:${v}%" data-v="${["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][i]} · ${v}"></div>`).join("")}</div>
+    </div>
+  </section>
+  <section id="items" hidden>
+    <form id="add"><input id="new" type="text" placeholder="Add a ${p.noun}" aria-label="Add a ${p.noun}"><button class="btn">Add</button></form>
+    <input id="q" type="search" placeholder="Search ${p.noun}s" aria-label="Search ${p.noun}s" style="width:100%">
+    <div class="chip" role="group" aria-label="Filter"><button aria-pressed="true" data-f="all">All</button><button aria-pressed="false" data-f="open">Open</button><button aria-pressed="false" data-f="done">Done</button></div>
+    <ul id="list"></ul>
+  </section>
+  <section id="settings" hidden>
+    <div class="switch"><span>Notifications</span><button role="switch" aria-checked="true" aria-label="Notifications"></button></div>
+    <div class="switch"><span>Compact rows</span><button role="switch" aria-checked="false" aria-label="Compact rows" id="density"></button></div>
+    <div class="switch"><span>Weekly digest</span><button role="switch" aria-checked="false" aria-label="Weekly digest"></button></div>
+  </section>
+</main>
+<footer>Sample demo for a portfolio. Not a real product; nothing you do here is saved.</footer>
+<script>
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  $$("[data-tab]").forEach((b) => b.addEventListener("click", () => {
+    $$("[data-tab]").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+    $$("main > section").forEach((s) => (s.hidden = s.id !== b.dataset.tab));
+  }));
+  $$("[data-count]").forEach((el) => { const to = +el.dataset.count; let n = 0; const t = setInterval(() => { n += Math.ceil(to / 20); if (n >= to) { n = to; clearInterval(t); } el.textContent = n; }, 30); });
+  const items = ${JSON.stringify(p.items)}.map((t, i) => ({ t, done: i === 1 }));
+  let filter = "all";
+  const render = () => {
+    const q = $("#q").value.toLowerCase();
+    $("#list").innerHTML = "";
+    items.filter((i) => i.t.toLowerCase().includes(q) && (filter === "all" || (filter === "done") === i.done)).forEach((i) => {
+      const li = document.createElement("li"); li.className = "row"; li.dataset.done = i.done; li.tabIndex = 0;
+      li.innerHTML = "<input type='checkbox' tabindex='-1' " + (i.done ? "checked" : "") + " aria-hidden='true'><span></span>"; $("span", li).textContent = i.t;
+      const toggle = () => { i.done = !i.done; render(); };
+      li.addEventListener("click", toggle); li.addEventListener("keydown", (e) => (e.key === "Enter" || e.key === " ") && (e.preventDefault(), toggle()));
+      $("#list").append(li);
+    });
+  };
+  $("#add").addEventListener("submit", (e) => { e.preventDefault(); const v = $("#new").value.trim(); if (v) { items.unshift({ t: v, done: false }); $("#new").value = ""; render(); } });
+  $("#q").addEventListener("input", render);
+  $$("[data-f]").forEach((b) => b.addEventListener("click", () => { filter = b.dataset.f; $$("[data-f]").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); render(); }));
+  $$("[role=switch]").forEach((b) => b.addEventListener("click", () => { b.setAttribute("aria-checked", String(b.getAttribute("aria-checked") !== "true")); if (b.id === "density") document.body.classList.toggle("compact"); }));
+  render();
+</script>
+</body>
+</html>
+`;
+
+for (const p of projects) {
+  const dir = new URL(`../public/demo/${p.slug}/`, import.meta.url);
+  await mkdir(dir, { recursive: true });
+  await writeFile(new URL("index.html", dir), page(p));
+}
+console.log(`wrote ${projects.length} demos to public/demo/`);

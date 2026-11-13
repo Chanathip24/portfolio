@@ -31,3 +31,23 @@ export const socialIcons: Record<SocialPlatform, IconType> = {
   [SocialPlatform.Bluesky]: SiBluesky,
   [SocialPlatform.Email]: Mail as unknown as IconType,
 };
+
+// Brand colour per tool, used to tint its tile. Typed Record<ToolKey, ...> like the icons: a tool added to the enum
+// without a colour here is a compile error. Black marks (Next.js, Vercel) follow the page's foreground so they stay
+// visible in both themes.
+export const toolColors: Record<ToolKey, string> = {
+  [ToolKey.TypeScript]: "#3178c6",
+  [ToolKey.React]: "#149eca",
+  [ToolKey.Nextjs]: "var(--foreground)",
+  [ToolKey.Nodejs]: "#5fa04e",
+  [ToolKey.Postgres]: "#4169e1",
+  [ToolKey.Supabase]: "#2eb67d",
+  [ToolKey.Tailwind]: "#06a6c4",
+  [ToolKey.Docker]: "#2496ed",
+  [ToolKey.Git]: "#f05032",
+  [ToolKey.Figma]: "#f24e1e",
+  [ToolKey.Vercel]: "var(--foreground)",
+  [ToolKey.Rust]: "#ce422b",
+  [ToolKey.Redis]: "#dc382d",
+  [ToolKey.GraphQL]: "#e10098",
+};

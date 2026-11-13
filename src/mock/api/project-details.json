@@ -680,7 +680,9 @@
             ]
           }
         ]
-      }
+      },
+      "live_url": "https://example.com/?project=tidewater",
+      "preview_url": "/demo/tidewater/index.html"
     }
   },
   "ledgerline": {
@@ -1363,7 +1365,9 @@
             ]
           }
         ]
-      }
+      },
+      "live_url": "https://example.com/?project=ledgerline",
+      "preview_url": "/demo/ledgerline/index.html"
     }
   },
   "pantry-search": {
@@ -2045,7 +2049,9 @@
             ]
           }
         ]
-      }
+      },
+      "live_url": "https://example.com/?project=pantry-search",
+      "preview_url": "/demo/pantry-search/index.html"
     }
   },
   "hearth-ci": {
@@ -2727,7 +2733,9 @@
             ]
           }
         ]
-      }
+      },
+      "live_url": "https://example.com/?project=hearth-ci",
+      "preview_url": "/demo/hearth-ci/index.html"
     }
   },
   "signal": {
@@ -3409,7 +3417,9 @@
             ]
           }
         ]
-      }
+      },
+      "live_url": "https://example.com/?project=signal",
+      "preview_url": "/demo/signal/index.html"
     }
   },
   "atlas": {
@@ -4091,7 +4101,9 @@
             ]
           }
         ]
-      }
+      },
+      "live_url": "https://example.com/?project=atlas",
+      "preview_url": "/demo/atlas/index.html"
     }
   },
   "relay": {
@@ -4773,7 +4785,9 @@
             ]
           }
         ]
-      }
+      },
+      "live_url": "https://example.com/?project=relay",
+      "preview_url": "/demo/relay/index.html"
     }
   },
   "lumen": {
@@ -5455,7 +5469,9 @@
             ]
           }
         ]
-      }
+      },
+      "live_url": "https://example.com/?project=lumen",
+      "preview_url": "/demo/lumen/index.html"
     }
   },
   "orchard": {
@@ -6138,7 +6154,9 @@
             ]
           }
         ]
-      }
+      },
+      "live_url": "https://example.com/?project=orchard",
+      "preview_url": "/demo/orchard/index.html"
     }
   },
   "kiln": {
@@ -6820,7 +6838,9 @@
             ]
           }
         ]
-      }
+      },
+      "live_url": "https://example.com/?project=kiln",
+      "preview_url": null
     }
   }
 }

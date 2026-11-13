@@ -152,6 +152,12 @@ export function Hero({ lines, swap, intro, note }: { lines: string[]; swap: Swap
   return (
     <div ref={wrapRef} style={{ height: reduce ? "100svh" : `calc(100svh + ${PIN}px)` }}>
       <div ref={stageRef} className="sticky top-0 flex h-svh flex-col items-center justify-center overflow-hidden px-5 text-center">
+        {/* Night only: the moon sits behind the cloud field, so pixel clouds drift over it. */}
+        <div aria-hidden className="pointer-events-none absolute right-[12%] top-[14%] hidden size-14 rounded-full bg-[#f6f1e0] shadow-[0_0_60px_18px_rgba(246,241,224,0.28)] dark:block sm:size-20">
+          <span className="absolute left-[22%] top-[28%] size-3 rounded-full bg-[#d9d2b4] sm:size-4" />
+          <span className="absolute bottom-[22%] right-[26%] size-2 rounded-full bg-[#d9d2b4] sm:size-3" />
+        </div>
+
         <DitherField clearCenter build={outerBuild} world={outerWorld} skip={outerSkip} keep={outerKeep} pointer className="absolute inset-0 size-full" />
 
         {!reduce && (

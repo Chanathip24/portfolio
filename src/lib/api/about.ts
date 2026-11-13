@@ -1,6 +1,6 @@
 import { cacheLife } from "next/cache";
 import { api } from "./client";
-import type { ProfileResponse, SkillsResponse, TestimonialsResponse, ToolsResponse } from "./types";
+import type { CareerResponse, ProfileResponse, SkillsResponse, TestimonialsResponse, ToolsResponse } from "./types";
 
 const bySort = <T extends { sort_order: number }>(rows: T[]) => [...rows].sort((a, b) => a.sort_order - b.sort_order);
 
@@ -29,5 +29,12 @@ export async function getTestimonials() {
   "use cache";
   cacheLife("hours");
   const { data } = await api.get<TestimonialsResponse>("/testimonials");
+  return bySort(data.data);
+}
+
+export async function getCareer() {
+  "use cache";
+  cacheLife("hours");
+  const { data } = await api.get<CareerResponse>("/career");
   return bySort(data.data);
 }

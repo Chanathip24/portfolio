@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { getSkills } from "@/lib/api/about";
 import { SkillGroup } from "@/lib/enums";
 import { titleCase } from "@/lib/format";
+import { Parallax } from "@/components/ui/parallax";
 
 type Skills = Awaited<ReturnType<typeof getSkills>>;
 const groups = Object.values(SkillGroup);
@@ -12,9 +13,11 @@ const groups = Object.values(SkillGroup);
 export function Skills({ skills }: { skills: Skills }) {
   return (
     <section aria-labelledby="skills-title" className="page-x pt-40">
-      <h2 id="skills-title" className="text-[clamp(2.25rem,5.5vw,4.5rem)] font-medium leading-[0.95] tracking-[-0.03em]">
-        What I do
-      </h2>
+      <Parallax distance={18}>
+        <h2 id="skills-title" className="text-[clamp(2.25rem,5.5vw,4.5rem)] font-medium leading-[0.95] tracking-[-0.03em]">
+          What I do
+        </h2>
+      </Parallax>
       <Tabs defaultValue={SkillGroup.Frontend} className="mt-12 gap-8">
         <TabsList className="h-auto! w-full flex-wrap justify-start gap-2 bg-transparent p-0">
           {groups.map((g) => (

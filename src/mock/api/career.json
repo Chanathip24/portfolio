@@ -1,0 +1,80 @@
+{
+  "data": [
+    {
+      "id": "00000000-0000-4000-8000-000000000801",
+      "kind": "education",
+      "role": "BSc Computer Science",
+      "organisation": "Sample University",
+      "location": "Bangkok, Thailand",
+      "start_year": 2014,
+      "end_year": 2018,
+      "summary": "Where it started: a degree, a broken game mod, and a habit of taking things apart to see how they worked.",
+      "highlights": [
+        "Thesis on offline-first sync",
+        "Ran the student web society"
+      ],
+      "sort_order": 1
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000802",
+      "kind": "work",
+      "role": "Junior developer",
+      "organisation": "Sample Studio",
+      "location": "Bangkok, Thailand",
+      "start_year": 2018,
+      "end_year": 2020,
+      "summary": "First professional job: client sites, a lot of CSS, and learning what happens after launch day.",
+      "highlights": [
+        "Shipped 20+ marketing sites",
+        "Moved the team from FTP to CI"
+      ],
+      "sort_order": 2
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000803",
+      "kind": "work",
+      "role": "Full-stack developer",
+      "organisation": "Example Health",
+      "location": "Remote",
+      "start_year": 2020,
+      "end_year": 2022,
+      "summary": "Built scheduling tools for clinics with patchy connectivity. This is where sync stopped being scary.",
+      "highlights": [
+        "Offline editing with no merge conflicts",
+        "Cut first load from 4s to 1.2s"
+      ],
+      "sort_order": 3
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000804",
+      "kind": "work",
+      "role": "Senior engineer",
+      "organisation": "Placeholder Labs",
+      "location": "Singapore",
+      "start_year": 2022,
+      "end_year": 2024,
+      "summary": "Owned a payments API end to end, from schema to the hover states of its dashboard.",
+      "highlights": [
+        "Every cent stored as an integer",
+        "Mentored three engineers"
+      ],
+      "sort_order": 4
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000805",
+      "kind": "freelance",
+      "role": "Independent developer",
+      "organisation": "Self-employed",
+      "location": "Bangkok, Thailand",
+      "start_year": 2024,
+      "end_year": null,
+      "summary": "Small teams, clear problems, and writing down what I learn. Open to the right project.",
+      "highlights": [
+        "Product builds for early teams",
+        "Writing here, in public"
+      ],
+      "sort_order": 5
+    }
+  ],
+  "count": 5
+}

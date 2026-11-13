@@ -82,31 +82,39 @@
   --brand-soft: #83d5fb;
   --brand-ink: #075985;
   --radius: 1rem;
+  /* The hero sky's cloud tones. Day: the brand blues. Night overrides them (see .dark). */
+  --sky-strong: var(--brand);
+  --sky-soft: var(--brand-soft);
 }
 
+/* Night. Not "dark grey": the page after sundown. Deep blue-black ground, moonlit cream ink, and a sky of indigo cloud
+   under stars (see NightSky and the starfield below). */
 .dark {
-  --background: oklch(0.16 0.003 286);
-  --foreground: oklch(0.96 0 0);
-  --tile: oklch(0.21 0.004 286);
-  --card: oklch(0.2 0.004 286);
+  --background: oklch(0.145 0.03 268);
+  --foreground: oklch(0.95 0.012 95);
+  --tile: oklch(0.2 0.036 268);
+  --card: oklch(0.19 0.036 268);
   --card-foreground: var(--foreground);
-  --popover: oklch(0.2 0.004 286);
+  --popover: oklch(0.2 0.036 268);
   --popover-foreground: var(--foreground);
-  --primary: oklch(0.96 0 0);
-  --primary-foreground: oklch(0.16 0.003 286);
-  --secondary: oklch(0.25 0.004 286);
+  --primary: oklch(0.95 0.012 95);
+  --primary-foreground: oklch(0.15 0.03 268);
+  --secondary: oklch(0.25 0.038 268);
   --secondary-foreground: var(--foreground);
-  --muted: oklch(0.25 0.004 286);
-  --muted-foreground: oklch(0.72 0.005 286);
-  --accent: oklch(0.25 0.004 286);
+  --muted: oklch(0.25 0.038 268);
+  --muted-foreground: oklch(0.73 0.03 265);
+  --accent: oklch(0.25 0.038 268);
   --accent-foreground: var(--foreground);
   --destructive: oklch(0.7 0.17 27);
-  --border: oklch(0.28 0.004 286);
-  --input: oklch(0.28 0.004 286);
+  --border: oklch(0.31 0.042 268);
+  --input: oklch(0.31 0.042 268);
   --ring: #83d5fb;
   --brand: #00a8f5;
   --brand-soft: #164e70;
   --brand-ink: #83d5fb;
+  /* The sky's cloud tones: moonlit indigo instead of daytime blue. */
+  --sky-strong: #27388c;
+  --sky-soft: #172158;
 }
 
 /* Shared page gutter: content and nav sit inset from the edges, as on the reference (~6vw). */
@@ -232,9 +240,9 @@
 @media (prefers-reduced-motion: reduce) { .hatch-cross { display: none; } }
 
 /* Tiptap content (RichContent): typography for the generated HTML. */
-.rich { font-size: 1.0625rem; line-height: 1.75; }
-.rich > * + * { margin-top: 1.25em; }
-.rich h2 { margin-top: 2.5em; font-family: var(--font-display); font-style: italic; font-size: 2.25rem; line-height: 1.05; letter-spacing: -0.02em; }
+.rich { font-size: 1rem; line-height: 1.75; }
+.rich > * + * { margin-top: 1.35em; }
+.rich h2 { margin-top: 2.75em; font-family: var(--font-display); font-style: italic; font-size: 2.25rem; line-height: 1.05; letter-spacing: -0.02em; }
 .rich h3 { margin-top: 2em; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; }
 .rich a { color: var(--brand-ink); text-decoration: underline; text-underline-offset: 0.2em; }
 .dark .rich a { color: var(--brand-soft); }
@@ -293,8 +301,96 @@
 .marquee:hover .marquee-track,
 .marquee:focus-within .marquee-track { animation-play-state: paused; }
 @keyframes marquee { to { transform: translateX(-100%); } }
+/* Vertical: the same two tracks, stacked, each slid up by its own height. The fade is top and bottom. */
+.marquee[data-vertical] {
+  flex-direction: column;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+}
+.marquee[data-vertical] .marquee-track {
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 0;
+  min-height: 100%;
+  padding-right: 0;
+  padding-bottom: var(--marquee-gap);
+  animation-name: marquee-y;
+}
+@keyframes marquee-y { to { transform: translateY(-100%); } }
 @media (prefers-reduced-motion: reduce) {
   .marquee { overflow-x: auto; scrollbar-width: thin; }
+  .marquee[data-vertical] { overflow-x: hidden; overflow-y: auto; }
   .marquee-track { animation: none; }
   .marquee-track[aria-hidden] { display: none; }
+}
+
+/* The About scene (globe + sky). Day: sky blue, white land. Night: the scene goes dark and the globe with it
+   (ocean = the scene ground, so the screen-filling hand-over stays seamless in both). */
+.sky-scene {
+  --brand-ink: #00a8f5;
+  --brand: #38baff;
+  --brand-soft: #83d5fb;
+  /* Globe: living green by day. */
+  --globe-cloud: #fff;
+  --globe-forest: #1f9d55;
+  --globe-grass: #7acb4f;
+  --globe-sand: #ecdc8c;
+  --globe-light: #ffd27a;
+  --globe-night: 0;
+  color: #fff;
+}
+.dark .sky-scene {
+  --brand-ink: #060a1d;
+  --brand: #0b1236;
+  --brand-soft: #0e1740;
+  /* Globe: Earth at night, dark continents lit by city lights. */
+  --globe-cloud: #34459c;
+  --globe-forest: #17235f;
+  --globe-grass: #2a3a8c;
+  --globe-sand: #2a3a8c;
+  --globe-light: #ffd27a;
+  --globe-night: 1;
+  color: #f6f1e0;
+}
+
+/* The night sky behind the whole page: two sparse layers of stars on tiles of different sizes, twinkling out of step.
+   Fixed and behind everything, so it shows wherever a section lets the page through. CSS only. */
+.dark body::before,
+.dark body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.dark body::before {
+  background-image:
+    radial-gradient(1.5px 1.5px at 8% 14%, #fff 50%, transparent 55%),
+    radial-gradient(1px 1px at 23% 61%, #cfe0ff 50%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 37% 32%, #fff 50%, transparent 55%),
+    radial-gradient(1px 1px at 52% 78%, #fff1c9 50%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 66% 19%, #cfe0ff 50%, transparent 55%),
+    radial-gradient(1px 1px at 79% 55%, #fff 50%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 91% 85%, #fff1c9 50%, transparent 55%),
+    radial-gradient(1px 1px at 44% 8%, #fff 50%, transparent 55%);
+  background-size: 540px 540px;
+  animation: night-twinkle 7s ease-in-out infinite alternate;
+}
+.dark body::after {
+  background-image:
+    radial-gradient(1px 1px at 15% 40%, #fff 50%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 31% 88%, #cfe0ff 50%, transparent 55%),
+    radial-gradient(1px 1px at 58% 47%, #fff1c9 50%, transparent 55%),
+    radial-gradient(1px 1px at 72% 91%, #fff 50%, transparent 55%),
+    radial-gradient(1.5px 1.5px at 86% 28%, #fff 50%, transparent 55%),
+    radial-gradient(1px 1px at 4% 72%, #cfe0ff 50%, transparent 55%);
+  background-size: 360px 360px;
+  animation: night-twinkle 5s ease-in-out -2.5s infinite alternate;
+}
+@keyframes night-twinkle {
+  from { opacity: 0.25; }
+  to { opacity: 0.8; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dark body::before, .dark body::after { animation: none; opacity: 0.6; }
 }

@@ -13,6 +13,8 @@ export type WorkItem = {
   summary: string;
   year: number;
   isSignature: boolean;
+  liveUrl: string | null;
+  previewUrl: string | null;
   image: string;
   href: string;
 };
@@ -27,6 +29,8 @@ const toItem = (p: ProjectRow): WorkItem => ({
   summary: p.summary,
   year: new Date(p.created_at).getUTCFullYear(),
   isSignature: p.is_signature,
+  liveUrl: p.live_url,
+  previewUrl: p.preview_url,
   image: p.image_url,
   href: `/work/${p.slug}`,
 });
@@ -62,4 +66,18 @@ export async function getProject(slug: string): Promise<ProjectDetailRow | null>
     if (isAxiosError(e) && e.response?.status === 404) return null;
     throw e;
   }
+}
+
+/** What sits around a project: up to three related ones (sharing a tag first, then in order), plus the
+ *  previous and next project in sort_order. */
+export async function getProjectNeighbors(slug: string) {
+  "use cache";
+  cacheLife("hours");
+  const all = await getPublished();
+  const i = all.findIndex((p) => p.slug === slug);
+  const tags = new Set(all[i]?.tags ?? []);
+  const others = all.filter((p) => p.slug !== slug);
+  const shares = (p: WorkItem) => p.tags.some((t) => tags.has(t));
+  const related = [...others.filter(shares), ...others.filter((p) => !shares(p))].slice(0, 3);
+  return { related, prev: all[i - 1] ?? null, next: all[i + 1] ?? null };
 }

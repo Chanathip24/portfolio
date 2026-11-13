@@ -16,9 +16,9 @@ export default async function BlogPage() {
   return (
     <>
       <SiteNav />
-      <main className="page-x flex-1 pt-32 sm:pt-40">
-        <h1 className="text-[clamp(3rem,8vw,6.5rem)] font-medium leading-[0.9] tracking-[-0.03em]">Blog</h1>
-        <p className="mt-5 max-w-[40ch] text-lg text-muted-foreground">{notes.blurb}</p>
+      <main className="page-x flex-1 pt-28 sm:pt-36">
+        <h1 className="text-[clamp(2.75rem,6vw,4.75rem)] font-medium leading-[0.9] tracking-[-0.03em]">Blog</h1>
+        <p className="mt-4 max-w-[40ch] text-lg text-muted-foreground">{notes.blurb}</p>
         <Suspense fallback={<p className="mt-12 text-muted-foreground">Loading posts…</p>}>
           <BlogList posts={posts} />
         </Suspense>

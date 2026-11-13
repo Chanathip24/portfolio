@@ -45,6 +45,47 @@ function getLandMask() {
   return landMask;
 }
 
+/** Big cities: [lat, lon, weight]. Only used to scatter the night-side lights. */
+const CITIES: [number, number, number][] = [
+  [35.7, 139.7, 1], [37.5, 127, 0.8], [39.9, 116.4, 0.9], [31.2, 121.5, 1], [23.1, 113.3, 0.8], [22.3, 114.2, 0.6],
+  [28.6, 77.2, 1], [19, 72.8, 0.9], [22.6, 88.4, 0.7], [23.8, 90.4, 0.8], [13.8, 100.5, 0.8], [-6.2, 106.8, 0.9],
+  [14.6, 121, 0.7], [1.3, 103.8, 0.5], [24.9, 67, 0.7], [35.7, 51.4, 0.7], [41, 29, 0.8], [30, 31.2, 0.8],
+  [6.5, 3.4, 0.7], [-4.3, 15.3, 0.5], [-26.2, 28, 0.6], [-1.3, 36.8, 0.4], [55.7, 37.6, 0.9], [51.5, -0.1, 0.9],
+  [48.9, 2.3, 0.8], [52.5, 13.4, 0.6], [40.4, -3.7, 0.6], [41.9, 12.5, 0.6], [24.7, 46.7, 0.5], [40.7, -74, 1],
+  [42.4, -71, 0.5], [38.9, -77, 0.6], [41.9, -87.6, 0.8], [34, -118.2, 0.9], [37.8, -122.4, 0.6], [32.8, -96.8, 0.6],
+  [29.8, -95.4, 0.6], [25.8, -80.2, 0.6], [33.7, -84.4, 0.5], [47.6, -122.3, 0.4], [43.7, -79.4, 0.6],
+  [19.4, -99.1, 0.9], [-23.5, -46.6, 0.9], [-22.9, -43.2, 0.6], [-34.6, -58.4, 0.8], [-12, -77, 0.5], [4.7, -74, 0.5],
+  [-33.5, -70.7, 0.5], [-33.9, 151.2, 0.6], [-37.8, 145, 0.4],
+];
+
+/** Night-side light map (0..1), same grid as the land mask: a soft glow around each city, broken up by noise. */
+let lightMap: Float32Array | null = null;
+function getLightMap(mask: Uint8Array) {
+  if (lightMap) return lightMap;
+  lightMap = new Float32Array(MAP_W * MAP_H);
+  const kx = MAP_W / 360, ky = MAP_H / 180;
+  for (const [lat, lon, w] of CITIES) {
+    const sigma = 1.3 + 1.3 * w; // degrees
+    const cx = (lon + 180) * kx, cy = (90 - lat) * ky;
+    const ry = Math.ceil(sigma * 2 * ky), rx = Math.ceil((sigma * 2 * kx) / Math.max(0.3, Math.cos(lat * RAD)));
+    for (let y = Math.max(0, Math.floor(cy) - ry); y <= Math.min(MAP_H - 1, Math.floor(cy) + ry); y++) {
+      for (let x = Math.floor(cx) - rx; x <= Math.floor(cx) + rx; x++) {
+        const xx = ((x % MAP_W) + MAP_W) % MAP_W;
+        if (!mask[y * MAP_W + xx]) continue;
+        const dy = (y - cy) / ky, dx = ((x - cx) / kx) * Math.cos(lat * RAD);
+        lightMap[y * MAP_W + xx] += w * Math.exp(-(dx * dx + dy * dy) / (sigma * sigma));
+      }
+    }
+  }
+  // Break the glow into streets and suburbs, and add faint towns that no city list names.
+  for (let i = 0; i < lightMap.length; i++) {
+    const h = Math.sin(i * 12.9898) * 43758.5453;
+    const n = h - Math.floor(h);
+    lightMap[i] = lightMap[i] * (0.45 + 0.9 * n);
+  }
+  return lightMap;
+}
+
 function toRgb(css: string): [number, number, number] {
   const c = document.createElement("canvas");
   c.width = c.height = 1;
@@ -85,12 +126,18 @@ export function Globe({ focus, pin, cell = 6, outerScale, className }: {
     const mask = getLandMask();
     const s = state.current;
     let n = 0, img: ImageData;
-    let pal: [number, number, number][] = [];
+    type Rgb = [number, number, number];
+    let pal = { ocean: [0, 0, 0] as Rgb, water: [0, 0, 0] as Rgb, cloud: [0, 0, 0] as Rgb, forest: [0, 0, 0] as Rgb, grass: [0, 0, 0] as Rgb, sand: [0, 0, 0] as Rgb, light: [0, 0, 0] as Rgb };
+    let night = false;
+    let lights: Float32Array | null = null;
     const readColors = () => {
       const cs = getComputedStyle(canvas);
+      const v = (name: string) => toRgb(cs.getPropertyValue(name));
       // Ocean = the scene background (--brand-ink) so a screen-filling globe hands over seamlessly;
-      // lit water and coasts in --brand; land in white.
-      pal = [toRgb(cs.getPropertyValue("--brand-ink")), toRgb(cs.getPropertyValue("--brand")), [255, 255, 255]];
+      // lit water in --brand; clouds and ice white (night: pale indigo); land in greens, sand and, at night, city lights.
+      pal = { ocean: v("--brand-ink"), water: v("--brand"), cloud: v("--globe-cloud"), forest: v("--globe-forest"), grass: v("--globe-grass"), sand: v("--globe-sand"), light: v("--globe-light") };
+      night = cs.getPropertyValue("--globe-night").trim() === "1";
+      lights = night ? getLightMap(mask) : null;
       s.dirty = true;
     };
     readColors();
@@ -129,18 +176,28 @@ export function Globe({ focus, pin, cell = 6, outerScale, className }: {
           const mx = Math.min(MAP_W - 1, Math.floor(((lon + 180) / 360) * MAP_W));
           const my = Math.min(MAP_H - 1, Math.floor(((90 - lat) / 180) * MAP_H));
           const isLand = mask[my * MAP_W + mx] === 1;
-          // Light from the upper left; limb darkens.
+          // Light from the upper left (the moon, at night); limb darkens.
           const light = Math.max(0, 0.4 + 0.35 * z + 0.35 * y - 0.25 * x);
-          // Water stays mostly flat (tone 0) with lit speckle; land dithers between tones 1 and 2.
-          let v = isLand ? 0.62 + 0.4 * light : 0.02 + 0.28 * light;
+          const b = BAYER[(j & 3) * 4 + (i & 3)];
           // Weather: cloud bands that drift east over the surface, so the planet reads as alive.
           const la = lat * RAD, lo = lon * RAD + t * 0.05;
           const cloud = 0.5 + 0.32 * Math.sin(3 * lo + 1.7 * Math.sin(2 * la + t * 0.07)) * Math.cos(5 * la) + 0.22 * Math.sin(7 * lo - 6 * la + t * 0.11);
-          if (cloud > 0.78) v = Math.max(v, 0.78 + 0.3 * light);
-          else if (cloud > 0.68) v = Math.max(v, 0.42 + 0.2 * light);
-          // Ordered dither into three tones: deep ocean, light ocean, land.
-          const level = Math.min(2, Math.floor(v * 2 + BAYER[(j & 3) * 4 + (i & 3)]));
-          const c = pal[level];
+          const cloudAmt = (cloud > 0.78 ? 0.75 + 0.25 * light : cloud > 0.68 ? 0.3 + 0.25 * light : 0) * (night ? 0.55 : 1);
+          const alat = Math.abs(lat);
+          let c: Rgb;
+          if (cloudAmt > b) c = pal.cloud;
+          else if (!isLand) c = 0.02 + 0.28 * light > b * 0.5 ? pal.water : pal.ocean;
+          else if (alat > 68) c = pal.cloud; // polar ice
+          else if (night) {
+            // Dark land with city lights; the moon just edges the continents.
+            const glow = lights![my * MAP_W + mx];
+            c = glow > 0.4 + b * 0.5 ? pal.light : light * 0.8 > b ? pal.grass : pal.forest;
+          } else {
+            // Biomes by latitude: rainforest at the equator, desert bands, green temperate land.
+            const dry = alat > 15 && alat < 34 && Math.sin(lon * RAD * 2.3 + alat * 0.2) > 0.05;
+            const base = dry ? pal.sand : alat < 15 || alat > 52 ? pal.forest : pal.grass;
+            c = light * 1.1 + b * 0.5 < 0.62 ? (dry ? pal.grass : pal.forest) : base;
+          }
           d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; d[o + 3] = 255;
         }
       }

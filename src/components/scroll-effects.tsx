@@ -2,19 +2,11 @@
 
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef } from "react";
 import { Globe } from "@/components/globe";
 import { onThemeChange } from "@/lib/site-store";
 import { EASE } from "@/lib/constants";
 import { SectionId } from "@/lib/enums";
-
-// Keep the globe, scene and fringe on one local sky-blue palette.
-const SKY_PALETTE = {
-  "--brand-ink": "#00a8f5",
-  "--brand": "#38baff",
-  "--brand-soft": "#83d5fb",
-  color: "#ffffff",
-} as CSSProperties;
 
 type Pin = { label: string; lat: number; lon: number };
 
@@ -57,7 +49,7 @@ export function GlobeScene({ pin, heading, body, primary }: {
 
   if (reduce) {
     return (
-      <section ref={ref} id={SectionId.About} aria-labelledby="about-title" style={SKY_PALETTE} className="relative bg-brand-ink py-24">
+      <section ref={ref} id={SectionId.About} aria-labelledby="about-title" className="sky-scene relative bg-brand-ink py-24">
         <Globe focus={reducedFocus} pin={pin} className="mx-auto size-[min(80vw,26rem)]" />
         <Copy heading={heading} body={body} primary={primary} />
       </section>
@@ -65,7 +57,7 @@ export function GlobeScene({ pin, heading, body, primary }: {
   }
 
   return (
-    <section ref={ref} id={SectionId.About} aria-labelledby="about-title" style={SKY_PALETTE} className="relative h-[360vh] overflow-x-clip">
+    <section ref={ref} id={SectionId.About} aria-labelledby="about-title" className="sky-scene relative h-[360vh] overflow-x-clip">
       {/* Clipped at the bottom and sides only: the rising dome may poke above, but a lagging
           (spring-smoothed) giant globe can never spill down over the next section. */}
       <div className="sticky top-0 h-svh [clip-path:inset(-100vh_0_0_0)]">

@@ -65,8 +65,8 @@ type Props = {
 };
 
 /**
- * Chunky pixel sky drawn in three tones: solid brand, solid soft brand, and a
- * fine checker of brand over paper. Cloud banks drift slowly.
+ * Chunky pixel sky drawn in three tones: a solid, a softer solid (the --sky-strong and --sky-soft
+ * tokens: blues by day, indigo by night), and a fine checker of the strong tone over the ground. Cloud banks drift slowly.
  */
 export function DitherField({ cell = 22, cellRef, clearCenter = false, clearAmount, spread, dissolve, build, world, skip, keep, detail = 0, pointer = false, className }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -78,14 +78,14 @@ export function DitherField({ cell = 22, cellRef, clearCenter = false, clearAmou
     let tones = { strong: "", soft: "", checker: null as CanvasPattern | null };
     const readColors = () => {
       const s = getComputedStyle(canvas);
-      const strong = toRgb(s.getPropertyValue("--brand"));
+      const strong = toRgb(s.getPropertyValue("--sky-strong"));
       const p = document.createElement("canvas");
       p.width = p.height = 4;
       const g = p.getContext("2d")!;
       g.fillStyle = strong;
       g.fillRect(0, 0, 2, 2);
       g.fillRect(2, 2, 2, 2);
-      tones = { strong, soft: toRgb(s.getPropertyValue("--brand-soft")), checker: ctx.createPattern(p, "repeat") };
+      tones = { strong, soft: toRgb(s.getPropertyValue("--sky-soft")), checker: ctx.createPattern(p, "repeat") };
     };
     readColors();
 

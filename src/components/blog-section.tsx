@@ -8,7 +8,7 @@ import { formatDate, titleCase } from "@/lib/format";
 
 /**
  * The latest three posts as a typographic list: the title is the content, set large in the display
- * italic; the thumbnail supports it and tilts into place on hover. Each row jumps to that post on /blog.
+ * italic; the thumbnail supports it and tilts into place on hover. Each row opens that post.
  */
 export async function BlogSection() {
   const posts = (await getPosts()).slice(0, 3);
@@ -31,7 +31,7 @@ export async function BlogSection() {
         {posts.map((p) => (
           <li key={p.slug} className="border-t border-border">
             <Link
-              href={`/blog#${p.slug}`}
+              href={`/blog/${p.slug}`}
               className="dim-item group grid items-center gap-x-10 gap-y-5 py-8 no-underline md:grid-cols-[7rem_minmax(0,1fr)_15rem] md:py-10"
             >
               <time dateTime={p.publishedAt} className="hidden text-sm tabular-nums text-muted-foreground md:block">{formatDate(p.publishedAt)}</time>

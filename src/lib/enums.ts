@@ -46,3 +46,11 @@ export type ToolKey = (typeof ToolKey)[keyof typeof ToolKey];
 /** pg enum social_platform. Same idea as ToolKey: the database stores the key, the frontend maps it to an icon. */
 export const SocialPlatform = { GitHub: "github", LinkedIn: "linkedin", X: "x", YouTube: "youtube", Bluesky: "bluesky", Email: "email" } as const;
 export type SocialPlatform = (typeof SocialPlatform)[keyof typeof SocialPlatform];
+
+/** How the blog page orders posts. The value is the `sort` URL param (Latest is the default and is left out of the URL). */
+export const PostSort = { Latest: "latest", Views: "views" } as const;
+export type PostSort = (typeof PostSort)[keyof typeof PostSort];
+
+/** pg enum career_kind. Education, employment and independent work are styled differently on the career path. */
+export const CareerKind = { Education: "education", Work: "work", Freelance: "freelance" } as const;
+export type CareerKind = (typeof CareerKind)[keyof typeof CareerKind];
