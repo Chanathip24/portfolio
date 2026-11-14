@@ -128,6 +128,16 @@ The site only reads mail. While the Google app is in Testing mode, Google ends t
 - **Preview deployments** share your Supabase project unless you give Preview its own variables. For anything risky, create a second Supabase project and point Preview at it.
 - **Backups**: Supabase keeps daily backups on paid plans. On the free plan, export what matters (posts, projects, settings) now and then.
 
+## Previews and staging
+
+Vercel builds every pull request as a preview. Keep previews away from your real data:
+
+1. Create a second Supabase project (staging), link it with `npx supabase link --project-ref <staging-ref>` and run `npx supabase db push`. Check which project you linked before pushing. Load `supabase/seed.sql` there if you want sample content; never on production.
+2. Apply the Authentication settings from step 4 to it (sign-ups off, TOTP on, password rules) and create an admin there as in step 3.
+3. In Vercel, **Settings, Environment Variables**: give the staging values (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) and a different `ANALYTICS_SALT` to **Preview** only, and keep the production values on **Production** only. A variable ticked for all environments would send previews to production. `NEXT_PUBLIC_*` values are fixed at build time, so redeploy after changing them.
+4. Or leave the Supabase variables unset for Preview: previews then show the sample data and the admin is off.
+5. CI publishes test reports to a `gh-pages` branch. In **Settings, Git, Ignored Build Step** use `if [ "$VERCEL_GIT_COMMIT_REF" = "gh-pages" ]; then exit 0; else exit 1; fi` so Vercel skips it (exit 0 skips, exit 1 builds).
+
 ## Troubleshooting
 
 | Problem | Likely cause and fix |
