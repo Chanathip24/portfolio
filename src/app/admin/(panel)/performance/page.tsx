@@ -7,17 +7,20 @@ import { EmptyState, SegmentedNav } from "@/components/admin/shared";
 import { StatTiles } from "@/components/admin/stat-tiles";
 import { getPerformance } from "@/lib/admin/data";
 import { VITALS, type VitalName, rate } from "@/lib/analytics";
+import { Streamed } from "@/components/admin/page-loading";
+import { ChartsSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
-
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 const RANGES = [7, 30, 90];
 const ORDER: VitalName[] = ["LCP", "INP", "CLS", "FCP", "TTFB"];
 const RATING = { good: "Good", "needs-improvement": "Needs work", poor: "Poor" } as const;
 /** 1830 -> "1.8 s", 640 -> "640 ms", 0.083 -> "0.08" */
 const show = (name: VitalName, v: number) => (name === "CLS" ? v.toFixed(2) : v >= 1000 ? `${(v / 1000).toFixed(1)} s` : `${Math.round(v)} ms`);
 
-export default async function PerformancePage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
+export default function PerformancePage(props: Parameters<typeof PerformancePageContent>[0]) {
+  return <Streamed fallback={<ChartsSkeleton tiles={5} />}><PerformancePageContent {...props} /></Streamed>;
+}
+
+async function PerformancePageContent({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
   const { range } = await searchParams;
   const days = RANGES.includes(Number(range)) ? Number(range) : 30;
   const stats = await getPerformance(days);

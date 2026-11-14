@@ -2,11 +2,14 @@ import { listMyFactors } from "@/app/admin/account-actions";
 import { PasswordPanel, ProfilePanel, SecurityPanel } from "@/components/admin/account-panels";
 import { PageHeader } from "@/components/admin/page-header";
 import { requireAdmin } from "@/lib/admin/auth";
+import { Streamed } from "@/components/admin/page-loading";
+import { FormSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
+export default function AccountPage() {
+  return <Streamed fallback={<FormSkeleton />}><AccountPageContent /></Streamed>;
+}
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
-export default async function AccountPage() {
+async function AccountPageContent() {
   const [me, factors] = await Promise.all([requireAdmin(), listMyFactors()]);
   return (
     <>

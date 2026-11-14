@@ -5,14 +5,17 @@ import { SegmentedNav } from "@/components/admin/shared";
 import { UrlSelect } from "@/components/admin/url-select";
 import { Button } from "@/components/ui/button";
 import { listAllRevisions } from "@/lib/admin/data";
+import { Streamed } from "@/components/admin/page-loading";
+import { HistorySkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
-
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 const PAGE = 50;
 const SHOW = [{ id: "all", label: "Every change" }, { id: "deleted", label: "Deleted" }] as const;
 
-export default async function HistoryPage({ searchParams }: { searchParams: Promise<{ page?: string; entity?: string; show?: string }> }) {
+export default function HistoryPage(props: Parameters<typeof HistoryPageContent>[0]) {
+  return <Streamed fallback={<HistorySkeleton />}><HistoryPageContent {...props} /></Streamed>;
+}
+
+async function HistoryPageContent({ searchParams }: { searchParams: Promise<{ page?: string; entity?: string; show?: string }> }) {
   const sp = await searchParams;
   const page = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
   const entity = sp.entity && sp.entity in KIND ? sp.entity : undefined;

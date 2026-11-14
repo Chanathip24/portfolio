@@ -1,14 +1,20 @@
 import { notFound } from "next/navigation";
 import { z } from "zod";
 import { ItemStats, RANGES } from "@/components/admin/item-stats";
-import { getCreator, getProjectById, getSectionAnalytics, visibilityOf } from "@/lib/admin/data";
+import { Streamed } from "@/components/admin/page-loading";
+import { StatsSkeleton } from "@/components/admin/skeletons";
+import { getCreator, getProjectSummary, getSectionAnalytics, visibilityOf } from "@/lib/admin/data";
 
-export const instant = false;
+type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ range?: string }> };
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
-export default async function ProjectStats({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ range?: string }> }) {
+// Everything that waits for the session or the database sits inside <Streamed>, so the page opens at once with a placeholder.
+export default function ProjectStats(props: Props) {
+  return <Streamed fallback={<StatsSkeleton />}><ProjectStatsContent {...props} /></Streamed>;
+}
+
+async function ProjectStatsContent({ params, searchParams }: Props) {
   const [{ id }, { range }] = await Promise.all([params, searchParams]);
-  const project = z.uuid().safeParse(id).success ? await getProjectById(id) : null;
+  const project = z.uuid().safeParse(id).success ? await getProjectSummary(id) : null;
   if (!project) notFound();
   const days = RANGES.includes(Number(range)) ? Number(range) : 30;
   const [stats, creator] = await Promise.all([getSectionAnalytics("/work/", days, `/work/${project.slug}`), getCreator("projects", project.id)]);

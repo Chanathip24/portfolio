@@ -16,13 +16,16 @@ import { userStats } from "@/lib/admin/user-stats";
 import { listUsers, usersConfigured } from "@/lib/admin/users";
 import { formatCount, formatDate, timeAgo } from "@/lib/format";
 import { cn } from "cn";
+import { Streamed } from "@/components/admin/page-loading";
+import { OverviewSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
-
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 const RANGES = [7, 30, 90];
 
-export default async function Overview({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
+export default function Overview(props: Parameters<typeof OverviewContent>[0]) {
+  return <Streamed fallback={<OverviewSkeleton />}><OverviewContent {...props} /></Streamed>;
+}
+
+async function OverviewContent({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
   const { range } = await searchParams;
   const days = RANGES.includes(Number(range)) ? Number(range) : 30;
   const [me, stats, twice, content, audit, admins, posts, projects, users] = await Promise.all([

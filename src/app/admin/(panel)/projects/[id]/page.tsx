@@ -7,11 +7,14 @@ import { PageHeader } from "@/components/admin/page-header";
 import { Button } from "@/components/ui/button";
 import { HistoryButton } from "@/components/admin/revisions";
 import { getCreator, getProjectById, listRevisions, taxonomyOptions } from "@/lib/admin/data";
+import { Streamed } from "@/components/admin/page-loading";
+import { FormSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
+export default function EditProject(props: Parameters<typeof EditProjectContent>[0]) {
+  return <Streamed fallback={<FormSkeleton side />}><EditProjectContent {...props} /></Streamed>;
+}
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
-export default async function EditProject({ params }: { params: Promise<{ id: string }> }) {
+async function EditProjectContent({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const valid = z.uuid().safeParse(id).success;
   const [project, { tags }, revisions, creator] = await Promise.all([valid ? getProjectById(id) : null, taxonomyOptions(), valid ? listRevisions("projects", id) : [], valid ? getCreator("projects", id) : "-"]);

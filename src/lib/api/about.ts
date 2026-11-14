@@ -1,6 +1,14 @@
+import { isAxiosError } from "axios";
 import { cacheLife, cacheTag } from "next/cache";
+import { owner } from "@/content/site";
 import { api } from "./client";
-import type { CareerResponse, CategoriesResponse, ProfileResponse, SkillsResponse, TestimonialsResponse, ToolsResponse } from "./types";
+import type { CareerResponse, CategoriesResponse, ProfileResponse, ProfileRow, SkillsResponse, TestimonialsResponse, ToolsResponse } from "./types";
+
+/** Shown until the profile is filled in (Admin, Profile), so a new, empty project still builds and the About page still opens. */
+const blankProfile: ProfileRow = {
+  id: "", display_name: owner.name, role: owner.role, location: owner.city, headline: "", status_note: "", years_experience: 0, image_url: "",
+  bio: { type: "doc", content: [] }, socials: [],
+};
 
 const bySort = <T extends { sort_order: number }>(rows: T[]) => [...rows].sort((a, b) => a.sort_order - b.sort_order);
 
@@ -8,8 +16,13 @@ export async function getProfile() {
   "use cache";
   cacheLife("hours");
   cacheTag("about");
-  const { data } = await api.get<ProfileResponse>("/profile");
-  return { ...data.data, socials: bySort(data.data.socials) };
+  try {
+    const { data } = await api.get<ProfileResponse>("/profile");
+    return { ...data.data, socials: bySort(data.data.socials) };
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.status === 404) return blankProfile; // no profile row yet
+    throw error;
+  }
 }
 
 export async function getSkills() {

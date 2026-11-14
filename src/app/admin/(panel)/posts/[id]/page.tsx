@@ -9,11 +9,14 @@ import { Button } from "@/components/ui/button";
 import { HistoryButton } from "@/components/admin/revisions";
 import { getCreator, getPostById, listRevisions, taxonomyOptions } from "@/lib/admin/data";
 import { formatCount } from "@/lib/format";
+import { Streamed } from "@/components/admin/page-loading";
+import { FormSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
+export default function EditPost(props: Parameters<typeof EditPostContent>[0]) {
+  return <Streamed fallback={<FormSkeleton side />}><EditPostContent {...props} /></Streamed>;
+}
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
-export default async function EditPost({ params }: { params: Promise<{ id: string }> }) {
+async function EditPostContent({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const valid = z.uuid().safeParse(id).success;
   const [post, { category }, revisions, creator] = await Promise.all([valid ? getPostById(id) : null, taxonomyOptions(), valid ? listRevisions("posts", id) : [], valid ? getCreator("posts", id) : "-"]);

@@ -5,12 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { listCareer, listSkills, listTaxonomy, listTestimonials, listTools, taxonomyOptions } from "@/lib/admin/data";
 import { titleCase } from "@/lib/format";
+import { Streamed } from "@/components/admin/page-loading";
+import { CardsSkeleton } from "@/components/admin/skeletons";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
-export const instant = false;
 const trigger = "h-10 flex-none gap-2 rounded-full border border-border px-4 text-sm data-active:border-foreground data-active:bg-foreground data-active:text-background";
 
-export default async function AboutAdmin() {
+export default function AboutAdmin() {
+  return <Streamed fallback={<CardsSkeleton tabs />}><AboutAdminContent /></Streamed>;
+}
+
+async function AboutAdminContent() {
   const [skills, groups, tools, career, testimonials, options] = await Promise.all([listSkills(), listTaxonomy("skillGroup"), listTools(), listCareer(), listTestimonials(), taxonomyOptions()]);
   const groupName = new Map(groups.map((g) => [g.slug, g.name]));
   const groupOrder = new Map(groups.map((g, i) => [g.slug, i]));
