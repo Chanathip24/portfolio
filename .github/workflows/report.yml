@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version-file: .nvmrc, cache: npm }
       - run: npm ci
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with: { pattern: "blob-report-*", path: all-blob-reports, merge-multiple: true }
       - run: npx playwright merge-reports --reporter html ./all-blob-reports
       - uses: actions/upload-artifact@v4
