@@ -235,7 +235,8 @@ function TileWord({ delay, show, reduce, children }: { delay: number; show: bool
       />
       <motion.span
         initial={false}
-        animate={show ? { clipPath: "inset(0 0% 0 0)", opacity: 1, filter: "blur(0px)" } : { clipPath: "inset(0 100% 0 0)", opacity: 0, filter: "blur(6px)" }}
+        // The shown clip reaches past the word's box (all in %, so it can animate): slanted italic letters and descenders overhang it.
+        animate={show ? { clipPath: "inset(-15% -30% -20% -10%)", opacity: 1, filter: "blur(0px)" } : { clipPath: "inset(-15% 100% -20% -10%)", opacity: 0, filter: "blur(6px)" }}
         transition={show ? { duration: 0.6, delay: delay + 0.22, ease: EASE } : { duration: 0.2 }}
         className="inline-block"
       >
