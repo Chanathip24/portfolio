@@ -1,9 +1,12 @@
 name: CI
 
+# Changes to docs and repo chores cannot break the site, so they do not start a run.
 on:
   push:
     branches: [main]
+    paths-ignore: ["**.md", "LICENSE", ".github/dependabot.yml"]
   pull_request:
+    paths-ignore: ["**.md", "LICENSE", ".github/dependabot.yml"]
 
 # A newer push to the same branch makes an older, still-running check pointless.
 concurrency:
@@ -56,9 +59,10 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      # Pinned, so a new CLI release cannot change the images or behaviour under a passing build.
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: 2.121.0
       # Leaves out the services the tests never use, which makes the start much faster.
       - run: supabase start -x studio,imgproxy,vector,logflare,edge-runtime,supavisor,postgres-meta
       - name: Point the app at the local stack
@@ -125,10 +129,14 @@ jobs:
             echo "Failed tests also appear as annotations on the pull request's Files tab. On main, the report is also published as a web page."
           } >> "$GITHUB_STEP_SUMMARY"
 
-  # Publishes the latest report from main as a web page (Settings > Pages > Source: GitHub Actions). Each run replaces the last one.
+  # Publishes the report of the latest run (main, a branch or a pull request) as a web page (Settings > Pages > Source: GitHub Actions).
+  # Each run replaces the last one. Pull requests from forks cannot deploy, so they only get the downloadable artifact.
   pages:
     needs: report
-    if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
+    if: ${{ !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
