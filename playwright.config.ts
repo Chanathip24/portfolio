@@ -12,6 +12,9 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   timeout: 60_000,
+  // On CI one retry absorbs the odd timing slip (a sign-in code at the edge of its 30 seconds); a test that fails twice is real.
+  retries: process.env.CI ? 1 : 0,
+  forbidOnly: Boolean(process.env.CI),
   expect: { timeout: 10_000 },
   reporter: [["list"], ["html", { open: "never", outputFolder: "playwright-report" }]],
   globalTeardown: "./tests/support/global-teardown.ts",

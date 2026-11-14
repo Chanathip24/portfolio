@@ -64,7 +64,7 @@ export function SiteFooter() {
 
       {/* Closing mark: the initial in hatching that drifts and bends away from the pointer. */}
       <HatchMark glyph={owner.firstName[0]} className="mt-10 h-[26vw] max-h-[30rem] w-full" />
-      <p className="page-x pb-6 text-xs text-muted-foreground">Sample content · built with Next.js</p>
+      <p className="page-x flex flex-wrap gap-x-4 pb-6 text-xs text-muted-foreground">Sample content · built with Next.js · <SiteLink href="/privacy" className="underline underline-offset-4">Privacy</SiteLink></p>
     </footer>
   );
 }

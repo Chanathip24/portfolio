@@ -1,5 +1,3 @@
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import Script from "next/script";
@@ -7,6 +5,7 @@ import { ViewTransitions } from "next-view-transitions";
 import { Suspense } from "react";
 import { PageViewTracker } from "@/components/page-view-tracker";
 import { feedAlternate, siteUrl } from "@/lib/site";
+import { ConsentBanner } from "@/components/consent-banner";
 import { ErrorReporter } from "@/components/error-reporter";
 import { WebVitalsReporter } from "@/components/web-vitals-reporter";
 import { ScrollRestore } from "@/components/scroll-restore";
@@ -61,9 +60,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <WebVitalsReporter />
         <ErrorReporter />
         <Providers>{children}</Providers>
-        {/* Vercel Web Analytics + real-user Web Vitals; both are no-ops off Vercel. */}
-        <Analytics />
-        <SpeedInsights />
+        {/* Also mounts Vercel Web Analytics and Speed Insights, but only after the visitor accepts. */}
+        <ConsentBanner />
       </body>
     </html>
     </ViewTransitions>
