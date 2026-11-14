@@ -15,7 +15,8 @@ import { Providers } from "./providers";
 import { Theme } from "@/lib/enums";
 
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+// preload: false keeps it out of every page's <head>; the browser still fetches it the moment mono text (admin tables, code in posts) needs it.
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], preload: false });
 // Free stand-in for a calligraphic italic display serif.
 const instrument = Instrument_Serif({
   variable: "--font-instrument",

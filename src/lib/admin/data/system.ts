@@ -56,6 +56,8 @@ export async function listMedia(): Promise<MediaFile[]> {
     for (const it of items) if (it.id) found.push({ path: prefix + it.name, url: store.getPublicUrl(prefix + it.name).data.publicUrl, size: it.metadata?.size ?? 0, created_at: it.created_at ?? "" });
   };
   add("", root);
-  for (const folder of root.filter((r) => !r.id)) add(`${folder.name}/`, await listAll(folder.name));
+  const folders = root.filter((r) => !r.id);
+  const inside = await Promise.all(folders.map((f) => listAll(f.name)));
+  folders.forEach((f, i) => add(`${f.name}/`, inside[i]));
   return found.sort((a, b) => b.created_at.localeCompare(a.created_at));
 }

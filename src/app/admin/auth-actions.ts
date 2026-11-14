@@ -31,7 +31,8 @@ export async function signIn(_: FormState, formData: FormData): Promise<FormStat
   // Unknown ingress: isolate counters by browser instead of locking an email globally.
   const pair = privateKey(`signin:${mail}:${ip || browser}`);
   const network = ip ? privateKey(`network:${ip}`) : "";
-  if (!(await allowed("email", pair, 5)) || !(await allowed("ip", network, 20))) {
+  const [pairOk, networkOk] = await Promise.all([allowed("email", pair, 5), allowed("ip", network, 20)]);
+  if (!pairOk || !networkOk) {
     await notifySecurity({ subject: `Sign-in blocked for ${mail}`, email: mail, detail: `Too many wrong passwords for ${mail}, or from one address. Further tries are refused for ten minutes.`, severity: "critical", escalateAt: 1 });
     return { email, error: "Too many attempts. Wait ten minutes and try again." };
   }
