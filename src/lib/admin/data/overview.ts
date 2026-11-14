@@ -1,5 +1,5 @@
 import "server-only";
-import { cachedRpc, db, visibilityOf, type Visibility } from "./core";
+import { cachedRpc, db, getTimeZone, visibilityOf, type Visibility } from "./core";
 
 // ─── overview ────────────────────────────────────────────────────────────────────────────────────
 export type Analytics = {
@@ -10,7 +10,7 @@ export type Analytics = {
   top_referrers: { referrer: string; views: number }[];
 };
 export async function getAnalytics(days: number) {
-  const data = await cachedRpc<unknown>("analytics_summary", { days });
+  const data = await cachedRpc<unknown>("analytics_summary", { days, p_tz: await getTimeZone() });
   return data as Analytics | null;
 }
 
@@ -36,7 +36,7 @@ export type SectionAnalytics = {
 };
 /** Views of a whole section ("/blog/" or "/work/") or of one page in it (`path`), over the last `days` days. */
 export async function getSectionAnalytics(prefix: "/blog/" | "/work/", days: number, path?: string) {
-  const data = await cachedRpc<unknown>("section_analytics", { p_prefix: prefix, p_path: path ?? null, days });
+  const data = await cachedRpc<unknown>("section_analytics", { p_prefix: prefix, p_path: path ?? null, days, p_tz: await getTimeZone() });
   return data as SectionAnalytics | null;
 }
 
@@ -48,6 +48,6 @@ export type VitalsSummary = {
   devices: { device: string; n: number }[];
 };
 export async function getPerformance(days: number) {
-  const data = await cachedRpc<unknown>("performance_summary", { days });
+  const data = await cachedRpc<unknown>("performance_summary", { days, p_tz: await getTimeZone() });
   return data as VitalsSummary | null;
 }

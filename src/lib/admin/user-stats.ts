@@ -1,12 +1,13 @@
+import { DEFAULT_TZ, addDays, siteDay } from "@/lib/tz";
 import type { UserRow } from "./users";
 
 /** Numbers about the accounts, from the list the users page already has. */
-export function userStats(users: UserRow[], days = 30, now = Date.now()) {
+export function userStats(users: UserRow[], days = 30, now = Date.now(), tz = DEFAULT_TZ) {
   const admins = users.filter((u) => u.is_admin);
-  const day = (t: number) => new Date(t).toISOString().slice(0, 10);
-  const signups = Array.from({ length: days }, (_, i) => ({ day: day(now - (days - 1 - i) * 864e5), signups: 0 }));
+  const today = siteDay(now, tz);
+  const signups = Array.from({ length: days }, (_, i) => ({ day: addDays(today, i + 1 - days), signups: 0 }));
   const at = new Map(signups.map((d, i) => [d.day, i]));
-  for (const u of users) { const i = at.get(u.created_at.slice(0, 10)); if (i !== undefined) signups[i].signups++; }
+  for (const u of users) { const i = at.get(siteDay(Date.parse(u.created_at), tz)); if (i !== undefined) signups[i].signups++; }
   return {
     total: users.length,
     admins: admins.length,

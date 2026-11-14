@@ -9,14 +9,14 @@ export async function getAdminStatus() {
 
 // ─── settings ────────────────────────────────────────────────────────────────────────────────────
 export async function getSettings() {
-  const { data } = await (await db()).from("app_settings").select("data_tools_enabled").limit(1).maybeSingle();
-  return { dataToolsEnabled: Boolean(data?.data_tools_enabled) };
+  const { data } = await (await db()).from("app_settings").select("data_tools_enabled,timezone").limit(1).maybeSingle();
+  return { dataToolsEnabled: Boolean(data?.data_tools_enabled), timezone: (data?.timezone as string | null) ?? null };
 }
 
 // ─── in-app data tools (read-only table browser, media library) ──────────────────────────────────
-/** The only tables the browser will show. Auth tables are never in it. */
+/** The only tables the browser will show. Auth tables and secret-holding ones (mail_connection, auth_attempts, admins) are never in it. */
 export const BROWSABLE = [
-  "posts", "projects", "post_categories", "project_categories", "skill_groups", "skills", "tools", "career", "testimonials", "socials", "profile", "authors", "page_views", "audit_log", "app_settings",
+  "posts", "projects", "post_categories", "project_categories", "skill_groups", "skills", "tools", "career", "testimonials", "socials", "profile", "authors", "page_views", "web_vitals", "error_events", "messages", "revisions", "audit_log", "app_settings",
 ] as const;
 export type BrowsableTable = (typeof BROWSABLE)[number];
 export const isBrowsable = (t: string): t is BrowsableTable => (BROWSABLE as readonly string[]).includes(t);

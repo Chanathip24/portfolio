@@ -1,8 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/auth";
+import { isTimeZone } from "@/lib/tz";
 import { createClient } from "@/lib/supabase/server";
 
 export type Result = { ok: true } | { ok: false; error: string };
@@ -13,6 +14,17 @@ export async function setDataTools(enabled: boolean): Promise<Result> {
   if (typeof enabled !== "boolean") return { ok: false, error: "Invalid value." };
   const { data, error } = await (await createClient()).from("app_settings").update({ data_tools_enabled: enabled, updated_at: new Date().toISOString() }).eq("id", true).select("id");
   if (error || !data?.length) return { ok: false, error: "Could not save the setting." };
+  revalidatePath("/admin", "layout");
+  return { ok: true };
+}
+
+/** Sets the time zone the admin counts days in. "default" goes back to the site's own (owner.timeZone). */
+export async function setTimeZone(timeZone: string): Promise<Result> {
+  await requireAdmin();
+  if (timeZone !== "default" && !isTimeZone(timeZone)) return { ok: false, error: "Choose a time zone from the list." };
+  const { data, error } = await (await createClient()).from("app_settings").update({ timezone: timeZone === "default" ? null : timeZone, updated_at: new Date().toISOString() }).eq("id", true).select("id");
+  if (error || !data?.length) return { ok: false, error: "Could not save the time zone." };
+  updateTag("app-settings");
   revalidatePath("/admin", "layout");
   return { ok: true };
 }

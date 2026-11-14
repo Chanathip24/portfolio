@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { DetailLayout } from "@/components/detail-layout";
+import { Suspense } from "react";
+import { DetailLayout, DetailSkeleton } from "@/components/detail-layout";
 import { owner } from "@/content/site";
 import { getPost, getPostNeighbors, getPosts } from "@/lib/api/posts";
 import { feedAlternate } from "@/lib/site";
 import { formatCount, formatDate } from "@/lib/format";
+
+type PageProps = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
   const slugs = (await getPosts()).map(({ slug }) => ({ slug }));
@@ -25,7 +28,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
+export default function PostPage(props: PageProps) {
+  return (
+    <Suspense fallback={<DetailSkeleton />}>
+      <PostPageContent {...props} />
+    </Suspense>
+  );
+}
+
+async function PostPageContent({ params }: PageProps) {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();

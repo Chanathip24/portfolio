@@ -3,10 +3,10 @@
 import { X } from "lucide-react";
 import { debounce, parseAsString, useQueryStates } from "nuqs";
 import { useState, useTransition } from "react";
+import { DateField } from "@/components/admin/date-field";
 import { OptionSelect } from "@/components/admin/option-select";
 import { SearchInput } from "@/components/admin/shared";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import type { Option } from "@/lib/admin/fields";
 
 const ACTIONS: Option[] = [
@@ -40,10 +40,10 @@ export function ActivityFilters({ entities, actors }: { entities: string[]; acto
           <OptionSelect size="sm" label="Filter by area" value={f.entity ?? "all"} options={[{ value: "all", label: "Any area" }, ...entities.map((e) => ({ value: e, label: title(e) }))]} className="w-full sm:w-40" onChange={(v) => set({ entity: v === "all" ? null : v })} />
           <OptionSelect size="sm" label="Filter by person" value={f.actor ?? "all"} options={[{ value: "all", label: "Anyone" }, { value: "system", label: "System" }, ...actors.map((a) => ({ value: a, label: a }))]} className="col-span-2 w-full sm:col-span-1 sm:w-48" onChange={(v) => set({ actor: v === "all" ? null : v })} />
           <label className="flex flex-col gap-1 text-xs text-muted-foreground sm:flex-row sm:items-center sm:gap-2 sm:text-sm">From
-            <Input type="date" aria-label="From date" className="w-full sm:w-40" value={f.from ?? ""} onChange={(e) => set({ from: e.target.value || null })} />
+            <DateField label="From date" className="sm:w-44" value={f.from ?? ""} max={f.to ?? undefined} onChange={(v) => set({ from: v || null })} />
           </label>
           <label className="flex flex-col gap-1 text-xs text-muted-foreground sm:flex-row sm:items-center sm:gap-2 sm:text-sm">To
-            <Input type="date" aria-label="To date" className="w-full sm:w-40" value={f.to ?? ""} onChange={(e) => set({ to: e.target.value || null })} />
+            <DateField label="To date" className="sm:w-44" value={f.to ?? ""} min={f.from ?? undefined} onChange={(v) => set({ to: v || null })} />
           </label>
         </div>
       </div>

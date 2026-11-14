@@ -57,8 +57,15 @@ test.describe("charts and insights", () => {
     await page.getByRole("link", { name: "By day" }).click();
     await expect(page.getByRole("link", { name: "By day" })).toHaveAttribute("aria-current", "page");
 
-    // a date range in the future shows nothing
-    await page.getByLabel("From date").fill("2999-01-01");
+    // a day picked in the calendar goes into the address, and the button then shows it
+    await page.getByRole("button", { name: "From date" }).click();
+    await page.locator("[role=gridcell]", { hasText: /^1$/ }).first().click();
+    await expect(page).toHaveURL(/from=\d{4}-\d{2}-01/);
+    await expect(page.getByRole("button", { name: /^From date: \d{4}-\d{2}-01$/ })).toBeVisible();
+    await page.keyboard.press("Escape");
+
+    // a range that starts in the far future shows nothing
+    await page.goto("/admin/activity?from=2999-01-01");
     await expect(page.getByText("Nothing matches those filters.")).toBeVisible();
     await service().from("post_categories").delete().like("name", "E2E Insight%");
   });

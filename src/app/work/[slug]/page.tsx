@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { DetailLayout } from "@/components/detail-layout";
+import { Suspense } from "react";
+import { DetailLayout, DetailSkeleton } from "@/components/detail-layout";
 import { owner } from "@/content/site";
 import { hash, SectionId } from "@/lib/enums";
 import { getProject, getProjectNeighbors, getProjects } from "@/lib/api/projects";
 import { feedAlternate } from "@/lib/site";
+
+type PageProps = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
   const slugs = (await getProjects()).map(({ slug }) => ({ slug }));
@@ -25,7 +28,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+export default function ProjectPage(props: PageProps) {
+  return (
+    <Suspense fallback={<DetailSkeleton />}>
+      <ProjectPageContent {...props} />
+    </Suspense>
+  );
+}
+
+async function ProjectPageContent({ params }: PageProps) {
   const { slug } = await params;
   const project = await getProject(slug);
   if (!project) notFound();

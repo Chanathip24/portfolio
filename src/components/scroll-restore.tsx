@@ -1,5 +1,6 @@
 "use client";
 
+import { useLenis } from "lenis/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { useSiteStore } from "@/lib/site-store";
@@ -14,7 +15,9 @@ import { useSiteStore } from "@/lib/site-store";
  */
 export function ScrollRestore() {
   const pathname = usePathname();
+  const lenis = useLenis();
   const popped = useRef(false);
+  const prev = useRef(pathname);
 
   useEffect(() => {
     let raf = 0, timer = 0;
@@ -43,11 +46,14 @@ export function ScrollRestore() {
 
   // Runs in the commit that brings in the new page, ahead of the view transition's snapshot.
   useLayoutEffect(() => {
-    if (!popped.current) return;
+    const changed = prev.current !== pathname;
+    prev.current = pathname;
+    // Forward navigation: start the new page at the top. Lenis keeps its own target, so reset it too or it can pull the page back down.
+    if (!popped.current) return void (changed && (scrollTo(0, 0), lenis?.scrollTo(0, { immediate: true, force: true })));
     popped.current = false;
     // Plain scrollTo: Lenis follows native scrolling, as it already does for Next's scroll-to-top.
     scrollTo(0, useSiteStore.getState().scrollByPath[pathname] ?? 0);
-  }, [pathname]);
+  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps -- lenis is read, never a trigger
 
   return null;
 }
