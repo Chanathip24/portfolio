@@ -1,5 +1,6 @@
 import "server-only";
 import { createHash } from "node:crypto";
+import { notifySecurity } from "@/lib/admin/security";
 import { authAdmin, usersConfigured } from "@/lib/admin/users";
 import { cleanPath } from "@/lib/analytics";
 import { supabaseConfigured } from "@/lib/supabase/env";
@@ -13,18 +14,32 @@ function fingerprint({ source, message, stack }: ErrorReport) {
   return createHash("sha1").update(text).digest("hex").slice(0, 16);
 }
 
-/** Stores one error. It must never throw: a failure in the reporter cannot become another error. */
+/** Stores one error, and tells the admin's Inbox the first time a new bug shows up (a bug already on the Errors page is not announced
+ *  again; resolve it there and a return counts as new). It must never throw: a failure in the reporter cannot become another error. */
 export async function recordError(report: ErrorReport) {
   if (!supabaseConfigured || !usersConfigured) return;
   try {
+    const sb = authAdmin();
+    const print = fingerprint(report);
     const path = cleanPath(report.path || "/");
-    await authAdmin().from("error_events").insert({
+    const message = report.message.slice(0, 500) || "Unknown error";
+    const { data: seen } = await sb.from("error_events").select("id").eq("fingerprint", print).limit(1);
+    const { error } = await sb.from("error_events").insert({
       source: report.source,
-      fingerprint: fingerprint(report),
-      message: report.message.slice(0, 500) || "Unknown error",
+      fingerprint: print,
+      message,
       stack: report.stack?.slice(0, 4000) ?? null,
       path: path.startsWith("/") ? path.slice(0, 300) : "/",
       digest: report.digest?.slice(0, 64) ?? null,
     });
+    if (!error && !seen?.length) {
+      await notifySecurity({
+        subject: `New ${report.source === "server" ? "server" : "browser"} error: ${message.slice(0, 80)}`,
+        detail: `${message}\n\nFirst seen on ${path}. Open Errors in the admin for the stack trace; resolve it there once it is fixed.`,
+        severity: report.source === "server" ? "critical" : "warning",
+        escalateAt: 25,
+        unit: "Occurrences",
+      });
+    }
   } catch {}
 }
