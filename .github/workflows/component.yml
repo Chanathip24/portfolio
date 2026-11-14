@@ -1,0 +1,15 @@
+name: Component tests
+
+# One component at a time in a real browser, with the app's own CSS. Needs no database and no build. Called by ci.yml.
+on: workflow_call
+
+jobs:
+  component:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - run: npm run test:ct

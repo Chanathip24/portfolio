@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { type EntityName, type Field, type Option, fields } from "@/lib/admin/fields";
 import { formatLocalDateTime } from "@/lib/format";
 import { uploadImage } from "@/lib/admin/upload";
+import { useMounted } from "@/lib/use-mounted";
 import { cn } from "cn";
 
 // Only the Preview tab needs the HTML renderer, so it is loaded when that tab is first opened.
@@ -56,9 +57,10 @@ const toPayload = (list: Field[], v: Values): Values =>
   }));
 
 /** One line saying what the status and date mean together: not visible, scheduled, or live. */
-function publishNote(status: unknown, local: unknown) {
+function publishNote(status: unknown, local: unknown, mounted: boolean) {
   if (status !== "published") return status === "archived" ? "Archived: hidden from the site." : "Draft: not visible on the site.";
   if (typeof local !== "string" || !local) return "Goes live as soon as you save.";
+  if (!mounted) return "Goes live when the date below is reached."; // the server knows no timezone, so the date waits for the browser
   const date = new Date(local);
   return date.getTime() > Date.now() ? `Scheduled: goes live on ${formatLocalDateTime(date)}.` : `Live since ${formatLocalDateTime(date)}.`;
 }
@@ -106,6 +108,7 @@ export function EntityForm({ entity, id, initial, submitLabel = "Save", onSaved,
 }) {
   const list = fields[entity];
   const uid = useId();
+  const mounted = useMounted();
   const [values, setValues] = useState(() => {
     const v = toForm(list, initial);
     // A select fed by the database starts on its first choice when the item has none yet.
@@ -145,7 +148,7 @@ export function EntityForm({ entity, id, initial, submitLabel = "Save", onSaved,
 
   const renderField = (f: Field) => {
     const fid = `${uid}-${f.name}`, err = errors[f.name];
-    const hintText = f.name === "published_at" && "status" in values ? publishNote(values.status, values.published_at) + (f.hint ? ` ${f.hint}` : "") : f.hint;
+    const hintText = f.name === "published_at" && "status" in values ? publishNote(values.status, values.published_at, mounted) + (f.hint ? ` ${f.hint}` : "") : f.hint;
     const hint = hintText ? `${fid}-hint` : undefined, desc = [err ? `${fid}-err` : "", hint ?? ""].join(" ").trim() || undefined;
     const v = values[f.name];
     const common = { id: fid, "aria-invalid": Boolean(err), "aria-describedby": desc } as const;
@@ -212,7 +215,7 @@ export function EntityForm({ entity, id, initial, submitLabel = "Save", onSaved,
       )}
       {canPreview && tab === "preview" && (
         <PostPreview title={String(values.title ?? "")} excerpt={String(values.excerpt ?? "")} image={String(values.image_url ?? "")} imageAlt={String(values.image_alt ?? "")} category={categoryName}
-          minutes={Number(initial.reading_minutes) || 1} note={publishNote(values.status, values.published_at)} doc={values.body as JSONContent} />
+          minutes={Number(initial.reading_minutes) || 1} note={publishNote(values.status, values.published_at, mounted)} doc={values.body as JSONContent} />
       )}
       <div hidden={canPreview && tab === "preview"} className={cn(side.length > 0 && "grid gap-8 lg:grid-cols-[minmax(0,1fr)_21rem] lg:items-start")}>
         <div className="flex min-w-0 flex-col gap-10">

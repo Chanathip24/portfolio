@@ -12,8 +12,13 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   timeout: 60_000,
+  // On CI one retry absorbs the odd timing slip (a sign-in code at the edge of its 30 seconds); a test that fails twice is real.
+  retries: process.env.CI ? 1 : 0,
+  forbidOnly: Boolean(process.env.CI),
   expect: { timeout: 10_000 },
-  reporter: [["list"], ["html", { open: "never", outputFolder: "playwright-report" }]],
+  // "list" prints each test's name as it runs. On CI each shard writes a "blob" that the report job merges into one HTML report, and the
+  // "github" reporter adds failure marks on the pull request (it prints only dots itself).
+  reporter: process.env.CI ? [["list"], ["github"], ["blob"]] : [["list"], ["html", { open: "never", outputFolder: "playwright-report" }]],
   globalTeardown: "./tests/support/global-teardown.ts",
   use: {
     baseURL: `http://localhost:${PORT}`,

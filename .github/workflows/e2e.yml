@@ -1,0 +1,54 @@
+name: End-to-end
+
+# Feature and end-to-end tests in three shards at once. Each shard has its own local Supabase and build, so data never collides.
+# Called by ci.yml.
+on: workflow_call
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - uses: supabase/setup-cli@v1
+        with: { version: 2.121.0 } # pinned, so a new release cannot change the images under a passing build
+      # The pulls open many outgoing connections, and Linux may hand one of them a port in Supabase's range (54322 is inside the
+      # temporary-port range). Reserving the range stops that clash; the retry covers anything else.
+      - name: Start Supabase
+        run: |
+          sudo sysctl -w net.ipv4.ip_local_reserved_ports=54320-54329
+          skip=studio,imgproxy,vector,logflare,edge-runtime,supavisor,postgres-meta
+          supabase start -x $skip || { supabase stop --no-backup; supabase start -x $skip; }
+      - name: Point the app at the local stack
+        run: |
+          supabase status -o env > /tmp/sb.env
+          get() { grep "^$1=" /tmp/sb.env | cut -d= -f2- | tr -d '"'; }
+          {
+            echo "NEXT_PUBLIC_SUPABASE_URL=$(get API_URL)"
+            echo "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=$(get PUBLISHABLE_KEY)"
+            echo "SUPABASE_SERVICE_ROLE_KEY=$(get SERVICE_ROLE_KEY)"
+            echo "ANALYTICS_SALT=$(openssl rand -hex 16)"
+          } > .env.local
+      - uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: next-e2e-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**') }}
+          restore-keys: next-e2e-${{ hashFiles('package-lock.json') }}-
+      - run: npm run build
+      - run: npx playwright test --shard=${{ matrix.shard }}/3
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: blob-report-${{ matrix.shard }}
+          path: blob-report
+          if-no-files-found: error
+          retention-days: 3
+      - if: always()
+        run: supabase stop --no-backup

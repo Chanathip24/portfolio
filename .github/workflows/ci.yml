@@ -1,0 +1,50 @@
+name: CI
+
+# The entry point. Each job calls one workflow file next to this one:
+#   checks.yml     types, lint, build, audit              component.yml  component tests in a real browser
+#   e2e.yml        feature and end-to-end tests, sharded  report.yml     merged report and its page
+#   cleanup.yml    removes a closed pull request's page
+# Docs and repo chores cannot break the site, so they do not start a run. `closed` is only for the cleanup.
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["**.md", "LICENSE", ".github/dependabot.yml"]
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    paths-ignore: ["**.md", "LICENSE", ".github/dependabot.yml"]
+
+# A newer push to the same branch makes an older run pointless.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    if: github.event.action != 'closed'
+    uses: ./.github/workflows/checks.yml
+
+  component:
+    if: github.event.action != 'closed'
+    uses: ./.github/workflows/component.yml
+
+  e2e:
+    if: github.event.action != 'closed'
+    uses: ./.github/workflows/e2e.yml
+
+  report:
+    needs: e2e
+    if: ${{ !cancelled() && github.event.action != 'closed' }}
+    uses: ./.github/workflows/report.yml
+    permissions:
+      contents: write
+      pull-requests: write
+
+  cleanup:
+    if: ${{ github.event.action == 'closed' && github.event.pull_request.head.repo.full_name == github.repository }}
+    uses: ./.github/workflows/cleanup.yml
+    permissions:
+      contents: write
+      pull-requests: write
