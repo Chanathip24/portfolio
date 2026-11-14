@@ -8,7 +8,8 @@ export function StatTiles({ items, className }: { items: { label: string; value:
         <div key={t.label} className="rounded-xl border border-border bg-card p-4">
           <dt className="text-sm text-muted-foreground">{t.label}</dt>
           <dd className="mt-1 text-3xl font-medium tracking-tight tabular-nums">{t.value}</dd>
-          {t.note && <p className={cn("mt-1 text-xs", t.warn ? "text-amber-700 dark:text-amber-400" : "text-muted-foreground")}>{t.note}</p>}
+          {/* A second <dd> in the same group: a definition list may hold only terms and definitions, not a paragraph. */}
+          {t.note && <dd className={cn("mt-1 text-xs", t.warn ? "text-amber-700 dark:text-amber-400" : "text-muted-foreground")}>{t.note}</dd>}
         </div>
       ))}
     </dl>

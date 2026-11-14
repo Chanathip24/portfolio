@@ -9,6 +9,9 @@ import { extensions } from "@/lib/tiptap";
 export function RichContent({ doc, className }: { doc: JSONContent; className?: string }) {
   const ids = headingsOf(doc).map((h) => h.id);
   let i = 0;
-  const html = generateHTML(doc, extensions).replace(/<h([23])>/g, (_, level) => `<h${level} id="${ids[i++]}">`);
+  const html = generateHTML(doc, extensions)
+    .replace(/<h([23])>/g, (_, level) => `<h${level} id="${ids[i++]}">`)
+    // A published task list is read-only, and its checkboxes need a name: the label around them holds no text.
+    .replace(/<input type="checkbox"( checked="checked")?>/g, (_, checked) => `<input type="checkbox"${checked ?? ""} disabled aria-label="${checked ? "Done" : "To do"}">`);
   return <div className={`rich ${className ?? ""}`} dangerouslySetInnerHTML={{ __html: html }} />;
 }

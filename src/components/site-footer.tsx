@@ -51,7 +51,7 @@ export function SiteFooter() {
             const z = minute === null ? null : zoneParts(c.timeZone, minute * 60000);
             const Icon = z?.day ? Sun : Moon;
             return (
-              <li key={c.city} className={cn("grid grid-cols-[1rem_1fr_auto_auto] items-center gap-3 tabular-nums", i === 0 ? "font-medium" : "font-medium opacity-45")}>
+              <li key={c.city} className={cn("grid grid-cols-[1rem_1fr_auto_auto] items-center gap-3 tabular-nums", i === 0 ? "font-medium" : "font-medium opacity-70")}>
                 <Icon aria-hidden className="size-3.5" strokeWidth={1.75} />
                 <span>{c.city}</span>
                 <span>{z?.time ?? "--:--"}</span>
