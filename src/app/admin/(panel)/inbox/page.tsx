@@ -2,11 +2,14 @@ import { Inbox } from "@/components/admin/inbox";
 import { PageHeader } from "@/components/admin/page-header";
 import { listMessages } from "@/lib/admin/data";
 import { getMailStatus } from "@/lib/admin/mail-connection";
+import { Streamed } from "@/components/admin/page-loading";
+import { InboxSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
+export default function InboxPage() {
+  return <Streamed fallback={<InboxSkeleton />}><InboxPageContent /></Streamed>;
+}
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
-export default async function InboxPage() {
+async function InboxPageContent() {
   const [messages, gmail] = await Promise.all([listMessages(), getMailStatus()]);
   return (
     <>

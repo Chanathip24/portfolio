@@ -12,6 +12,11 @@
   font-display: swap;
 }
 
+/* The admin's loading bar: runs quickly to most of the width, then waits for the page. */
+@keyframes nav-progress { from { transform: scaleX(0); } to { transform: scaleX(0.92); } }
+.nav-progress { transform-origin: left; animation: nav-progress 10s cubic-bezier(0.1, 0.7, 0.2, 1) forwards; }
+@media (prefers-reduced-motion: reduce) { .nav-progress { animation: none; transform: scaleX(0.6); } }
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

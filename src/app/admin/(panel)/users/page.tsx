@@ -5,11 +5,14 @@ import { UsersManager } from "@/components/admin/users-manager";
 import { requireAdmin } from "@/lib/admin/auth";
 import { userStats } from "@/lib/admin/user-stats";
 import { listUsers, usersConfigured } from "@/lib/admin/users";
+import { Streamed } from "@/components/admin/page-loading";
+import { ListSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
+export default function UsersPage() {
+  return <Streamed fallback={<ListSkeleton tiles />}><UsersPageContent /></Streamed>;
+}
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
-export default async function UsersPage() {
+async function UsersPageContent() {
   const me = await requireAdmin();
   const users = usersConfigured ? await listUsers() : null;
   return (

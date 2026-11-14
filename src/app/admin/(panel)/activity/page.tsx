@@ -6,9 +6,10 @@ import { Donut, Legend, RankBars, TrendChart } from "@/components/admin/charts";
 import { ChartMenu } from "@/components/admin/chart-card";
 import { ChartPanel } from "@/components/admin/chart-panel";
 import { DashCard } from "@/components/admin/dash-card";
-import { EmptyState, SegmentedNav } from "@/components/admin/shared";
+import { EmptyState } from "@/components/admin/shared";
 import { PageHeader } from "@/components/admin/page-header";
 import { StatTiles } from "@/components/admin/stat-tiles";
+import { ViewSwitch } from "@/components/admin/view-switch";
 import { UserAvatar } from "@/components/admin/user-avatar";
 import { PAGE_SIZE_OPTIONS, UrlSelect } from "@/components/admin/url-select";
 import { Badge } from "@/components/ui/badge";
@@ -17,17 +18,20 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { type AuditFilter, type AuditRow, auditStats, listAudit } from "@/lib/admin/data";
 import { formatDate, formatTime, timeAgo } from "@/lib/format";
 import { cn } from "cn";
+import { Streamed } from "@/components/admin/page-loading";
+import { ActivitySkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
-
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 type Params = { page?: string; size?: string; view?: string; dir?: string; q?: string; action?: string; entity?: string; actor?: string; from?: string; to?: string };
 const VIEWS = [{ id: "timeline", label: "Timeline" }, { id: "table", label: "Table" }, { id: "cards", label: "Cards" }, { id: "days", label: "By day" }] as const;
 const SLICE = { created: "#10b981", updated: "var(--brand-ink)", deleted: "#f43f5e", event: "#a855f7" } as const;
 const SERIES = (["created", "updated", "deleted", "event"] as const).map((k) => ({ key: k, label: k === "event" ? "Events" : k[0].toUpperCase() + k.slice(1), color: SLICE[k] }));
 const title = (s: string) => s.replace(/[_-]/g, " ").replace(/^./, (c) => c.toUpperCase());
 
-export default async function ActivityPage({ searchParams }: { searchParams: Promise<Params> }) {
+export default function ActivityPage(props: Parameters<typeof ActivityPageContent>[0]) {
+  return <Streamed fallback={<ActivitySkeleton />}><ActivityPageContent {...props} /></Streamed>;
+}
+
+async function ActivityPageContent({ searchParams }: { searchParams: Promise<Params> }) {
   const sp = await searchParams;
   const size = [10, 25, 50, 100].includes(Number(sp.size)) ? Number(sp.size) : 25;
   const page = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
@@ -79,7 +83,7 @@ export default async function ActivityPage({ searchParams }: { searchParams: Pro
         <ActivityFilters entities={stats.entities} actors={stats.actors} />
 
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <SegmentedNav label="View" items={VIEWS.map((v) => ({ href: href({ view: v.id, page: "" }), label: v.label, active: v.id === view }))} />
+          <ViewSwitch views={VIEWS} fallback="timeline" />
           <p role="status" className="text-sm tabular-nums text-muted-foreground">{total} {filtered ? "matching" : "recorded"}, {dir === "desc" ? "newest" : "oldest"} first</p>
         </div>
 

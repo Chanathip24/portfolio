@@ -4,11 +4,14 @@ import { PageHeader } from "@/components/admin/page-header";
 import { HistoryButton } from "@/components/admin/revisions";
 import { getProfileAdmin, listRevisions } from "@/lib/admin/data";
 import { blank } from "@/lib/admin/fields";
+import { Streamed } from "@/components/admin/page-loading";
+import { FormSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
+export default function ProfilePage() {
+  return <Streamed fallback={<FormSkeleton />}><ProfilePageContent /></Streamed>;
+}
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
-export default async function ProfilePage() {
+async function ProfilePageContent() {
   const profile = await getProfileAdmin();
   const revisions = profile ? await listRevisions("profile", profile.id) : [];
   return (

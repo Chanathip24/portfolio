@@ -3,11 +3,14 @@ import { PageHeader } from "@/components/admin/page-header";
 import { SettingsPanel } from "@/components/admin/settings-panel";
 import { getSettings } from "@/lib/admin/data";
 import { getMailStatus, redirectUri } from "@/lib/admin/mail-connection";
+import { Streamed } from "@/components/admin/page-loading";
+import { FormSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
+export default function SettingsPage(props: Parameters<typeof SettingsPageContent>[0]) {
+  return <Streamed fallback={<FormSkeleton />}><SettingsPageContent {...props} /></Streamed>;
+}
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
-export default async function SettingsPage({ searchParams }: { searchParams: Promise<{ gmail?: string }> }) {
+async function SettingsPageContent({ searchParams }: { searchParams: Promise<{ gmail?: string }> }) {
   const [settings, mail, uri, { gmail }] = await Promise.all([getSettings(), getMailStatus(), redirectUri(), searchParams]);
   return (
     <>

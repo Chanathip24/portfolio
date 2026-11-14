@@ -3,14 +3,17 @@ import { EntityManager } from "@/components/admin/entity-manager";
 import { PageHeader } from "@/components/admin/page-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { listTaxonomy } from "@/lib/admin/data";
+import { Streamed } from "@/components/admin/page-loading";
+import { CardsSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
-
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 const trigger = "h-10 flex-none gap-2 rounded-full border border-border px-4 text-sm data-active:border-foreground data-active:bg-foreground data-active:text-background";
 const count = (n: number, one: string) => `${n} ${one}${n === 1 ? "" : "s"}`;
 
-export default async function CategoriesPage() {
+export default function CategoriesPage() {
+  return <Streamed fallback={<CardsSkeleton />}><CategoriesPageContent /></Streamed>;
+}
+
+async function CategoriesPageContent() {
   const [postCategories, projectCategories, skillGroups] = await Promise.all([listTaxonomy("postCategory"), listTaxonomy("projectCategory"), listTaxonomy("skillGroup")]);
   return (
     <>

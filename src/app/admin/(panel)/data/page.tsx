@@ -7,10 +7,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { UrlSelect, PAGE_SIZE_OPTIONS } from "@/components/admin/url-select";
 import { BROWSABLE, browseTable, getSettings, isBrowsable } from "@/lib/admin/data";
 import { cn } from "cn";
+import { Streamed } from "@/components/admin/page-loading";
+import { DataSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
-
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 /** One cell as short text: long strings and JSON are cut, and the full row is under "Show JSON". */
 function cell(v: unknown) {
   if (v === null || v === undefined) return "";
@@ -18,7 +17,11 @@ function cell(v: unknown) {
   return s.length > 60 ? `${s.slice(0, 60)}…` : s;
 }
 
-export default async function DataPage({ searchParams }: { searchParams: Promise<{ table?: string; page?: string; size?: string; sort?: string; dir?: string }> }) {
+export default function DataPage(props: Parameters<typeof DataPageContent>[0]) {
+  return <Streamed fallback={<DataSkeleton />}><DataPageContent {...props} /></Streamed>;
+}
+
+async function DataPageContent({ searchParams }: { searchParams: Promise<{ table?: string; page?: string; size?: string; sort?: string; dir?: string }> }) {
   if (!(await getSettings()).dataToolsEnabled) return (<><PageHeader title="Data" /><DataToolsOff /></>);
   const sp = await searchParams;
   const table = sp.table && isBrowsable(sp.table) ? sp.table : "posts";

@@ -33,9 +33,20 @@ export async function listProjects({ creators = true }: { creators?: boolean } =
   return ((data ?? []) as Omit<ProjectListRow, "tagNames" | "visibility" | "creator">[]).map((p) => ({ ...p, creator: who.get(p.id) ?? "-", tagNames: p.tags.map((t) => names.get(t) ?? t), visibility: visibilityOf(p.status, p.published_at, now) }));
 }
 
+/** What a stats page shows about a post: everything but the body, which can be large. */
+export async function getPostSummary(id: string) {
+  const { data } = await (await db()).from("posts").select(`${POST_COLUMNS},reading_minutes`).eq("id", id).maybeSingle();
+  return data as Pick<PostDetailRow, "id" | "slug" | "title" | "category" | "status" | "views" | "published_at" | "updated_at" | "reading_minutes"> | null;
+}
+
 export async function getPostById(id: string) {
   const { data } = await (await db()).from("posts").select("*").eq("id", id).maybeSingle();
   return data as Omit<PostDetailRow, "author"> | null;
+}
+
+export async function getProjectSummary(id: string) {
+  const { data } = await (await db()).from("projects").select(PROJECT_COLUMNS).eq("id", id).maybeSingle();
+  return data as Pick<ProjectDetailRow, "id" | "slug" | "title" | "client" | "status" | "is_signature" | "sort_order" | "tags" | "published_at"> | null;
 }
 
 export async function getProjectById(id: string) {

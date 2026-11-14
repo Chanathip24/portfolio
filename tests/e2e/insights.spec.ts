@@ -26,7 +26,7 @@ test.describe("charts and insights", () => {
     await expect(sheet).toBeHidden();
   });
 
-  test("the activity page has charts, filters and three views", async ({ page }) => {
+  test("the activity page has charts, filters and four views", async ({ page }) => {
     const name = `E2E Insight ${rand()}`;
     await page.goto("/admin/categories");
     await page.getByRole("button", { name: "Add category" }).first().click();

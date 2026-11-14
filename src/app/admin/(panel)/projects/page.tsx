@@ -5,13 +5,16 @@ import { PageHeader } from "@/components/admin/page-header";
 import { SectionInsights } from "@/components/admin/section-insights";
 import { Button } from "@/components/ui/button";
 import { getSectionAnalytics, listProjects } from "@/lib/admin/data";
+import { Streamed } from "@/components/admin/page-loading";
+import { ListSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
-
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 const DAYS = 30;
 
-export default async function ProjectsPage() {
+export default function ProjectsPage() {
+  return <Streamed fallback={<ListSkeleton />}><ProjectsPageContent /></Streamed>;
+}
+
+async function ProjectsPageContent() {
   const [projects, stats] = await Promise.all([listProjects(), getSectionAnalytics("/work/", DAYS)]);
   const signature = projects.filter((p) => p.is_signature).length;
   return (

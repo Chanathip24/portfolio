@@ -10,15 +10,18 @@ import { Badge } from "@/components/ui/badge";
 import { type ErrorGroup, getErrorSummary } from "@/lib/admin/data";
 import { formatDate, formatTime, timeAgo } from "@/lib/format";
 import { cn } from "cn";
+import { Streamed } from "@/components/admin/page-loading";
+import { ChartsSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
-
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 const RANGES = [1, 7, 30];
 const SERIES = [{ key: "client", label: "Browser", color: "#f59e0b" }, { key: "server", label: "Server", color: "#f43f5e" }];
 const dayLabel = (days: number) => (days === 1 ? "24 hours" : `${days} days`);
 
-export default async function ErrorsPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
+export default function ErrorsPage(props: Parameters<typeof ErrorsPageContent>[0]) {
+  return <Streamed fallback={<ChartsSkeleton tiles={4} list />}><ErrorsPageContent {...props} /></Streamed>;
+}
+
+async function ErrorsPageContent({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
   const { range } = await searchParams;
   const days = RANGES.includes(Number(range)) ? Number(range) : 7;
   const stats = await getErrorSummary(days);

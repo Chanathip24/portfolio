@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { ChartPrefsHydrator } from "@/components/admin/chart-card";
+import { NavProgress } from "@/components/admin/nav-progress";
 import { AdminNav, MobileNav, UserMenu } from "@/components/admin/sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,9 +12,12 @@ export const instant = false;
 
 export default function PanelLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Suspense fallback={<Loading />}>
-      <Shell>{children}</Shell>
-    </Suspense>
+    <>
+      <Suspense fallback={null}><NavProgress /></Suspense>
+      <Suspense fallback={<Loading />}>
+        <Shell>{children}</Shell>
+      </Suspense>
+    </>
   );
 }
 

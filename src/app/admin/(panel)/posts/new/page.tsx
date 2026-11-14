@@ -2,11 +2,14 @@ import { PageHeader } from "@/components/admin/page-header";
 import { EntityEditor } from "@/components/admin/entity-editor";
 import { taxonomyOptions } from "@/lib/admin/data";
 import { blank } from "@/lib/admin/fields";
+import { Streamed } from "@/components/admin/page-loading";
+import { FormSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
+export default function NewPost() {
+  return <Streamed fallback={<FormSkeleton side />}><NewPostContent /></Streamed>;
+}
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
-export default async function NewPost() {
+async function NewPostContent() {
   const { category } = await taxonomyOptions();
   return (
     <>
