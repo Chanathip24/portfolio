@@ -12,13 +12,10 @@ import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, Pagi
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Post } from "@/lib/api/posts";
 import { EASE } from "@/lib/constants";
-import { PostCategory, PostSort } from "@/lib/enums";
-import { titleCase } from "@/lib/format";
+import { PostSort } from "@/lib/enums";
 import { cn } from "@/lib/utils";
 
 const PAGE_SIZE = 9; // a full 3 x 3 grid
-const categories = Object.values(PostCategory);
-const isCategory = (v: string | null): v is PostCategory => categories.includes(v as PostCategory);
 const sortLabel: Record<PostSort, string> = { [PostSort.Latest]: "Latest", [PostSort.Views]: "Most viewed" };
 const isSort = (v: string | null): v is PostSort => v === PostSort.Latest || v === PostSort.Views;
 
@@ -33,27 +30,27 @@ function pageWindow(page: number, pages: number): (number | "gap")[] {
   return pages <= 7 ? Array.from({ length: pages }, (_, i) => i + 1) : out;
 }
 
-type Next = { category?: PostCategory | null; q?: string; sort?: PostSort; page?: number };
+type Next = { category?: string | null; q?: string; sort?: PostSort; page?: number };
 
 /**
  * The blog: a tab strip of categories, a search and a sort (latest or most viewed), a grid of posts nine to a page,
  * and pagination. Everything the reader chose lives in the URL (?category=data&q=money&sort=views&page=2), so a view
  * can be shared and survives a reload; the URL is the state.
  */
-export function BlogList({ posts }: { posts: Post[] }) {
+export function BlogList({ posts, categories }: { posts: Post[]; categories: { slug: string; name: string }[] }) {
   const pathname = usePathname();
   const params = useSearchParams();
   const lenis = useLenis();
   const [sortOpen, setSortOpen] = useState(false); // radio items do not close their menu by themselves
 
   const rawCategory = params.get("category");
-  const category = isCategory(rawCategory) ? rawCategory : null;
+  const category = categories.some((c) => c.slug === rawCategory) ? rawCategory : null;
   const rawSort = params.get("sort");
   const sort = isSort(rawSort) ? rawSort : PostSort.Latest;
   const query = params.get("q")?.trim() ?? "";
   const requestedPage = Math.max(1, Number.parseInt(params.get("page") ?? "1", 10) || 1);
 
-  const counts = useMemo(() => Object.fromEntries(categories.map((c) => [c, posts.filter((p) => p.category === c).length])), [posts]);
+  const counts = useMemo(() => Object.fromEntries(categories.map((c) => [c.slug, posts.filter((p) => p.category === c.slug).length])), [posts, categories]);
   const pool = useMemo(() => {
     const needle = query.toLowerCase();
     const matches = posts.filter((p) => (!category || p.category === category) && (!needle || `${p.title} ${p.excerpt}`.toLowerCase().includes(needle)));
@@ -113,14 +110,14 @@ export function BlogList({ posts }: { posts: Post[] }) {
   return (
     <>
       <div id="posts" className="mt-12 flex scroll-mt-24 flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <Tabs value={category ?? "all"} onValueChange={(v) => go({ category: v === "all" ? null : (v as PostCategory) })} className="min-w-0">
+        <Tabs value={category ?? "all"} onValueChange={(v) => go({ category: v === "all" ? null : v })} className="min-w-0">
           <TabsList variant="line" aria-label="Filter by category" className="h-auto w-full justify-start gap-1 overflow-x-auto border-b border-border [scrollbar-width:none] lg:w-auto [&::-webkit-scrollbar]:hidden">
             <TabsTrigger value="all" className="flex-none px-3 py-2.5 text-sm">
               All <span className="tabular-nums opacity-60">{posts.length}</span>
             </TabsTrigger>
-            {categories.map((c) => (
-              <TabsTrigger key={c} value={c} className="flex-none px-3 py-2.5 text-sm">
-                {titleCase(c)} <span className="tabular-nums opacity-60">{counts[c]}</span>
+            {categories.filter((c) => counts[c.slug] > 0).map((c) => (
+              <TabsTrigger key={c.slug} value={c.slug} className="flex-none px-3 py-2.5 text-sm">
+                {c.name} <span className="tabular-nums opacity-60">{counts[c.slug]}</span>
               </TabsTrigger>
             ))}
           </TabsList>
@@ -159,7 +156,7 @@ export function BlogList({ posts }: { posts: Post[] }) {
 
       <p aria-live="polite" className="mt-6 text-sm tabular-nums text-muted-foreground">
         {pool.length === 0 ? "0 posts" : `Showing ${(page - 1) * PAGE_SIZE + 1}–${(page - 1) * PAGE_SIZE + shown.length} of ${pool.length} ${pool.length === 1 ? "post" : "posts"}`}
-        {category && <> in {titleCase(category)}</>}
+        {category && <> in {categories.find((c) => c.slug === category)?.name}</>}
         {query && <> matching “{query}”</>}
         {sort === PostSort.Views && <> · most viewed first</>}
       </p>

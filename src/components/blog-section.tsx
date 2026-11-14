@@ -4,7 +4,7 @@ import { SiteImage } from "@/components/ui/site-image";
 import { notes } from "@/content/site";
 import { getPosts } from "@/lib/api/posts";
 import { SectionId } from "@/lib/enums";
-import { formatDate, titleCase } from "@/lib/format";
+import { formatDate } from "@/lib/format";
 
 /**
  * The latest three posts as a typographic list: the title is the content, set large in the display
@@ -39,7 +39,7 @@ export async function BlogSection() {
                 <span className="block font-display text-[clamp(2.25rem,5vw,4rem)] italic leading-[0.98] tracking-[-0.02em] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-2">{p.title}</span>
                 <span className="mt-4 block max-w-[56ch] text-muted-foreground">{p.excerpt}</span>
                 <span className="mt-4 block text-sm text-muted-foreground">
-                  <span className="text-foreground">{titleCase(p.category)}</span> · {p.minutes} min read<span className="md:hidden"> · {formatDate(p.publishedAt)}</span>
+                  <span className="text-foreground">{p.categoryName}</span> · {p.minutes} min read<span className="md:hidden"> · {formatDate(p.publishedAt)}</span>
                 </span>
               </span>
               <span className="order-1 block overflow-hidden rounded-xl bg-tile transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-rotate-2 group-hover:scale-[1.03] md:order-none">

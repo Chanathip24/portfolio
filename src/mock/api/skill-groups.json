@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "slug": "frontend",
+      "name": "Frontend",
+      "sort_order": 1
+    },
+    {
+      "slug": "backend",
+      "name": "Backend",
+      "sort_order": 2
+    },
+    {
+      "slug": "data",
+      "name": "Data",
+      "sort_order": 3
+    },
+    {
+      "slug": "tooling",
+      "name": "Tooling",
+      "sort_order": 4
+    }
+  ],
+  "count": 4
+}

@@ -1,15 +1,15 @@
 import { isAxiosError } from "axios";
-import { cacheLife } from "next/cache";
-import { PublishStatus, type ProjectTag } from "@/lib/enums";
+import { cacheLife, cacheTag } from "next/cache";
+import { PublishStatus } from "@/lib/enums";
 import { api } from "./client";
-import type { ProjectDetailRow, ProjectResponse, ProjectRow, ProjectsResponse } from "./types";
+import type { CategoriesResponse, CategoryRow, ProjectDetailRow, ProjectResponse, ProjectRow, ProjectsResponse } from "./types";
 
-/** What the components use: camelCase, with the page link resolved. */
+/** What the components use: camelCase, with the page link resolved and the categories as display names. */
 export type WorkItem = {
   slug: string;
   title: string;
   client: string;
-  tags: ProjectTag[];
+  tags: string[];
   summary: string;
   year: number;
   isSignature: boolean;
@@ -21,13 +21,25 @@ export type WorkItem = {
 
 const isPublished = (p: Pick<ProjectRow, "status">) => p.status === PublishStatus.Published;
 
-const toItem = (p: ProjectRow): WorkItem => ({
+/** The work categories in the order the admin set. */
+export async function getProjectCategories(): Promise<CategoryRow[]> {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("projects");
+  const { data } = await api.get<CategoriesResponse>("/project-categories");
+  return [...data.data].sort((a, b) => a.sort_order - b.sort_order);
+}
+
+const nameMap = (categories: CategoryRow[]) => new Map(categories.map((c) => [c.slug, c.name]));
+const namesOf = (slugs: string[], names: Map<string, string>) => slugs.map((s) => names.get(s) ?? s);
+
+const toItem = (p: ProjectRow, names: Map<string, string>): WorkItem => ({
   slug: p.slug,
   title: p.title,
   client: p.client,
-  tags: p.tags,
+  tags: namesOf(p.tags, names),
   summary: p.summary,
-  year: new Date(p.created_at).getUTCFullYear(),
+  year: new Date(p.published_at ?? p.created_at).getUTCFullYear(),
   isSignature: p.is_signature,
   liveUrl: p.live_url,
   previewUrl: p.preview_url,
@@ -36,32 +48,41 @@ const toItem = (p: ProjectRow): WorkItem => ({
 });
 
 async function getPublished() {
-  const { data } = await api.get<ProjectsResponse>("/projects");
-  return data.data.filter(isPublished).sort((a, b) => a.sort_order - b.sort_order).map(toItem);
+  const [{ data }, categories] = await Promise.all([api.get<ProjectsResponse>("/projects"), getProjectCategories()]);
+  const names = nameMap(categories);
+  return data.data.filter(isPublished).sort((a, b) => a.sort_order - b.sort_order).map((p) => toItem(p, names));
 }
 
 export async function getProjects() {
   "use cache";
-  cacheLife("hours");
+  cacheLife("minutes");
+  cacheTag("projects");
   return getPublished();
 }
 
 /** The home Work section: signature projects (large, stacked on the left) and one combined index of all
- *  the others (small, on the right), each in sort_order. */
+ *  the others (small, on the right), each in sort_order. `categories` are the display names in use, in the admin's order. */
 export async function getWork() {
   "use cache";
-  cacheLife("hours");
-  const items = await getPublished();
-  return { signature: items.filter((i) => i.isSignature), others: items.filter((i) => !i.isSignature) };
+  cacheLife("minutes");
+  cacheTag("projects");
+  const [items, categories] = await Promise.all([getPublished(), getProjectCategories()]);
+  const used = new Set(items.flatMap((i) => i.tags));
+  return {
+    signature: items.filter((i) => i.isSignature),
+    others: items.filter((i) => !i.isSignature),
+    categories: categories.map((c) => c.name).filter((n) => used.has(n)),
+  };
 }
 
-/** The full project (with its Tiptap body), or null when the slug doesn't exist or isn't published. */
+/** The full project (with its Tiptap body; `tags` are display names), or null when the slug doesn't exist or isn't published. */
 export async function getProject(slug: string): Promise<ProjectDetailRow | null> {
   "use cache";
-  cacheLife("hours");
+  cacheLife("minutes");
+  cacheTag("projects");
   try {
-    const { data } = await api.get<ProjectResponse>(`/projects/${encodeURIComponent(slug)}`);
-    return isPublished(data.data) ? data.data : null;
+    const [{ data }, categories] = await Promise.all([api.get<ProjectResponse>(`/projects/${encodeURIComponent(slug)}`), getProjectCategories()]);
+    return isPublished(data.data) ? { ...data.data, tags: namesOf(data.data.tags, nameMap(categories)) } : null;
   } catch (e) {
     if (isAxiosError(e) && e.response?.status === 404) return null;
     throw e;
@@ -72,7 +93,8 @@ export async function getProject(slug: string): Promise<ProjectDetailRow | null>
  *  previous and next project in sort_order. */
 export async function getProjectNeighbors(slug: string) {
   "use cache";
-  cacheLife("hours");
+  cacheLife("minutes");
+  cacheTag("projects");
   const all = await getPublished();
   const i = all.findIndex((p) => p.slug === slug);
   const tags = new Set(all[i]?.tags ?? []);

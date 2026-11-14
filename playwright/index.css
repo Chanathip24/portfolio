@@ -1,0 +1,4 @@
+/* The component-test page uses the app's own styles. Tailwind only scans the folder this file is in by default, so the app's
+   source is added explicitly; without it the class names in src/ would produce no CSS here. */
+@import "../src/app/globals.css";
+@source "../src";

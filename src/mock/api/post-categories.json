@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "slug": "engineering",
+      "name": "Engineering",
+      "sort_order": 1
+    },
+    {
+      "slug": "design",
+      "name": "Design",
+      "sort_order": 2
+    },
+    {
+      "slug": "data",
+      "name": "Data",
+      "sort_order": 3
+    },
+    {
+      "slug": "process",
+      "name": "Process",
+      "sort_order": 4
+    }
+  ],
+  "count": 4
+}

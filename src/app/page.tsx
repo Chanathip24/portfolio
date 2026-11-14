@@ -23,7 +23,7 @@ export default async function Home() {
         {/* Opaque and above the globe scene, so the rising globe passes behind Work instead of over it.
             Clipped sideways: cards fly in from 1.5x and must not widen the page while they do. */}
         <section id={SectionId.Work} aria-label="Selected projects" className="page-x relative z-10 scroll-mt-24 overflow-x-clip bg-background pb-24 pt-12">
-          <WorkShowcase signature={work.signature} others={work.others} />
+          <WorkShowcase signature={work.signature} others={work.others} categories={work.categories} />
         </section>
 
         <GlobeScene pin={owner.pin} heading={about.heading} body={about.body} primary={{ label: "Read my notes", href: hash(SectionId.Notes) }} />

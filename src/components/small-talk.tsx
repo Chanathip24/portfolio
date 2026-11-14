@@ -3,7 +3,7 @@
 import { ArrowUp, Plus } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useId, useState } from "react";
-import { owner, smallTalk } from "@/content/site";
+import { smallTalk } from "@/content/site";
 import { cn } from "@/lib/utils";
 import { EASE } from "@/lib/constants";
 import { SectionId } from "@/lib/enums";
@@ -17,12 +17,23 @@ import { SectionId } from "@/lib/enums";
 export function SmallTalk() {
   const [open, setOpen] = useState<number | null>(null);
   const [q, setQ] = useState("");
+  const [email, setEmail] = useState("");
+  const [state, setState] = useState<{ ok: boolean; text: string } | null>(null);
+  const [busy, setBusy] = useState(false);
   const base = useId();
 
-  const ask = (e: React.FormEvent) => {
+  /** Sends the question to the site owner's inbox (see /api/contact). */
+  const ask = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!q.trim()) return;
-    window.location.href = `mailto:${owner.email}?subject=${encodeURIComponent("Small talk")}&body=${encodeURIComponent(q.trim())}`;
+    if (!q.trim() || busy) return;
+    setBusy(true); setState(null);
+    try {
+      const res = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, message: q, website: new FormData(e.currentTarget as HTMLFormElement).get("website") ?? "" }) });
+      const data = (await res.json().catch(() => ({}))) as { message?: string };
+      setState({ ok: res.ok, text: data.message ?? (res.ok ? "Sent." : "Could not send that.") });
+      if (res.ok) { setQ(""); setEmail(""); }
+    } catch { setState({ ok: false, text: "Could not send that. Check your connection." }); }
+    setBusy(false);
   };
 
   return (
@@ -68,20 +79,32 @@ export function SmallTalk() {
           );
         })}
         <li>
-          <form onSubmit={ask} className="flex items-center gap-3 rounded-xl border border-dashed border-border px-2 py-2 pl-3">
-            <span aria-hidden className="dither-tile size-6 shrink-0 rounded-[4px] text-[2.5rem]" />
-            <label htmlFor={`${base}-ask`} className="sr-only">Ask me anything else</label>
-            <input
-              id={`${base}-ask`}
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Ask me anything else"
-              className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-            />
-            <button type="submit" disabled={!q.trim()} aria-label="Send question by email"
-              className="flex size-8 shrink-0 items-center justify-center rounded-full bg-foreground text-background transition-opacity disabled:opacity-30">
-              <ArrowUp aria-hidden className="size-4" strokeWidth={2} />
-            </button>
+          <form onSubmit={ask} className="flex flex-col gap-2 rounded-xl border border-dashed border-border px-2 py-2 pl-3">
+            <div className="flex items-center gap-3">
+              <span aria-hidden className="dither-tile size-6 shrink-0 rounded-[4px] text-[2.5rem]" />
+              <label htmlFor={`${base}-ask`} className="sr-only">Ask me anything else</label>
+              <input
+                id={`${base}-ask`}
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Ask me anything else"
+                className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+              />
+              <button type="submit" disabled={!q.trim() || !email.trim() || busy} aria-label="Send question"
+                className="flex size-8 shrink-0 items-center justify-center rounded-full bg-foreground text-background transition-opacity disabled:opacity-30">
+                <ArrowUp aria-hidden className="size-4" strokeWidth={2} />
+              </button>
+            </div>
+            {q.trim() && (
+              <div className="flex items-center gap-3 pl-9">
+                <label htmlFor={`${base}-email`} className="sr-only">Your email, so I can reply</label>
+                <input id={`${base}-email`} type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Your email, so I can reply"
+                  className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" />
+              </div>
+            )}
+            {/* A field only a bot fills in. */}
+            <input name="website" tabIndex={-1} autoComplete="off" aria-hidden className="absolute -left-[9999px] h-0 w-0 opacity-0" />
+            {state && <p role="status" className={cn("pl-9 text-sm", state.ok ? "text-muted-foreground" : "text-destructive")}>{state.text}</p>}
           </form>
         </li>
       </ul>

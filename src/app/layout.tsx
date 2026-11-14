@@ -5,6 +5,9 @@ import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import Script from "next/script";
 import { ViewTransitions } from "next-view-transitions";
 import { Suspense } from "react";
+import { PageViewTracker } from "@/components/page-view-tracker";
+import { feedAlternate, siteUrl } from "@/lib/site";
+import { WebVitalsReporter } from "@/components/web-vitals-reporter";
 import { ScrollRestore } from "@/components/scroll-restore";
 import "./globals.css";
 import "./navigation.css";
@@ -21,9 +24,14 @@ const instrument = Instrument_Serif({
   style: ["normal", "italic"],
 });
 
+const description = "Sample portfolio. Interfaces and the systems underneath, from first sketch to production.";
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl), // makes every relative address below absolute, as share previews need
   title: "Your Name, full-stack developer",
-  description: "Sample portfolio. Interfaces and the systems underneath, from first sketch to production.",
+  description,
+  alternates: { canonical: "/", types: feedAlternate },
+  openGraph: { type: "website", siteName: "Your Name", title: "Your Name, full-stack developer", description, locale: "en_GB" },
+  twitter: { card: "summary_large_image" },
 };
 
 // Runs before paint so the saved or system theme never flashes.
@@ -48,6 +56,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Suspense fallback={null}>
           <ScrollRestore />
         </Suspense>
+        <PageViewTracker />
+        <WebVitalsReporter />
         <Providers>{children}</Providers>
         {/* Vercel Web Analytics + real-user Web Vitals; both are no-ops off Vercel. */}
         <Analytics />

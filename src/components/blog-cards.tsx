@@ -4,7 +4,7 @@ import { Fragment } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SiteImage } from "@/components/ui/site-image";
 import type { Post } from "@/lib/api/posts";
-import { formatCount, titleCase } from "@/lib/format";
+import { formatCount } from "@/lib/format";
 
 const initials = (name: string) => name.split(" ").map((w) => w[0]).slice(0, 2).join("");
 
@@ -53,7 +53,7 @@ export function PostCard({ post, query }: { post: Post; query: string }) {
           <Marked text={post.title} query={query} />
         </h2>
         <p className="mt-2 line-clamp-2 text-sm text-muted-foreground sm:mt-3 sm:text-base"><Marked text={post.excerpt} query={query} /></p>
-        <span className="mt-3 text-xs text-muted-foreground sm:text-sm">{titleCase(post.category)} · {post.minutes} min read</span>
+        <span className="mt-3 text-xs text-muted-foreground sm:text-sm">{post.categoryName} · {post.minutes} min read</span>
         <span className="mt-3 flex items-center justify-between gap-3 sm:mt-auto sm:pt-4">
           <Byline post={post} className="flex min-w-0 items-center gap-2" />
           <span className="flex shrink-0 items-center gap-1.5 text-xs tabular-nums text-muted-foreground sm:text-sm" title={`${post.views.toLocaleString("en")} views`}>

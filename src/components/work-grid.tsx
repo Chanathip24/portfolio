@@ -10,7 +10,6 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "next-view-transitions";
 import type { WorkItem } from "@/lib/api/projects";
 import { EASE } from "@/lib/constants";
-import { ProjectTag } from "@/lib/enums";
 import { cn } from "@/lib/utils";
 
 /*
@@ -50,14 +49,14 @@ const opener = (open: Open, item: WorkItem) => (e: React.MouseEvent) => {
   open(item);
 };
 
-type TagFilter = ProjectTag | "all";
+type TagFilter = string;
 
 /**
  * The Work section: a tag filter, the signature projects (large, stacked on the left) and one index of the others (small,
  * on the right). Clicking any project opens a live preview in a dialog instead of leaving the page; from there the visitor
  * goes to the project's detail page or to the project itself.
  */
-export function WorkShowcase({ signature, others }: { signature: WorkItem[]; others: WorkItem[] }) {
+export function WorkShowcase({ signature, others, categories }: { signature: WorkItem[]; others: WorkItem[]; categories: string[] }) {
   const [tag, setTag] = useState<TagFilter>("all");
   const [preview, setPreview] = useState<WorkItem | null>(null);
   // The home page stays mounted, with its state, while you are on another page, so without this a dialog left open
@@ -65,7 +64,7 @@ export function WorkShowcase({ signature, others }: { signature: WorkItem[]; oth
   useEffect(() => () => setPreview(null), []);
 
   const everything = [...signature, ...others];
-  const tags = Object.values(ProjectTag)
+  const tags = categories
     .map((t) => ({ tag: t, count: everything.filter((i) => i.tags.includes(t)).length }))
     .filter((t) => t.count > 0);
   const shows = (i: WorkItem) => tag === "all" || i.tags.includes(tag);

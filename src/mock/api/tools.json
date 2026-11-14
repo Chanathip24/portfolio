@@ -4,85 +4,99 @@
       "id": "00000000-0000-4000-8000-000000000501",
       "name": "TypeScript",
       "tool_key": "typescript",
-      "sort_order": 1
+      "sort_order": 1,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000502",
       "name": "React",
       "tool_key": "react",
-      "sort_order": 2
+      "sort_order": 2,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000503",
       "name": "Next.js",
       "tool_key": "nextjs",
-      "sort_order": 3
+      "sort_order": 3,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000504",
       "name": "Node.js",
       "tool_key": "nodejs",
-      "sort_order": 4
+      "sort_order": 4,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000505",
       "name": "PostgreSQL",
       "tool_key": "postgres",
-      "sort_order": 5
+      "sort_order": 5,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000506",
       "name": "Supabase",
       "tool_key": "supabase",
-      "sort_order": 6
+      "sort_order": 6,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000507",
       "name": "Tailwind CSS",
       "tool_key": "tailwind",
-      "sort_order": 7
+      "sort_order": 7,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000508",
       "name": "Docker",
       "tool_key": "docker",
-      "sort_order": 8
+      "sort_order": 8,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000509",
       "name": "Git",
       "tool_key": "git",
-      "sort_order": 9
+      "sort_order": 9,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000510",
       "name": "Figma",
       "tool_key": "figma",
-      "sort_order": 10
+      "sort_order": 10,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000511",
       "name": "Vercel",
       "tool_key": "vercel",
-      "sort_order": 11
+      "sort_order": 11,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000512",
       "name": "Rust",
       "tool_key": "rust",
-      "sort_order": 12
+      "sort_order": 12,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000513",
       "name": "Redis",
       "tool_key": "redis",
-      "sort_order": 13
+      "sort_order": 13,
+      "logo_url": null
     },
     {
       "id": "00000000-0000-4000-8000-000000000514",
       "name": "GraphQL",
       "tool_key": "graphql",
-      "sort_order": 14
+      "sort_order": 14,
+      "logo_url": null
     }
   ],
   "count": 14

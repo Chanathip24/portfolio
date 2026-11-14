@@ -16,14 +16,6 @@ export const hash = (id: SectionId) => `#${id}` as const;
 export const PublishStatus = { Draft: "draft", Published: "published", Archived: "archived" } as const;
 export type PublishStatus = (typeof PublishStatus)[keyof typeof PublishStatus];
 
-/** pg enum post_category. The blog page filters by it; the value is the URL param. */
-export const PostCategory = { Engineering: "engineering", Design: "design", Data: "data", Process: "process" } as const;
-export type PostCategory = (typeof PostCategory)[keyof typeof PostCategory];
-
-/** pg enum project_tag (or a tags table, if editors need to add their own). */
-export const ProjectTag = { Product: "Product", Sync: "Sync", Postgres: "Postgres", Api: "API", Payments: "Payments" } as const;
-export type ProjectTag = (typeof ProjectTag)[keyof typeof ProjectTag];
-
 /** Tone of a Callout block in project bodies. */
 export const CalloutTone = { Info: "info", Success: "success", Warning: "warning" } as const;
 export type CalloutTone = (typeof CalloutTone)[keyof typeof CalloutTone];
@@ -31,10 +23,6 @@ export type CalloutTone = (typeof CalloutTone)[keyof typeof CalloutTone];
 /** Names of the custom Tiptap nodes (the built-in ones keep Tiptap's own names). */
 export const NodeType = { Callout: "callout" } as const;
 export type NodeType = (typeof NodeType)[keyof typeof NodeType];
-
-/** pg enum skill_group. The about page groups skills into tabs by it. */
-export const SkillGroup = { Frontend: "frontend", Backend: "backend", Data: "data", Tooling: "tooling" } as const;
-export type SkillGroup = (typeof SkillGroup)[keyof typeof SkillGroup];
 
 /** pg enum tool_key. The database stores only this key; the icon for each lives in the frontend (lib/icons.tsx). */
 export const ToolKey = {

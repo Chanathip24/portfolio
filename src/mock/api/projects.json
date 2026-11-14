@@ -6,9 +6,9 @@
       "title": "A shift planner clinics edit offline, with zero sync conflicts",
       "client": "Tidewater · sample",
       "tags": [
-        "Product",
-        "Sync",
-        "Postgres"
+        "product",
+        "sync",
+        "postgres"
       ],
       "status": "published",
       "is_signature": true,
@@ -17,7 +17,8 @@
       "summary": "Clinics edit rosters on a ward with no signal; changes merge cleanly when the tablet reconnects.",
       "created_at": "2026-01-01T09:00:00Z",
       "live_url": "https://example.com/?project=tidewater",
-      "preview_url": "/demo/tidewater/index.html"
+      "preview_url": "/demo/tidewater/index.html",
+      "published_at": "2026-01-01T09:00:00Z"
     },
     {
       "id": "00000000-0000-4000-8000-000000000002",
@@ -25,8 +26,8 @@
       "title": "A bookkeeping API freelancers trust with their taxes",
       "client": "Ledgerline · sample",
       "tags": [
-        "API",
-        "Payments"
+        "api",
+        "payments"
       ],
       "status": "published",
       "is_signature": true,
@@ -35,7 +36,8 @@
       "summary": "An invoicing and ledger API where every cent is an integer and every write is auditable.",
       "created_at": "2026-02-01T09:00:00Z",
       "live_url": "https://example.com/?project=ledgerline",
-      "preview_url": "/demo/ledgerline/index.html"
+      "preview_url": "/demo/ledgerline/index.html",
+      "published_at": "2026-02-01T09:00:00Z"
     },
     {
       "id": "00000000-0000-4000-8000-000000000003",
@@ -43,7 +45,7 @@
       "title": "Pantry search",
       "client": "Sample",
       "tags": [
-        "Product"
+        "product"
       ],
       "status": "published",
       "is_signature": false,
@@ -52,7 +54,8 @@
       "summary": "Type three letters, find the tin at the back of the cupboard.",
       "created_at": "2026-03-01T09:00:00Z",
       "live_url": "https://example.com/?project=pantry-search",
-      "preview_url": "/demo/pantry-search/index.html"
+      "preview_url": "/demo/pantry-search/index.html",
+      "published_at": "2026-03-01T09:00:00Z"
     },
     {
       "id": "00000000-0000-4000-8000-000000000004",
@@ -60,7 +63,7 @@
       "title": "Hearth CI",
       "client": "Sample",
       "tags": [
-        "API"
+        "api"
       ],
       "status": "published",
       "is_signature": false,
@@ -69,7 +72,8 @@
       "summary": "A CI runner that caches like a fireplace: warm after the first fire.",
       "created_at": "2026-04-01T09:00:00Z",
       "live_url": "https://example.com/?project=hearth-ci",
-      "preview_url": "/demo/hearth-ci/index.html"
+      "preview_url": "/demo/hearth-ci/index.html",
+      "published_at": "2026-04-01T09:00:00Z"
     },
     {
       "id": "00000000-0000-4000-8000-000000000005",
@@ -77,7 +81,7 @@
       "title": "Signal",
       "client": "Sample",
       "tags": [
-        "Sync"
+        "sync"
       ],
       "status": "published",
       "is_signature": false,
@@ -86,7 +90,8 @@
       "summary": "Presence and typing indicators on a websocket that survives flaky Wi-Fi.",
       "created_at": "2026-05-01T09:00:00Z",
       "live_url": "https://example.com/?project=signal",
-      "preview_url": "/demo/signal/index.html"
+      "preview_url": "/demo/signal/index.html",
+      "published_at": "2026-05-01T09:00:00Z"
     },
     {
       "id": "00000000-0000-4000-8000-000000000006",
@@ -94,7 +99,7 @@
       "title": "Atlas",
       "client": "Sample",
       "tags": [
-        "Postgres"
+        "postgres"
       ],
       "status": "published",
       "is_signature": false,
@@ -103,7 +108,8 @@
       "summary": "A map-first dashboard over a few million rows, still snappy on a laptop.",
       "created_at": "2026-06-01T09:00:00Z",
       "live_url": "https://example.com/?project=atlas",
-      "preview_url": "/demo/atlas/index.html"
+      "preview_url": "/demo/atlas/index.html",
+      "published_at": "2026-06-01T09:00:00Z"
     },
     {
       "id": "00000000-0000-4000-8000-000000000007",
@@ -111,7 +117,7 @@
       "title": "Relay",
       "client": "Sample",
       "tags": [
-        "API"
+        "api"
       ],
       "status": "published",
       "is_signature": false,
@@ -120,7 +126,8 @@
       "summary": "Webhook delivery with retries, replay and a log a human can read.",
       "created_at": "2026-07-01T09:00:00Z",
       "live_url": "https://example.com/?project=relay",
-      "preview_url": "/demo/relay/index.html"
+      "preview_url": "/demo/relay/index.html",
+      "published_at": "2026-07-01T09:00:00Z"
     },
     {
       "id": "00000000-0000-4000-8000-000000000008",
@@ -128,7 +135,7 @@
       "title": "Lumen",
       "client": "Sample",
       "tags": [
-        "Product"
+        "product"
       ],
       "status": "published",
       "is_signature": false,
@@ -137,7 +144,8 @@
       "summary": "A design-token pipeline from Figma to a Tailwind theme in one command.",
       "created_at": "2026-08-01T09:00:00Z",
       "live_url": "https://example.com/?project=lumen",
-      "preview_url": "/demo/lumen/index.html"
+      "preview_url": "/demo/lumen/index.html",
+      "published_at": "2026-08-01T09:00:00Z"
     },
     {
       "id": "00000000-0000-4000-8000-000000000009",
@@ -145,8 +153,8 @@
       "title": "Orchard",
       "client": "Sample",
       "tags": [
-        "Postgres",
-        "Sync"
+        "postgres",
+        "sync"
       ],
       "status": "published",
       "is_signature": false,
@@ -155,7 +163,8 @@
       "summary": "Row-level security and realtime for a small marketplace.",
       "created_at": "2026-09-01T09:00:00Z",
       "live_url": "https://example.com/?project=orchard",
-      "preview_url": "/demo/orchard/index.html"
+      "preview_url": "/demo/orchard/index.html",
+      "published_at": "2026-09-01T09:00:00Z"
     },
     {
       "id": "00000000-0000-4000-8000-000000000010",
@@ -163,7 +172,7 @@
       "title": "Kiln",
       "client": "Sample",
       "tags": [
-        "Payments"
+        "payments"
       ],
       "status": "published",
       "is_signature": false,
@@ -172,7 +181,8 @@
       "summary": "A checkout that fires, cools and settles without double charges.",
       "created_at": "2026-01-01T09:00:00Z",
       "live_url": "https://example.com/?project=kiln",
-      "preview_url": null
+      "preview_url": null,
+      "published_at": "2026-01-01T09:00:00Z"
     },
     {
       "id": "00000000-0000-4000-8000-000000000099",
@@ -180,7 +190,7 @@
       "title": "Night shift (draft)",
       "client": "Sample",
       "tags": [
-        "Product"
+        "product"
       ],
       "status": "draft",
       "is_signature": false,
@@ -189,7 +199,8 @@
       "summary": "Not published yet.",
       "created_at": "2026-09-01T09:00:00Z",
       "live_url": "https://example.com/?project=night-shift",
-      "preview_url": null
+      "preview_url": null,
+      "published_at": "2026-09-01T09:00:00Z"
     }
   ],
   "count": 11

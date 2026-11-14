@@ -1,12 +1,28 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { DetailLayout } from "@/components/detail-layout";
+import { owner } from "@/content/site";
 import { getPost, getPostNeighbors, getPosts } from "@/lib/api/posts";
-import { formatCount, formatDate, titleCase } from "@/lib/format";
+import { feedAlternate } from "@/lib/site";
+import { formatCount, formatDate } from "@/lib/format";
 
 export const instant = false;
 
 export async function generateStaticParams() {
   return (await getPosts()).map(({ slug }) => ({ slug }));
+}
+
+/** Each post gets its own title, description and share preview (the card image is ./opengraph-image.tsx). */
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const post = await getPost((await params).slug);
+  if (!post) return { title: "Post not found", robots: { index: false } };
+  return {
+    title: `${post.title} · ${owner.name}`,
+    description: post.excerpt,
+    alternates: { canonical: `/blog/${post.slug}`, types: feedAlternate },
+    openGraph: { type: "article", url: `/blog/${post.slug}`, title: post.title, description: post.excerpt, publishedTime: post.published_at, modifiedTime: post.updated_at, authors: [post.author.name], section: post.categoryName },
+    twitter: { card: "summary_large_image", title: post.title, description: post.excerpt },
+  };
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -22,7 +38,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       title={post.title}
       summary={post.excerpt}
       author={{ name: post.author.name, role: post.author.role, bio: post.author.bio, image: post.author.avatar_url, href: post.author.profile_href }}
-      tags={[titleCase(post.category)]}
+      tags={[post.categoryName]}
       tagsLabel="Post category"
       facts={[
         { label: "Published", value: formatDate(post.published_at) },
@@ -30,7 +46,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         { label: "Reading time", value: `${post.reading_minutes} min read` },
         { label: "Views", value: formatCount(post.views) },
       ]}
-      image={{ src: post.image_url, alt: `${post.title} cover` }}
+      image={{ src: post.image_url, alt: post.image_alt || `${post.title} cover` }}
       body={post.body}
       adjacent={{
         prev: older && { href: `/blog/${older.slug}`, title: older.title, label: "Older post" },
@@ -38,7 +54,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       }}
       related={{
         heading: "Keep reading",
-        items: related.map((p) => ({ href: `/blog/${p.slug}`, title: p.title, meta: `${titleCase(p.category)} · ${p.minutes} min read`, image: p.image })),
+        items: related.map((p) => ({ href: `/blog/${p.slug}`, title: p.title, meta: `${p.categoryName} · ${p.minutes} min read`, image: p.image })),
       }}
     />
   );

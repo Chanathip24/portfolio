@@ -5,7 +5,7 @@ import { Skills } from "@/components/about/skills";
 import { Testimonials } from "@/components/about/testimonials";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
-import { getCareer, getProfile, getSkills, getTestimonials, getTools } from "@/lib/api/about";
+import { getCareer, getProfile, getSkillGroups, getSkills, getTestimonials, getTools } from "@/lib/api/about";
 
 export const metadata: Metadata = {
   title: "About · Your Name",
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const [profile, career, skills, tools, testimonials] = await Promise.all([getProfile(), getCareer(), getSkills(), getTools(), getTestimonials()]);
+  const [profile, career, skills, groups, tools, testimonials] = await Promise.all([getProfile(), getCareer(), getSkills(), getSkillGroups(), getTools(), getTestimonials()]);
   return (
     <>
       <SiteNav />
@@ -21,7 +21,7 @@ export default async function AboutPage() {
         <Intro profile={profile} tools={tools} />
         <Testimonials items={testimonials} />
         <Career entries={career} />
-        <Skills skills={skills} />
+        <Skills skills={skills} groups={groups} />
       </main>
       <SiteFooter />
     </>

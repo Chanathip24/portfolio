@@ -6,9 +6,9 @@
       "title": "A shift planner clinics edit offline, with zero sync conflicts",
       "client": "Tidewater · sample",
       "tags": [
-        "Product",
-        "Sync",
-        "Postgres"
+        "product",
+        "sync",
+        "postgres"
       ],
       "status": "published",
       "is_signature": true,
@@ -682,7 +682,8 @@
         ]
       },
       "live_url": "https://example.com/?project=tidewater",
-      "preview_url": "/demo/tidewater/index.html"
+      "preview_url": "/demo/tidewater/index.html",
+      "published_at": "2026-01-01T09:00:00Z"
     }
   },
   "ledgerline": {
@@ -692,8 +693,8 @@
       "title": "A bookkeeping API freelancers trust with their taxes",
       "client": "Ledgerline · sample",
       "tags": [
-        "API",
-        "Payments"
+        "api",
+        "payments"
       ],
       "status": "published",
       "is_signature": true,
@@ -1367,7 +1368,8 @@
         ]
       },
       "live_url": "https://example.com/?project=ledgerline",
-      "preview_url": "/demo/ledgerline/index.html"
+      "preview_url": "/demo/ledgerline/index.html",
+      "published_at": "2026-02-01T09:00:00Z"
     }
   },
   "pantry-search": {
@@ -1377,7 +1379,7 @@
       "title": "Pantry search",
       "client": "Sample",
       "tags": [
-        "Product"
+        "product"
       ],
       "status": "published",
       "is_signature": false,
@@ -2051,7 +2053,8 @@
         ]
       },
       "live_url": "https://example.com/?project=pantry-search",
-      "preview_url": "/demo/pantry-search/index.html"
+      "preview_url": "/demo/pantry-search/index.html",
+      "published_at": "2026-03-01T09:00:00Z"
     }
   },
   "hearth-ci": {
@@ -2061,7 +2064,7 @@
       "title": "Hearth CI",
       "client": "Sample",
       "tags": [
-        "API"
+        "api"
       ],
       "status": "published",
       "is_signature": false,
@@ -2735,7 +2738,8 @@
         ]
       },
       "live_url": "https://example.com/?project=hearth-ci",
-      "preview_url": "/demo/hearth-ci/index.html"
+      "preview_url": "/demo/hearth-ci/index.html",
+      "published_at": "2026-04-01T09:00:00Z"
     }
   },
   "signal": {
@@ -2745,7 +2749,7 @@
       "title": "Signal",
       "client": "Sample",
       "tags": [
-        "Sync"
+        "sync"
       ],
       "status": "published",
       "is_signature": false,
@@ -3419,7 +3423,8 @@
         ]
       },
       "live_url": "https://example.com/?project=signal",
-      "preview_url": "/demo/signal/index.html"
+      "preview_url": "/demo/signal/index.html",
+      "published_at": "2026-05-01T09:00:00Z"
     }
   },
   "atlas": {
@@ -3429,7 +3434,7 @@
       "title": "Atlas",
       "client": "Sample",
       "tags": [
-        "Postgres"
+        "postgres"
       ],
       "status": "published",
       "is_signature": false,
@@ -4103,7 +4108,8 @@
         ]
       },
       "live_url": "https://example.com/?project=atlas",
-      "preview_url": "/demo/atlas/index.html"
+      "preview_url": "/demo/atlas/index.html",
+      "published_at": "2026-06-01T09:00:00Z"
     }
   },
   "relay": {
@@ -4113,7 +4119,7 @@
       "title": "Relay",
       "client": "Sample",
       "tags": [
-        "API"
+        "api"
       ],
       "status": "published",
       "is_signature": false,
@@ -4787,7 +4793,8 @@
         ]
       },
       "live_url": "https://example.com/?project=relay",
-      "preview_url": "/demo/relay/index.html"
+      "preview_url": "/demo/relay/index.html",
+      "published_at": "2026-07-01T09:00:00Z"
     }
   },
   "lumen": {
@@ -4797,7 +4804,7 @@
       "title": "Lumen",
       "client": "Sample",
       "tags": [
-        "Product"
+        "product"
       ],
       "status": "published",
       "is_signature": false,
@@ -5471,7 +5478,8 @@
         ]
       },
       "live_url": "https://example.com/?project=lumen",
-      "preview_url": "/demo/lumen/index.html"
+      "preview_url": "/demo/lumen/index.html",
+      "published_at": "2026-08-01T09:00:00Z"
     }
   },
   "orchard": {
@@ -5481,8 +5489,8 @@
       "title": "Orchard",
       "client": "Sample",
       "tags": [
-        "Postgres",
-        "Sync"
+        "postgres",
+        "sync"
       ],
       "status": "published",
       "is_signature": false,
@@ -6156,7 +6164,8 @@
         ]
       },
       "live_url": "https://example.com/?project=orchard",
-      "preview_url": "/demo/orchard/index.html"
+      "preview_url": "/demo/orchard/index.html",
+      "published_at": "2026-09-01T09:00:00Z"
     }
   },
   "kiln": {
@@ -6166,7 +6175,7 @@
       "title": "Kiln",
       "client": "Sample",
       "tags": [
-        "Payments"
+        "payments"
       ],
       "status": "published",
       "is_signature": false,
@@ -6840,7 +6849,8 @@
         ]
       },
       "live_url": "https://example.com/?project=kiln",
-      "preview_url": null
+      "preview_url": null,
+      "published_at": "2026-01-01T09:00:00Z"
     }
   }
 }

@@ -137,6 +137,12 @@ export function Globe({ focus, pin, cell = 6, outerScale, className }: {
       // lit water in --brand; clouds and ice white (night: pale indigo); land in greens, sand and, at night, city lights.
       pal = { ocean: v("--brand-ink"), water: v("--brand"), cloud: v("--globe-cloud"), forest: v("--globe-forest"), grass: v("--globe-grass"), sand: v("--globe-sand"), light: v("--globe-light") };
       night = cs.getPropertyValue("--globe-night").trim() === "1";
+      // Day: deepen the seas so the globe separates from the same-blue page background.
+      if (!night) {
+        const dim = (c: Rgb, k: number): Rgb => [c[0] * k, c[1] * k, c[2] * k];
+        pal.ocean = dim(pal.ocean, 0.6);
+        pal.water = dim(pal.water, 0.82);
+      }
       lights = night ? getLightMap(mask) : null;
       s.dirty = true;
     };

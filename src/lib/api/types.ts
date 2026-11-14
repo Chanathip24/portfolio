@@ -1,5 +1,5 @@
 import type { JSONContent } from "@tiptap/core";
-import type { CareerKind, PostCategory, ProjectTag, PublishStatus, SkillGroup, SocialPlatform, ToolKey } from "@/lib/enums";
+import type { CareerKind, PublishStatus, SocialPlatform, ToolKey } from "@/lib/enums";
 
 // Response shapes of the API, written the way Supabase/PostgREST returns them: snake_case columns,
 // uuid ids, ISO timestamps, jsonb as-is. src/mock/api/*.json are sample responses of these shapes.
@@ -13,18 +13,22 @@ export type ProjectRow = {
   slug: string;
   title: string;
   client: string;
-  tags: ProjectTag[];
+  /** Slugs of project_categories. */
+  tags: string[];
   status: PublishStatus;
   /** Signature projects get the large card with full detail; the rest are small cards with a hover preview. */
   is_signature: boolean;
   sort_order: number;
   image_url: string;
+  image_alt?: string; // optional: older rows and the sample data have none
   summary: string;
   /** The real, public site. Opened in a new tab; it is not framed, since many sites refuse to be. */
   live_url: string | null;
   /** A page the preview dialog may frame and let visitors try (the site itself if it allows framing, or a demo). null shows the cover instead. */
   preview_url: string | null;
   created_at: string;
+  /** When it goes live: a published project shows from this date on. */
+  published_at: string;
 };
 export type ProjectDetailRow = ProjectRow & { body: JSONContent };
 
@@ -42,10 +46,12 @@ export type PostRow = {
   slug: string;
   title: string;
   excerpt: string;
-  category: PostCategory;
+  /** Slug of a post_categories row. */
+  category: string;
   status: PublishStatus;
   reading_minutes: number;
   image_url: string;
+  image_alt?: string; // optional: older rows and the sample data have none
   published_at: string;
   updated_at: string;
   author_id: string;
@@ -82,8 +88,9 @@ export type ProfileRow = {
   /** Embedded rows, as Supabase returns them for select("*, socials(*)"). */
   socials: SocialRow[];
 };
-export type SkillRow = { id: string; name: string; group: SkillGroup; years: number; note: string; sort_order: number };
-export type ToolRow = { id: string; name: string; tool_key: ToolKey; sort_order: number };
+export type SkillRow = { id: string; name: string; /** Slug of a skill_groups row. */ group: string; years: number; note: string; sort_order: number };
+/** A tool shows its uploaded logo; without one it falls back to the built-in icon for `tool_key`, then to its initials. */
+export type ToolRow = { id: string; name: string; tool_key: ToolKey | null; logo_url: string | null; sort_order: number };
 export type TestimonialRow = { id: string; quote: string; author_name: string; author_role: string; company: string; avatar_url: string | null; sort_order: number };
 
 /** GET /profile */
@@ -110,3 +117,8 @@ export type CareerRow = {
 };
 /** GET /career */
 export type CareerResponse = { data: CareerRow[]; count: number };
+
+// post_categories / project_categories / skill_groups(slug text pk, name, sort_order): the admin manages these lists.
+export type CategoryRow = { slug: string; name: string; sort_order: number };
+/** GET /post-categories, /project-categories, /skill-groups */
+export type CategoriesResponse = { data: CategoryRow[]; count: number };

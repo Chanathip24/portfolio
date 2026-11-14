@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "slug": "product",
+      "name": "Product",
+      "sort_order": 1
+    },
+    {
+      "slug": "sync",
+      "name": "Sync",
+      "sort_order": 2
+    },
+    {
+      "slug": "postgres",
+      "name": "Postgres",
+      "sort_order": 3
+    },
+    {
+      "slug": "api",
+      "name": "API",
+      "sort_order": 4
+    },
+    {
+      "slug": "payments",
+      "name": "Payments",
+      "sort_order": 5
+    }
+  ],
+  "count": 5
+}
