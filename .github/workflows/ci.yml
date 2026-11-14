@@ -4,14 +4,44 @@ name: CI
 #   checks.yml     types, lint, build, audit              component.yml  component tests in a real browser
 #   e2e.yml        feature and end-to-end tests, sharded  report.yml     merged report and its page
 #   cleanup.yml    removes a closed pull request's page
-# Docs and repo chores cannot break the site, so they do not start a run. `closed` is only for the cleanup.
+# The pipeline runs only when something that can change how the site builds or behaves changes: code, tests, the database, the
+# dependency files (package.json and the lockfile, so Dependabot's updates are tested) and the tool and workflow settings.
+# Docs and other files (README, DEPLOYMENT, PRODUCT, dependabot.yml) do not start a run. `closed` is only for the cleanup.
 on:
   push:
     branches: [main]
-    paths-ignore: ["**.md", "LICENSE", ".github/dependabot.yml"]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "supabase/**"
+      - "public/**"
+      - "scripts/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".nvmrc"
+      - "next.config.ts"
+      - "tsconfig.json"
+      - "eslint.config.mjs"
+      - "playwright*.ts"
+      - "components.json"
+      - ".github/workflows/**"
   pull_request:
     types: [opened, synchronize, reopened, closed]
-    paths-ignore: ["**.md", "LICENSE", ".github/dependabot.yml"]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "supabase/**"
+      - "public/**"
+      - "scripts/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".nvmrc"
+      - "next.config.ts"
+      - "tsconfig.json"
+      - "eslint.config.mjs"
+      - "playwright*.ts"
+      - "components.json"
+      - ".github/workflows/**"
 
 # A newer push to the same branch makes an older run pointless.
 concurrency:
