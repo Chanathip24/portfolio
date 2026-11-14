@@ -1,0 +1,19 @@
+name: Cleanup
+
+# A closed or merged pull request loses its report page. Called by ci.yml.
+on: workflow_call
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+    concurrency:
+      group: gh-pages-publish
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: rossjrw/pr-preview-action@v1
+        with: { preview-branch: gh-pages, umbrella-dir: pr-preview, action: remove }

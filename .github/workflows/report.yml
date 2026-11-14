@@ -1,0 +1,39 @@
+name: Report
+
+# Joins the shards into one HTML report (kept as a download), then publishes it to the gh-pages branch:
+# a pull request at .../pr-preview/pr-<number>/, main at the site root (Settings > Pages > Deploy from a branch > gh-pages).
+# Forks cannot write to the repo, so they only get the download. Called by ci.yml.
+on: workflow_call
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    concurrency:
+      group: gh-pages-publish # one queue, because every publish pushes to the same branch
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version-file: .nvmrc, cache: npm }
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with: { pattern: "blob-report-*", path: all-blob-reports, merge-multiple: true }
+      - run: npx playwright merge-reports --reporter html ./all-blob-reports
+      - uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          if-no-files-found: error
+          retention-days: 14
+      - name: Pull request page
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
+        uses: rossjrw/pr-preview-action@v1
+        with: { source-dir: playwright-report, preview-branch: gh-pages, umbrella-dir: pr-preview, action: deploy }
+      - name: Main page
+        if: ${{ github.event_name == 'push' }}
+        uses: JamesIves/github-pages-deploy-action@v4
+        with: { folder: playwright-report, branch: gh-pages, clean-exclude: pr-preview, force: false }
