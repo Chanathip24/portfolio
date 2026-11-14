@@ -7,7 +7,9 @@ import { getProject, getProjectNeighbors, getProjects } from "@/lib/api/projects
 import { feedAlternate } from "@/lib/site";
 
 export async function generateStaticParams() {
-  return (await getProjects()).map(({ slug }) => ({ slug }));
+  const slugs = (await getProjects()).map(({ slug }) => ({ slug }));
+  // Cache Components needs at least one result to check the page at build time. With no projects yet, "_" stands in; it is not a project, so the page answers 404.
+  return slugs.length ? slugs : [{ slug: "_" }];
 }
 
 /** Each project gets its own title, description and share preview (the card image is ./opengraph-image.tsx). */

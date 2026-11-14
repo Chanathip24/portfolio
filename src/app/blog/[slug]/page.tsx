@@ -7,7 +7,9 @@ import { feedAlternate } from "@/lib/site";
 import { formatCount, formatDate } from "@/lib/format";
 
 export async function generateStaticParams() {
-  return (await getPosts()).map(({ slug }) => ({ slug }));
+  const slugs = (await getPosts()).map(({ slug }) => ({ slug }));
+  // Cache Components needs at least one result to check the page at build time. With no posts yet, "_" stands in; it is not a post, so the page answers 404.
+  return slugs.length ? slugs : [{ slug: "_" }];
 }
 
 /** Each post gets its own title, description and share preview (the card image is ./opengraph-image.tsx). */
