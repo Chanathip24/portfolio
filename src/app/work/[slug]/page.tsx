@@ -6,8 +6,6 @@ import { hash, SectionId } from "@/lib/enums";
 import { getProject, getProjectNeighbors, getProjects } from "@/lib/api/projects";
 import { feedAlternate } from "@/lib/site";
 
-export const instant = false;
-
 export async function generateStaticParams() {
   return (await getProjects()).map(({ slug }) => ({ slug }));
 }

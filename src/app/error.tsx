@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
+import { reportError } from "@/lib/report-error";
 
 /** A page that threw while rendering. `reset` tries the same page again. */
 export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  useEffect(() => reportError(error), [error]);
   return (
     <main className="page-x flex min-h-svh flex-1 flex-col justify-center py-24">
       <p className="text-sm text-muted-foreground">Something went wrong</p>

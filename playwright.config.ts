@@ -35,7 +35,11 @@ export default defineConfig({
       url: `http://localhost:${PORT}/admin/login`,
       reuseExistingServer: true,
       timeout: 120_000,
-      env: { GOOGLE_MOCK_ORIGIN: `http://localhost:${MOCK_PORT}` },
+      env: {
+        GOOGLE_MOCK_ORIGIN: `http://localhost:${MOCK_PORT}`,
+        // Lets the tests play different visitor addresses (header x-test-ip), the way Vercel's header does in production.
+        TRUSTED_PROXY_IP_HEADER: "x-test-ip",
+      },
     },
   ],
 });

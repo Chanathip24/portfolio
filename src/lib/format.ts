@@ -21,6 +21,12 @@ const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFracti
 export const formatCount = (n: number) => compact.format(n);
 
 const dayMonth = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
+/** "14 Oct" (UTC). */
+export const formatDayMonth = (iso: string) => dayMonth.format(new Date(iso));
+
+const localDateTime = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+/** "14 Oct 2026, 09:41" in the reader's own timezone (for admin fields that edit a local time). */
+export const formatLocalDateTime = (date: Date) => localDateTime.format(date);
 /** "just now", "5 min ago", "3 h ago", "2 d ago", then a date. Rendered on the server, so the same for everyone. */
 export function timeAgo(iso: string, now = Date.now()) {
   const s = Math.max(0, Math.round((now - new Date(iso).getTime()) / 1000));

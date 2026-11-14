@@ -8,19 +8,21 @@ import { ChartPanel } from "@/components/admin/chart-panel";
 import { DashCard } from "@/components/admin/dash-card";
 import { EmptyState, SegmentedNav } from "@/components/admin/shared";
 import { PageHeader } from "@/components/admin/page-header";
+import { StatTiles } from "@/components/admin/stat-tiles";
+import { UserAvatar } from "@/components/admin/user-avatar";
 import { PAGE_SIZE_OPTIONS, UrlSelect } from "@/components/admin/url-select";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { type AuditFilter, type AuditRow, auditStats, listAudit } from "@/lib/admin/data";
-import { formatDate, formatTime } from "@/lib/format";
+import { formatDate, formatTime, timeAgo } from "@/lib/format";
 import { cn } from "cn";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 type Params = { page?: string; size?: string; view?: string; dir?: string; q?: string; action?: string; entity?: string; actor?: string; from?: string; to?: string };
-const VIEWS = [{ id: "timeline", label: "Timeline" }, { id: "table", label: "Table" }, { id: "days", label: "By day" }] as const;
+const VIEWS = [{ id: "timeline", label: "Timeline" }, { id: "table", label: "Table" }, { id: "cards", label: "Cards" }, { id: "days", label: "By day" }] as const;
 const SLICE = { created: "#10b981", updated: "var(--brand-ink)", deleted: "#f43f5e", event: "#a855f7" } as const;
 const SERIES = (["created", "updated", "deleted", "event"] as const).map((k) => ({ key: k, label: k === "event" ? "Events" : k[0].toUpperCase() + k.slice(1), color: SLICE[k] }));
 const title = (s: string) => s.replace(/[_-]/g, " ").replace(/^./, (c) => c.toUpperCase());
@@ -40,6 +42,10 @@ export default async function ActivityPage({ searchParams }: { searchParams: Pro
     for (const [k, v] of Object.entries({ ...sp, ...extra })) if (v !== undefined && v !== "") next.set(k, String(v));
     return `/admin/activity?${next.toString()}`;
   };
+  const count = (k: string) => stats.byAction.find((a) => a.key === k)?.value ?? 0;
+  const busiest = stats.daily
+    .map((d) => ({ day: String(d.day), n: SERIES.reduce((sum, s) => sum + Number(d[s.key] ?? 0), 0) }))
+    .reduce((best, d) => (d.n > best.n ? d : best), { day: "", n: 0 });
   const slices = stats.byAction.map((a) => ({ ...a, color: SLICE[a.key as keyof typeof SLICE] }));
 
   return (
@@ -47,6 +53,12 @@ export default async function ActivityPage({ searchParams }: { searchParams: Pro
       <PageHeader title="Activity" description="Every change to the site's content, categories, settings and users. Written by the database, so nothing is missed."
         action={<ChartMenu charts={[{ id: "activity-over-time", label: "Activity over time" }, { id: "activity-kinds", label: "What kind" }, { id: "activity-areas", label: "Busiest areas" }, { id: "activity-people", label: "Most active people" }]} />} />
       <div className="flex flex-col gap-4">
+        <StatTiles items={[
+          { label: filtered ? "Matching changes" : "Changes", value: stats.total, note: `${count("created")} created, ${count("updated")} updated` },
+          { label: "Deleted", value: count("deleted"), note: count("deleted") ? "Check History to restore" : "Nothing removed", warn: count("deleted") > 0 },
+          { label: "People", value: stats.byActor.length, note: stats.byActor[0] ? `Most active: ${stats.byActor[0].name}` : "No one yet" },
+          { label: "Busiest day", value: busiest.n, note: busiest.day ? formatDate(`${busiest.day}T00:00:00Z`) : "No activity" },
+        ]} />
         <div className="order-2 grid gap-4 lg:order-1 lg:grid-cols-12">
           <ChartPanel id="activity-over-time" className="lg:col-span-8" icon={BarChart3} title="Activity over time" description={`${stats.total} ${filtered ? "matching " : ""}${stats.total === 1 ? "change" : "changes"}, by kind, per day.`}>
             <TrendChart data={stats.daily} series={SERIES} kind="bar" stacked height={200} />
@@ -75,6 +87,8 @@ export default async function ActivityPage({ searchParams }: { searchParams: Pro
           <EmptyState>{filtered ? "Nothing matches those filters." : "Nothing yet. Changes show up here as they happen."}</EmptyState>
         ) : view === "table" ? (
           <ActivityTable rows={rows} dir={dir} sortHref={href({ dir: dir === "desc" ? "asc" : "desc", page: "" })} />
+        ) : view === "cards" ? (
+          <ActivityCards rows={rows} />
         ) : view === "days" ? (
           <ByDay rows={rows} />
         ) : (
@@ -141,5 +155,27 @@ function ByDay({ rows }: { rows: AuditRow[] }) {
         </DashCard>
       ))}
     </div>
+  );
+}
+
+/** One card per change: who, what kind, which area, and the summary. A grid reads faster than a list when you are scanning. */
+function ActivityCards({ rows }: { rows: AuditRow[] }) {
+  return (
+    <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      {rows.map((r) => (
+        <li key={r.id} className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4">
+          <div className="flex items-center justify-between gap-2">
+            <Badge variant="outline" className={cn("font-normal", ACTION_TONE[r.action])}>{r.action}</Badge>
+            <time dateTime={r.at} className="text-xs text-muted-foreground tabular-nums" title={`${formatDate(r.at)}, ${formatTime(r.at)} UTC`}>{timeAgo(r.at)}</time>
+          </div>
+          <p className="line-clamp-3 text-sm">{r.summary}</p>
+          <div className="mt-auto flex items-center gap-2 text-xs text-muted-foreground">
+            <UserAvatar email={r.actor_email ?? "System"} className="size-6" />
+            <span className="min-w-0 flex-1 truncate">{r.actor_email ?? "System"}</span>
+            <span>{title(r.entity)}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }

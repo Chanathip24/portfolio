@@ -1,8 +1,9 @@
 "use server";
 
+import { requireRecentAdmin } from "@/lib/admin/recent-mfa";
+
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireAdmin } from "@/lib/admin/auth";
 import { notifySecurity } from "@/lib/admin/security";
 import { authAdmin, usersConfigured } from "@/lib/admin/users";
 import { createClient } from "@/lib/supabase/server";
@@ -17,7 +18,7 @@ const id = z.uuid();
 /** Every action: the caller must be an admin, the service-role client is only used after that, the target is validated,
  *  and what was done is written to the audit log (as the caller, through the log_event function). */
 async function run(fn: (ctx: { me: string; sb: ReturnType<typeof authAdmin>; log: (summary: string) => Promise<void> }) => Promise<Result>): Promise<Result> {
-  const me = await requireAdmin();
+  const me = await requireRecentAdmin();
   if (!usersConfigured) return { ok: false, error: "User management needs SUPABASE_SERVICE_ROLE_KEY on the server." };
   const session = await createClient();
   const log = async (summary: string) => { await session.rpc("log_event", { p_entity: "users", p_summary: summary }); };

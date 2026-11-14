@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  Activity, BarChart3, ChevronsUpDown, Database, ExternalLink, FolderKanban, FolderTree, Gauge, History, Images, Inbox, LogOut, Menu, Newspaper, Settings, UserCog, UserRound, Users,
+  Activity, BarChart3, Bug, ChevronsUpDown, Database, ExternalLink, FolderKanban, FolderTree, Gauge, History, Images, Inbox, LogOut, Menu, Newspaper, Settings, UserCog, UserRound, Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -32,6 +32,7 @@ const sections: { label?: string; items: Item[] }[] = [
     { href: "/admin/activity", label: "Activity", icon: Activity },
     { href: "/admin/history", label: "History", icon: History },
     { href: "/admin/performance", label: "Performance", icon: Gauge },
+    { href: "/admin/errors", label: "Errors", icon: Bug },
     { href: "/admin/data", label: "Data", icon: Database, dataTools: true },
     { href: "/admin/media", label: "Media", icon: Images, dataTools: true },
     { href: "/admin/settings", label: "Settings", icon: Settings },

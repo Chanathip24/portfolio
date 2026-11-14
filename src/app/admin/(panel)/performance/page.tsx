@@ -8,9 +8,9 @@ import { StatTiles } from "@/components/admin/stat-tiles";
 import { getPerformance } from "@/lib/admin/data";
 import { VITALS, type VitalName, rate } from "@/lib/analytics";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 const RANGES = [7, 30, 90];
 const ORDER: VitalName[] = ["LCP", "INP", "CLS", "FCP", "TTFB"];
 const RATING = { good: "Good", "needs-improvement": "Needs work", poor: "Poor" } as const;

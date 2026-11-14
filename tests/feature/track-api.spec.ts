@@ -23,7 +23,7 @@ test.describe("page-view tracking endpoint", () => {
     expect(JSON.stringify(row)).not.toContain("203.0.113.7"); // the address itself is never stored
   });
 
-  test("the same visitor hashes to the same id on the same day, a different one to another", async ({ request, baseURL }) => {
+  test("the same visitor hashes consistently and untrusted forwarded headers do not change identity", async ({ request, baseURL }) => {
     const hit = async (ip: string) => {
       await request.post("/api/track", { headers: { "user-agent": BROWSER, origin: baseURL!, "x-forwarded-for": ip }, data: { path: "/about" } });
       return (await since()).at(-1)!.visitor;
@@ -32,7 +32,7 @@ test.describe("page-view tracking endpoint", () => {
     const a2 = await hit("198.51.100.1");
     const b = await hit("198.51.100.2");
     expect(a2).toBe(a1);
-    expect(b).not.toBe(a1);
+    expect(b).toBe(a1);
   });
 
   test("ignores bots, other origins, unknown paths, admin paths and bad bodies (always 204, nothing stored)", async ({ request, baseURL }) => {

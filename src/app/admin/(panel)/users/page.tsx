@@ -6,9 +6,9 @@ import { requireAdmin } from "@/lib/admin/auth";
 import { userStats } from "@/lib/admin/user-stats";
 import { listUsers, usersConfigured } from "@/lib/admin/users";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export default async function UsersPage() {
   const me = await requireAdmin();
   const users = usersConfigured ? await listUsers() : null;

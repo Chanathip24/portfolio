@@ -39,7 +39,9 @@ test.describe.serial("user management", () => {
     await page.getByRole("searchbox", { name: "Search users" }).fill("");
     await page.getByRole("combobox", { name: "Filter users" }).click();
     await page.getByRole("option", { name: "Admins", exact: true }).click();
-    await expect(page.getByRole("row").filter({ hasText: "Off" })).toHaveCount(0);
+    // Role and MFA enrollment are independent: a newly added admin can still have 2-step off.
+    await expect(page.getByRole("cell", { name: "User", exact: true })).toHaveCount(0);
+    await expect(page.getByRole("cell", { name: "Admin", exact: true }).first()).toBeVisible();
   });
 
   test("an admin adds a user: weak passwords and duplicates are refused, a strong one works", async ({ page, admin }) => {

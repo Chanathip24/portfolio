@@ -17,9 +17,9 @@ import { listUsers, usersConfigured } from "@/lib/admin/users";
 import { formatCount, formatDate, timeAgo } from "@/lib/format";
 import { cn } from "cn";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 const RANGES = [7, 30, 90];
 
 export default async function Overview({ searchParams }: { searchParams: Promise<{ range?: string }> }) {

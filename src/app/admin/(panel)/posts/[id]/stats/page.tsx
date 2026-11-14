@@ -4,9 +4,9 @@ import { ItemStats, RANGES } from "@/components/admin/item-stats";
 import { getCreator, getPostById, getSectionAnalytics, visibilityOf } from "@/lib/admin/data";
 import { formatCount } from "@/lib/format";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export default async function PostStats({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ range?: string }> }) {
   const [{ id }, { range }] = await Promise.all([params, searchParams]);
   const post = z.uuid().safeParse(id).success ? await getPostById(id) : null;

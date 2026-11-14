@@ -3,9 +3,9 @@ import { z } from "zod";
 import { ItemStats, RANGES } from "@/components/admin/item-stats";
 import { getCreator, getProjectById, getSectionAnalytics, visibilityOf } from "@/lib/admin/data";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export default async function ProjectStats({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ range?: string }> }) {
   const [{ id }, { range }] = await Promise.all([params, searchParams]);
   const project = z.uuid().safeParse(id).success ? await getProjectById(id) : null;

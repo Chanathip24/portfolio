@@ -8,9 +8,9 @@ import { UrlSelect, PAGE_SIZE_OPTIONS } from "@/components/admin/url-select";
 import { BROWSABLE, browseTable, getSettings, isBrowsable } from "@/lib/admin/data";
 import { cn } from "cn";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 /** One cell as short text: long strings and JSON are cut, and the full row is under "Show JSON". */
 function cell(v: unknown) {
   if (v === null || v === undefined) return "";

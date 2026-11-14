@@ -3,9 +3,9 @@ import { PageHeader } from "@/components/admin/page-header";
 import { listMessages } from "@/lib/admin/data";
 import { getMailStatus } from "@/lib/admin/mail-connection";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export default async function InboxPage() {
   const [messages, gmail] = await Promise.all([listMessages(), getMailStatus()]);
   return (

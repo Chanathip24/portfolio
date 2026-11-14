@@ -2,15 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Label, Pie, PieChart, XAxis, YAxis } from "recharts";
+import { formatDayMonth } from "@/lib/format";
 import { useMedia } from "@/lib/admin/use-media";
 import { type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 /** The palette every admin chart draws from: the brand ink first, then colours that stay apart in light and dark. */
 export const PALETTE = ["var(--brand-ink)", "#f59e0b", "#10b981", "#a855f7", "#f43f5e", "#64748b", "#06b6d4", "#84cc16"];
 
-const dayFmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
 const isDay = (v: unknown): v is string => typeof v === "string" && /^\d{4}-\d{2}-\d{2}/.test(v);
-export const dayLabel = (v: unknown) => (isDay(v) ? dayFmt.format(new Date(`${v.slice(0, 10)}T00:00:00Z`)) : String(v));
+export const dayLabel = (v: unknown) => (isDay(v) ? formatDayMonth(`${v.slice(0, 10)}T00:00:00Z`) : String(v));
 
 /** 1830 -> "1.8k", so a four-digit axis label fits in the narrow gutter. */
 const compact = (v: number) => (Math.abs(v) >= 1000 ? `${+(v / 1000).toFixed(1)}k` : String(v));

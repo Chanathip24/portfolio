@@ -6,8 +6,6 @@ import { getPost, getPostNeighbors, getPosts } from "@/lib/api/posts";
 import { feedAlternate } from "@/lib/site";
 import { formatCount, formatDate } from "@/lib/format";
 
-export const instant = false;
-
 export async function generateStaticParams() {
   return (await getPosts()).map(({ slug }) => ({ slug }));
 }

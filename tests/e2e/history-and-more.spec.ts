@@ -134,6 +134,15 @@ test.describe("sign-in is rate limited", () => {
     await page.getByRole("button", { name: "Continue" }).click();
     await expect(page.getByText(/Too many attempts\. Wait ten minutes/)).toBeVisible();
     await ctx.close();
+    // Another browser behind an unknown ingress must not inherit an email-only lockout.
+    const other = await browser.newContext({ storageState: { cookies: [], origins: [] } });
+    const otherPage = await other.newPage();
+    await otherPage.goto("/admin/login");
+    await otherPage.getByLabel("Email").fill(email);
+    await otherPage.getByLabel("Password").fill("wrong-password-other-browser");
+    await otherPage.getByRole("button", { name: "Continue" }).click();
+    await expect(otherPage.getByText("Wrong email or password.")).toBeVisible();
+    await other.close();
     expect(((await service().from("messages").select("severity").eq("subject", `Sign-in blocked for ${email}`)).data ?? [])[0]?.severity).toBe("critical");
     await service().from("auth_attempts").delete().eq("key", email);
     await service().from("messages").delete().like("subject", `%${email}%`);

@@ -5,9 +5,9 @@ import { HistoryButton } from "@/components/admin/revisions";
 import { getProfileAdmin, listRevisions } from "@/lib/admin/data";
 import { blank } from "@/lib/admin/fields";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export default async function ProfilePage() {
   const profile = await getProfileAdmin();
   const revisions = profile ? await listRevisions("profile", profile.id) : [];

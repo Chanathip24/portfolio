@@ -92,7 +92,7 @@ test.describe("admin database features", () => {
 
     test("the page-view counter and seeds do not flood it", async () => {
       const before = (await service().from("audit_log").select("id", { count: "exact", head: true })).count;
-      await anon().from("page_views").insert({ path: "/blog/sync-without-fear", visitor: "e2e-audit" }); // bumps posts.views through a trigger
+      await service().from("page_views").insert({ path: "/blog/sync-without-fear", visitor: "e2e-audit" }); // bumps posts.views through a trigger
       expect((await service().from("audit_log").select("id", { count: "exact", head: true })).count).toBe(before);
     });
 
@@ -203,7 +203,7 @@ test.describe("revisions", () => {
 
     await sb.from("posts").update({ title: "e2e rev two" }).eq("id", id); // service key: no signed-in user
     expect(await count()).toBe(0);
-    await anon().from("page_views").insert({ path: "/blog/e2e-rev", visitor: "e2e-rev-visitor" }); // a visit raises the view counter
+    await service().from("page_views").insert({ path: "/blog/e2e-rev", visitor: "e2e-rev-visitor" }); // a visit raises the view counter
     expect((await sb.from("posts").select("views").eq("id", id).single()).data!.views).toBe(1);
     expect(await count()).toBe(0);
 

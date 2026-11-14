@@ -30,18 +30,18 @@ test.describe("database security", () => {
       expect((await service().from("posts").select("id", { count: "exact", head: true })).count).toBe(before);
     });
 
-    test("can add a page view but never read the log or the analytics", async () => {
-      expect((await anon().from("page_views").insert({ path: "/blog/sync-without-fear", visitor: "e2e-visitor" })).error).toBeNull();
+    test("cannot add page views or read the log or analytics", async () => {
+      expect((await anon().from("page_views").insert({ path: "/blog/sync-without-fear", visitor: "e2e-visitor" })).error?.code).toBe("42501");
       expect((await anon().from("page_views").select("*")).data ?? []).toEqual([]);
       const summary = await anon().rpc("analytics_summary", { days: 7 });
       expect(summary.data?.views ?? 0).toBe(0);
       expect((await anon().from("page_views").insert({ path: "no-slash", visitor: "e2e-visitor" })).error).not.toBeNull(); // path must start with /
     });
 
-    test("a view of a post raises its counter", async () => {
+    test("a server-recorded view of a post raises its counter", async () => {
       const read = async () => (await service().from("posts").select("views").eq("slug", "sync-without-fear").single()).data!.views as number;
       const before = await read();
-      await anon().from("page_views").insert({ path: "/blog/sync-without-fear", visitor: "e2e-visitor" });
+      expect((await service().from("page_views").insert({ path: "/blog/sync-without-fear", visitor: "e2e-visitor" })).error).toBeNull();
       expect(await read()).toBe(before + 1);
     });
 
@@ -55,6 +55,24 @@ test.describe("database security", () => {
     const sb = await signedInClient(other, { mfa: true }); // even with MFA: not on the list
     expect((await sb.rpc("is_admin")).data).toBe(false);
     expect((await sb.from("projects").insert({ slug: "e2e-evil", title: "evil" })).error?.code).toBe("42501");
+  });
+
+  test("public keys cannot bypass contact or telemetry validation, including signed-in users", async () => {
+    for (const sb of [anon(), await signedInClient(other)]) {
+      expect((await sb.from("messages").insert({ source: "contact", kind: "message", severity: "info", from_email: "e2e@test.local", subject: "spam", body: "spam" })).error?.code).toBe("42501");
+      expect((await sb.from("web_vitals").insert({ metric: "LCP", value: 1, rating: "good", path: "/", device: "desktop" })).error?.code).toBe("42501");
+      expect((await sb.from("page_views").insert({ path: "/", visitor: "e2e-bypass" })).error?.code).toBe("42501");
+      expect((await sb.rpc("reserve_contact", { p_email: "bypass", p_network: "bypass" })).error).not.toBeNull();
+    }
+  });
+
+  test("parallel contact requests cannot exceed the email quota", async () => {
+    const key = `e2e-quota-${Date.now()}`;
+    try {
+      const results = await Promise.all(Array.from({ length: 8 }, () => service().rpc("reserve_contact", { p_email: key, p_network: key })));
+      expect(results.every((r) => !r.error)).toBe(true);
+      expect(results.filter((r) => r.data === true)).toHaveLength(3);
+    } finally { await service().from("auth_attempts").delete().eq("key", key); }
   });
 
   test("an admin who has only typed a password (no second factor) can do nothing special", async () => {

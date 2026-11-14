@@ -7,17 +7,19 @@ import { useEffect, useId, useRef, useState, useTransition } from "react";
 import { saveEntity } from "@/app/admin/content-actions";
 import { DateTimeField } from "@/components/admin/date-time-field";
 import { OptionSelect } from "@/components/admin/option-select";
-import { RichEditor } from "@/components/admin/rich-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { type EntityName, type Field, type Option, fields } from "@/lib/admin/fields";
+import { formatLocalDateTime } from "@/lib/format";
 import { uploadImage } from "@/lib/admin/upload";
 import { cn } from "cn";
 
 // Only the Preview tab needs the HTML renderer, so it is loaded when that tab is first opened.
+// Tiptap is large: load it only for forms that have a rich-text field.
+const RichEditor = dynamic(() => import("@/components/admin/rich-editor").then((m) => m.RichEditor), { ssr: false, loading: () => <div aria-busy className="h-64 animate-pulse rounded-lg bg-muted" /> });
 const PostPreview = dynamic(() => import("@/components/admin/post-preview").then((m) => m.PostPreview), { ssr: false });
 
 type Values = Record<string, unknown>;
@@ -53,13 +55,12 @@ const toPayload = (list: Field[], v: Values): Values =>
     return [f.name, x];
   }));
 
-const when = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 /** One line saying what the status and date mean together: not visible, scheduled, or live. */
 function publishNote(status: unknown, local: unknown) {
   if (status !== "published") return status === "archived" ? "Archived: hidden from the site." : "Draft: not visible on the site.";
   if (typeof local !== "string" || !local) return "Goes live as soon as you save.";
   const date = new Date(local);
-  return date.getTime() > Date.now() ? `Scheduled: goes live on ${when.format(date)}.` : `Live since ${when.format(date)}.`;
+  return date.getTime() > Date.now() ? `Scheduled: goes live on ${formatLocalDateTime(date)}.` : `Live since ${formatLocalDateTime(date)}.`;
 }
 
 function ImageField({ id, value, onChange, invalid, describedBy, contain }: { id: string; value: string; onChange: (v: string) => void; invalid: boolean; describedBy?: string; contain?: boolean }) {

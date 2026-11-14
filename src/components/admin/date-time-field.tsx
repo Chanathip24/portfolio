@@ -4,10 +4,10 @@ import { CalendarDays, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
+import { formatLocalDateTime } from "@/lib/format";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const pad = (n: number) => String(n).padStart(2, "0");
-const show = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
 /** A date and time in the browser's own timezone, as "YYYY-MM-DDTHH:mm" (empty means "not set"). shadcn Calendar in a
  *  popover for the day, a time field for the hour; replaces the browser's own date control. */
@@ -27,7 +27,7 @@ export function DateTimeField({ id, value, onChange, invalid, describedBy }: {
       >
         <CalendarDays aria-hidden className="text-muted-foreground" />
         {/* Formatted in the browser's timezone, so it can differ from the server-rendered text. */}
-        <span suppressHydrationWarning className={date ? "" : "text-muted-foreground"}>{date ? show.format(date) : "Pick a date and time"}</span>
+        <span suppressHydrationWarning className={date ? "" : "text-muted-foreground"}>{date ? formatLocalDateTime(date) : "Pick a date and time"}</span>
       </PopoverTrigger>
       <PopoverContent align="start" className="w-auto gap-3 p-3">
         <Calendar mode="single" selected={date} onSelect={pickDay} defaultMonth={date} />

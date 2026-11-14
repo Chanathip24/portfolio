@@ -1,5 +1,7 @@
 "use server";
 
+import { requireRecentAdmin } from "@/lib/admin/recent-mfa";
+
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/auth";
@@ -72,7 +74,7 @@ const client = z.object({ clientId: z.string().trim().min(10).max(300), clientSe
 /** Saves the OAuth client the owner created in Google Cloud. A blank secret keeps the stored one; a different client id ends the old
  *  connection, because its token belongs to the old client. The secret is stored encrypted and is never sent back to the browser. */
 export async function saveMailClient(input: { clientId: string; clientSecret: string }): Promise<Result> {
-  await requireAdmin();
+  await requireRecentAdmin();
   const parsed = client.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Paste the client ID from Google Cloud." };
   if (!usersConfigured) return { ok: false, error: "The service key is needed to store these." };
@@ -93,7 +95,7 @@ export async function saveMailClient(input: { clientId: string; clientSecret: st
 
 /** Forgets the Gmail connection: Google is told to revoke the grant, and the stored token is deleted. Mail already fetched stays in the inbox. */
 export async function disconnectGmail(): Promise<Result> {
-  await requireAdmin();
+  await requireRecentAdmin();
   if (!usersConfigured) return { ok: false, error: "The service key is needed." };
   const secrets = await getSecrets();
   if (secrets?.refreshToken) await revokeGrant(secrets.refreshToken);

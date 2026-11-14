@@ -63,5 +63,6 @@ export async function removeTestContent() {
   await sb.from("page_views").delete().like("visitor", "e2e%");
   await sb.from("messages").delete().eq("kind", "security").like("subject", "%e2e-%"); // notices the sign-in tests cause
   await sb.from("auth_attempts").delete().like("key", "e2e-%"); // sign-in counters
+  await sb.from("auth_attempts").delete().like("kind", "contact%"); // the contact form quota, so repeated runs within an hour start fresh
   await sb.from("revisions").delete().like("label", "%e2e-%");
 }

@@ -3,9 +3,8 @@ import { type User, createClient } from "@supabase/supabase-js";
 import { allRows } from "@/lib/admin/paging";
 import { supabaseUrl } from "@/lib/supabase/env";
 
-/** User management is the one place the app needs the Auth Admin API, which Supabase only offers with the service-role key.
- *  That key bypasses every security rule, so it is read here and nowhere else, it never reaches the browser (no NEXT_PUBLIC_
- *  prefix, `server-only`), and every function that uses it is called only after requireAdmin() has passed. */
+/** Server-only service client. Bypasses RLS: admin features authorize before using it; public ingestion routes validate
+ *  origin, input and applicable quotas before writing. Never pass the client or key to a browser. */
 export const usersConfigured = Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY && supabaseUrl);
 
 export function authAdmin() {

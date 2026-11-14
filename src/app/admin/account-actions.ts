@@ -1,5 +1,7 @@
 "use server";
 
+import { requireRecentAdmin } from "@/lib/admin/recent-mfa";
+
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/auth";
@@ -27,7 +29,7 @@ export async function updateMyProfile(input: unknown): Promise<Result> {
 
 /** Allowed only from a session that passed the second factor (requireAdmin guarantees it). */
 export async function changeMyPassword(newPassword: string): Promise<Result> {
-  await requireAdmin();
+  await requireRecentAdmin();
   const parsed = password.safeParse(newPassword);
   if (!parsed.success) return fail(parsed.error.issues[0].message);
   const { error } = await (await createClient()).auth.updateUser({ password: parsed.data });
@@ -43,7 +45,7 @@ export async function listMyFactors() {
 
 /** An admin keeps at least one authenticator, or the next sign-in would have nothing to ask for. */
 export async function removeMyFactor(factorId: string): Promise<Result> {
-  await requireAdmin();
+  await requireRecentAdmin();
   if (!z.uuid().safeParse(factorId).success) return fail("Unknown authenticator.");
   const sb = await createClient();
   const { data } = await sb.auth.mfa.listFactors();
@@ -56,7 +58,7 @@ export async function removeMyFactor(factorId: string): Promise<Result> {
 
 export type Enrollment = { factorId: string; qr: string; secret: string } | { error: string };
 export async function addMyFactor(): Promise<Enrollment> {
-  await requireAdmin();
+  await requireRecentAdmin();
   const sb = await createClient();
   const { data: factors } = await sb.auth.mfa.listFactors();
   for (const f of factors?.all ?? []) if (f.status === "unverified") await sb.auth.mfa.unenroll({ factorId: f.id });
@@ -76,7 +78,7 @@ export async function confirmMyFactor(factorId: string, code: string): Promise<R
 
 /** Signs out every other browser and device, keeping this one. */
 export async function signOutOtherDevices(): Promise<Result> {
-  await requireAdmin();
+  await requireRecentAdmin();
   const { error } = await (await createClient()).auth.signOut({ scope: "others" });
   return error ? fail("Could not sign the other devices out.") : { ok: true, message: "Signed out everywhere else." };
 }

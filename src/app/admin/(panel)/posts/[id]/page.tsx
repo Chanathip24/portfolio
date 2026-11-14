@@ -10,9 +10,9 @@ import { HistoryButton } from "@/components/admin/revisions";
 import { getCreator, getPostById, listRevisions, taxonomyOptions } from "@/lib/admin/data";
 import { formatCount } from "@/lib/format";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export default async function EditPost({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const valid = z.uuid().safeParse(id).success;

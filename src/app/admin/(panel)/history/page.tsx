@@ -6,9 +6,9 @@ import { UrlSelect } from "@/components/admin/url-select";
 import { Button } from "@/components/ui/button";
 import { listAllRevisions } from "@/lib/admin/data";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 const PAGE = 50;
 const SHOW = [{ id: "all", label: "Every change" }, { id: "deleted", label: "Deleted" }] as const;
 

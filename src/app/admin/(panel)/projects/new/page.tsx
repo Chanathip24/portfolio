@@ -3,9 +3,9 @@ import { PageHeader } from "@/components/admin/page-header";
 import { taxonomyOptions } from "@/lib/admin/data";
 import { blank } from "@/lib/admin/fields";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export default async function NewProject() {
   const { tags } = await taxonomyOptions();
   return (

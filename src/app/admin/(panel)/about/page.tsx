@@ -8,7 +8,6 @@ import { titleCase } from "@/lib/format";
 
 // Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
-
 const trigger = "h-10 flex-none gap-2 rounded-full border border-border px-4 text-sm data-active:border-foreground data-active:bg-foreground data-active:text-background";
 
 export default async function AboutAdmin() {

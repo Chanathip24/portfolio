@@ -1,10 +1,13 @@
 import type { NextConfig } from "next";
+import { contentSecurityPolicy } from "./src/lib/csp";
 
 // Images uploaded in the admin live in the Supabase project's public Storage bucket.
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL) : null;
 const localSupabase = supabaseUrl !== null && ["127.0.0.1", "localhost"].includes(supabaseUrl.hostname);
 
 const nextConfig: NextConfig = {
+  cacheComponents: true,
+  partialPrefetching: true,
   images: supabaseUrl
     ? {
         remotePatterns: [{ protocol: supabaseUrl.protocol === "http:" ? "http" : "https", hostname: supabaseUrl.hostname, port: supabaseUrl.port, pathname: "/storage/v1/object/public/media/**" }],
@@ -19,16 +22,16 @@ const nextConfig: NextConfig = {
       // The site never needs these browser features, so no page (or script that slips in) can ask for them.
       { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
       { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+      { key: "X-Frame-Options", value: "SAMEORIGIN" },
+      { key: "Content-Security-Policy", value: contentSecurityPolicy(false) },
       { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }, // only acted on over HTTPS
     ];
     return [
       { source: "/:path*", headers: common },
       // The admin must never be framed (clickjacking) or cached.
-      { source: "/admin/:path*", headers: [{ key: "X-Frame-Options", value: "DENY" }, { key: "Content-Security-Policy", value: "frame-ancestors 'none'" }, { key: "Cache-Control", value: "private, no-store" }] },
+      { source: "/admin/:path*", headers: [{ key: "X-Frame-Options", value: "DENY" }, { key: "Content-Security-Policy", value: contentSecurityPolicy(true) }, { key: "Cache-Control", value: "private, no-store" }] },
     ];
   },
-  cacheComponents: true,
-  partialPrefetching: true,
   turbopack: {
     rules: {
       "*.css": {

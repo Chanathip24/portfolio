@@ -2,8 +2,6 @@ import { Suspense } from "react";
 import { LoginForm } from "@/components/admin/auth-forms";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export const instant = false;
-
 export default function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   return (
     <main className="grid min-h-svh place-items-center p-4">

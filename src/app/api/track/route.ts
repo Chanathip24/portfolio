@@ -3,7 +3,9 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { BOT, KNOWN_PATH, cleanPath } from "@/lib/analytics";
 import { supabaseConfigured } from "@/lib/supabase/env";
-import { publicClient } from "@/lib/supabase/public";
+import { authAdmin, usersConfigured } from "@/lib/admin/users";
+import { withinLimit } from "@/lib/request-policy";
+import { sameOrigin, trustedClientIp } from "@/lib/request-security";
 
 const body = z.object({ path: z.string().max(300), referrer: z.string().max(500).optional() });
 
@@ -11,12 +13,15 @@ const body = z.object({ path: z.string().max(300), referrer: z.string().max(500)
  *  unique visitors for one day and can't be reversed or followed across days. Nothing identifying is stored. */
 export async function POST(req: NextRequest) {
   const done = new NextResponse(null, { status: 204 });
-  if (!supabaseConfigured) return done;
+  if (!supabaseConfigured || !usersConfigured) return done;
   const ua = req.headers.get("user-agent") ?? "";
-  const origin = req.headers.get("origin");
-  if (BOT.test(ua) || !ua || (origin && new URL(origin).host !== req.headers.get("host"))) return done;
+  if (BOT.test(ua) || !ua || !sameOrigin(req)) return done;
   // The admin browsing their own site shouldn't count.
   if (req.cookies.getAll().some((c) => /^sb-.*-auth-token/.test(c.name))) return done;
+
+  // One address may log 60 views a minute (a browser sends one per page). With no trusted address everyone shares one bucket, so it is ten times larger.
+  const ip = trustedClientIp(req.headers);
+  if (!withinLimit(`track:${ip || "unknown"}`, ip ? 60 : 600)) return done;
 
   const parsed = body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return done;
@@ -29,9 +34,8 @@ export async function POST(req: NextRequest) {
     if (r.host !== req.headers.get("host") && /^https?:$/.test(r.protocol)) referrer = r.hostname.replace(/^www\./, "");
   } catch {}
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "";
   const day = new Date().toISOString().slice(0, 10);
   const visitor = createHash("sha256").update(`${process.env.ANALYTICS_SALT ?? "dev-salt"}:${day}:${ip}:${ua}`).digest("hex").slice(0, 32);
-  await publicClient().from("page_views").insert({ path, referrer, visitor });
+  await authAdmin().from("page_views").insert({ path, referrer, visitor });
   return done;
 }

@@ -6,9 +6,9 @@ import { SectionInsights } from "@/components/admin/section-insights";
 import { Button } from "@/components/ui/button";
 import { getSectionAnalytics, listProjects } from "@/lib/admin/data";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 const DAYS = 30;
 
 export default async function ProjectsPage() {

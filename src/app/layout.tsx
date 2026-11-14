@@ -7,6 +7,7 @@ import { ViewTransitions } from "next-view-transitions";
 import { Suspense } from "react";
 import { PageViewTracker } from "@/components/page-view-tracker";
 import { feedAlternate, siteUrl } from "@/lib/site";
+import { ErrorReporter } from "@/components/error-reporter";
 import { WebVitalsReporter } from "@/components/web-vitals-reporter";
 import { ScrollRestore } from "@/components/scroll-restore";
 import "./globals.css";
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </Suspense>
         <PageViewTracker />
         <WebVitalsReporter />
+        <ErrorReporter />
         <Providers>{children}</Providers>
         {/* Vercel Web Analytics + real-user Web Vitals; both are no-ops off Vercel. */}
         <Analytics />

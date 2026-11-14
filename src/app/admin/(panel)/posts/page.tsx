@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { getSectionAnalytics, listPosts } from "@/lib/admin/data";
 import { formatCount } from "@/lib/format";
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 export const instant = false;
 
+// Admin pages read the signed-in session, so they render on request, never ahead of time.
 const DAYS = 30;
 
 export default async function PostsPage() {

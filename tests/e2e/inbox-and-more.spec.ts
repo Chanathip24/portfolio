@@ -139,7 +139,8 @@ test.describe.serial("inbox", () => {
     expect((await post({ email: "nope", message: "hi" })).status()).toBe(400);
     expect((await post({ email: who, message: "bot", website: "http://spam" })).status()).toBe(204);
     expect((await service().from("messages").select("id").eq("from_email", who)).data).toHaveLength(0); // the bot stored nothing
-    for (let i = 0; i < 3; i++) expect((await post({ email: who, message: `m${i}` })).status()).toBe(201);
+    // The prior message still uses one quota slot even though the admin deleted it from the inbox.
+    for (let i = 0; i < 2; i++) expect((await post({ email: who, message: `m${i}` })).status()).toBe(201);
     expect((await post({ email: who, message: "one too many" })).status()).toBe(429);
     await visitor.close();
     await service().from("messages").delete().eq("from_email", who);
