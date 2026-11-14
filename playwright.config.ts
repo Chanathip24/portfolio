@@ -46,6 +46,8 @@ export default defineConfig({
         TRUSTED_PROXY_IP_HEADER: "x-test-ip",
         // The tests write rows and read the summaries straight away, so the admin's cached summaries are off.
         ADMIN_CACHE: "off",
+        // Lets the tests call the daily cleanup route.
+        CRON_SECRET: "test-cron-secret",
       },
     },
   ],

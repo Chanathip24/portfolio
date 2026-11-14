@@ -3,7 +3,7 @@ import { z } from "zod";
 import { BOT, KNOWN_PATH, cleanPath } from "@/lib/analytics";
 import { supabaseConfigured } from "@/lib/supabase/env";
 import { authAdmin, usersConfigured } from "@/lib/admin/users";
-import { withinLimit } from "@/lib/request-policy";
+import { sharedLimit } from "@/lib/shared-limit";
 import { sameOrigin, trustedClientIp } from "@/lib/request-security";
 
 const body = z.object({
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   if (req.cookies.getAll().some((c) => /^sb-.*-auth-token/.test(c.name))) return done;
   // One address may send 120 measurements a minute (a page load reports about six). With no trusted address everyone shares one bucket, so it is ten times larger.
   const ip = trustedClientIp(req.headers);
-  if (!withinLimit(`vitals:${ip || "unknown"}`, ip ? 120 : 1200)) return done;
+  if (!(await sharedLimit(`vitals:${ip || "unknown"}`, ip ? 120 : 1200)) || !(await sharedLimit("vitals:all", 6000, { shared: true }))) return done;
   const parsed = body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return done;
   const path = cleanPath(parsed.data.path);
