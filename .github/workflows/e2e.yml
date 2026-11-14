@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version-file: .nvmrc, cache: npm }
       - run: npm ci
-      - uses: supabase/setup-cli@v1
+      - uses: supabase/setup-cli@v3
         with: { version: 2.121.0 } # pinned, so a new release cannot change the images under a passing build
       # The pulls open many outgoing connections, and Linux may hand one of them a port in Supabase's range (54322 is inside the
       # temporary-port range). Reserving the range stops that clash; the retry covers anything else.
