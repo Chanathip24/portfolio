@@ -1,24 +1,14 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import "../styles/shadcn.css";
 @import "lenis/dist/lenis.css";
 
 @custom-variant dark (&:is(.dark *));
 
-/* Licensed display face. TRJN DaVinci is a commercial font: buy a web licence and put the
-   files at these paths. Until they exist, the stack falls back to Instrument Serif. */
 @font-face {
-  font-family: "TRJN DaVinci";
-  src: url("/fonts/trjn-davinci-italic.woff2") format("woff2");
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "TRJN DaVinci";
-  src: url("/fonts/trjn-davinci-regular.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 400;
+  font-family: "TRJN DaVinci Text";
+  src: url("https://db.onlinewebfonts.com/t/413438edc16177b70627d108238ec05f.woff2") format("woff2"),
+    url("https://db.onlinewebfonts.com/t/413438edc16177b70627d108238ec05f.woff") format("woff");
   font-display: swap;
 }
 
@@ -28,7 +18,7 @@
   --font-sans: var(--font-geist);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-geist);
-  --font-display: "TRJN DaVinci", var(--font-instrument);
+  --font-display: "TRJN DaVinci Text", var(--font-instrument);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
