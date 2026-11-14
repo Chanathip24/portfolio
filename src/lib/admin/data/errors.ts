@@ -1,5 +1,5 @@
 import "server-only";
-import { db } from "./core";
+import { cachedRpc } from "./core";
 
 export type ErrorGroup = { fingerprint: string; n: number; first_seen: string; last_seen: string; source: "client" | "server"; message: string; path: string; stack: string | null; pages: number };
 export type ErrorSummary = {
@@ -11,7 +11,7 @@ export type ErrorSummary = {
 
 /** Errors in the last `days` days, grouped by fingerprint (the same bug counts once, with how often it happened). */
 export async function getErrorSummary(days: number) {
-  const { data } = await (await db()).rpc("error_summary", { days });
+  const data = await cachedRpc<unknown>("error_summary", { days });
   const stats = data as ErrorSummary | null;
   if (!stats) return null;
   // One row per day (at least a week, so a quiet period still draws), with zeros where nothing happened.

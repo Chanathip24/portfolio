@@ -44,6 +44,8 @@ export default defineConfig({
         GOOGLE_MOCK_ORIGIN: `http://localhost:${MOCK_PORT}`,
         // Lets the tests play different visitor addresses (header x-test-ip), the way Vercel's header does in production.
         TRUSTED_PROXY_IP_HEADER: "x-test-ip",
+        // The tests write rows and read the summaries straight away, so the admin's cached summaries are off.
+        ADMIN_CACHE: "off",
       },
     },
   ],
