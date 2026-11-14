@@ -20,14 +20,21 @@ export function ScrollRestore() {
   const prev = useRef(pathname);
 
   useEffect(() => {
-    let raf = 0, timer = 0;
+    let timer = 0, commit = 0;
+    let pending: { path: string; y: number } | null = null;
+    const flush = () => {
+      clearTimeout(commit);
+      if (pending) useSiteStore.getState().saveScroll(pending.path, pending.y);
+      pending = null;
+    };
+    // Persisting writes sessionStorage, so do it once scrolling pauses, not on every frame. The path is read now, not
+    // when the write happens, so a pause that ends after a navigation still files the position under the right page.
     const save = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        // The browser's clamped restore also fires a scroll event; don't record it.
-        if (popped.current) return;
-        useSiteStore.getState().saveScroll(location.pathname, Math.round(scrollY));
-      });
+      // The browser's clamped restore also fires a scroll event; don't record it.
+      if (popped.current) return;
+      pending = { path: location.pathname, y: Math.round(scrollY) };
+      clearTimeout(commit);
+      commit = window.setTimeout(flush, 200);
     };
     const onPop = () => {
       popped.current = true;
@@ -36,9 +43,11 @@ export function ScrollRestore() {
     };
     addEventListener("scroll", save, { passive: true });
     addEventListener("popstate", onPop);
+    addEventListener("pagehide", flush);
     return () => {
-      cancelAnimationFrame(raf);
+      flush();
       clearTimeout(timer);
+      removeEventListener("pagehide", flush);
       removeEventListener("scroll", save);
       removeEventListener("popstate", onPop);
     };

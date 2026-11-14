@@ -1,9 +1,9 @@
 "use client";
 
 import { ArrowUpRight, Plus } from "lucide-react";
+import dynamic from "next/dynamic";
 import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
-import { ProjectPreview } from "@/components/project-preview";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { SiteImage } from "@/components/ui/site-image";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,6 +21,10 @@ import { cn } from "@/lib/utils";
  * - Lead card arrow: swaps out (up-right) as a fresh one slides in (from
  *   down-left) on a 600ms ease-in-out.
  */
+// The preview dialog (iframe, device frames) is only needed once someone opens a project, so it is its own chunk,
+// fetched on first pointer or focus over the grid and mounted on first open.
+const loadPreview = () => import("@/components/project-preview").then((m) => m.ProjectPreview);
+const ProjectPreview = dynamic(loadPreview, { ssr: false });
 const SWAP = "duration-[600ms] ease-[cubic-bezier(0.77,0,0.175,1)]";
 const revealedCards = new Set<string>();
 
@@ -59,6 +63,8 @@ type TagFilter = string;
 export function WorkShowcase({ signature, others, categories }: { signature: WorkItem[]; others: WorkItem[]; categories: string[] }) {
   const [tag, setTag] = useState<TagFilter>("all");
   const [preview, setPreview] = useState<WorkItem | null>(null);
+  const [previewUsed, setPreviewUsed] = useState(false);
+  if (preview && !previewUsed) setPreviewUsed(true);
   // The home page stays mounted, with its state, while you are on another page, so without this a dialog left open
   // would still be open when you came Back. Effect cleanup runs when the page is left, however that happens.
   useEffect(() => () => setPreview(null), []);
@@ -90,12 +96,12 @@ export function WorkShowcase({ signature, others, categories }: { signature: Wor
         </TabsList>
       </Tabs>
 
-      <div className={cn("dim-others grid min-w-0 grid-cols-[minmax(0,1fr)] gap-14", gridClass)}>
+      <div onPointerEnter={loadPreview} onFocus={loadPreview} className={cn("dim-others grid min-w-0 grid-cols-[minmax(0,1fr)] gap-14", gridClass)}>
         {sig.length > 0 && (
           <div className={cn(both ? "space-y-16" : "contents")}>
-            {sig.map((item, i) => (
+            {sig.map((item) => (
               <Flow key={item.slug} id={item.slug} i={0}>
-                <Lead item={item} priority={i === 0} onOpen={setPreview} />
+                <Lead item={item} onOpen={setPreview} />
               </Flow>
             ))}
           </div>
@@ -109,7 +115,7 @@ export function WorkShowcase({ signature, others, categories }: { signature: Wor
         )}
       </div>
 
-      <ProjectPreview item={preview} onClose={() => setPreview(null)} />
+      {previewUsed && <ProjectPreview item={preview} onClose={() => setPreview(null)} />}
     </>
   );
 }
@@ -249,11 +255,11 @@ function TouchList({ rowId, items, onOpen }: { rowId: string; items: WorkItem[];
   );
 }
 
-function Lead({ item, priority, onOpen }: { item: WorkItem; priority: boolean; onOpen: Open }) {
+function Lead({ item, onOpen }: { item: WorkItem; onOpen: Open }) {
   return (
     <Link href={item.href} onClick={opener(onOpen, item)} aria-haspopup="dialog" className="dim-item group block rounded-[1.75rem] no-underline">
       <span className="relative block overflow-hidden rounded-[1.75rem] bg-tile transition-transform duration-300 group-active:scale-[0.98]">
-          <SiteImage src={item.image} alt="" width={1400} height={1000} sizes="100vw" priority={priority}
+          <SiteImage src={item.image} alt="" width={1400} height={1000} sizes="(min-width: 1024px) 55vw, 100vw"
             className="aspect-[7/5] w-full object-cover transition-[scale] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]" />
         <span aria-hidden className="absolute right-4 top-4 size-10 overflow-hidden rounded-full bg-foreground text-background">
           <ArrowUpRight strokeWidth={2} className={cn("absolute inset-0 m-auto size-5 transition-transform group-hover:translate-x-[150%] group-hover:-translate-y-[150%] group-focus-visible:translate-x-[150%] group-focus-visible:-translate-y-[150%]", SWAP)} />
