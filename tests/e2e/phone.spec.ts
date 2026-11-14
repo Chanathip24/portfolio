@@ -25,7 +25,12 @@ test.describe("admin on a phone", () => {
     }
   });
 
-  test("a chart card keeps its title readable next to its period switch, and its chart fits the card", async ({ page }) => {
+  test.describe("a chart card", () => {
+    // The chart only draws when there is a view to show, and a fresh database has none.
+    test.beforeAll(async () => { await service().from("page_views").insert({ path: "/blog", visitor: "e2e-phone-chart" }); });
+    test.afterAll(async () => { await service().from("page_views").delete().eq("visitor", "e2e-phone-chart"); });
+
+  test("keeps its title readable next to its period switch, and its chart fits the card", async ({ page }) => {
     await page.goto("/admin");
     const card = page.getByRole("region", { name: "Page views" });
     await expect(card.locator("[data-slot=chart]")).toBeVisible();
@@ -37,6 +42,7 @@ test.describe("admin on a phone", () => {
     // the period switch sits under the title, still inside the card
     const nav = (await card.getByRole("navigation", { name: "Time range" }).boundingBox())!;
     expect(nav.x + nav.width).toBeLessThanOrEqual(cardBox.x + cardBox.width + 1);
+  });
   });
 
   test("on a phone the list comes before the charts on posts, projects and users", async ({ page }) => {
