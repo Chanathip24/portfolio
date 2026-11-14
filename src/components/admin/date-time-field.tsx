@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { formatLocalDateTime } from "@/lib/format";
+import { useMounted } from "@/lib/use-mounted";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -14,6 +15,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 export function DateTimeField({ id, value, onChange, invalid, describedBy }: {
   id: string; value: string; onChange: (v: string) => void; invalid?: boolean; describedBy?: string;
 }) {
+  const mounted = useMounted();
   const date = value ? new Date(value) : undefined; // no zone in the string: read as local time
   const time = value ? value.slice(11, 16) : "09:00";
   const today = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
@@ -26,8 +28,8 @@ export function DateTimeField({ id, value, onChange, invalid, describedBy }: {
         render={<Button id={id} type="button" variant="outline" aria-invalid={invalid} aria-describedby={describedBy} className="h-10 w-full justify-start gap-2 px-3 font-normal" />}
       >
         <CalendarDays aria-hidden className="text-muted-foreground" />
-        {/* Formatted in the browser's timezone, so it can differ from the server-rendered text. */}
-        <span suppressHydrationWarning className={date ? "" : "text-muted-foreground"}>{date ? formatLocalDateTime(date) : "Pick a date and time"}</span>
+        {/* The server knows no timezone, so a set date is written only once the browser can format it. */}
+        <span className={date ? "" : "text-muted-foreground"}>{date ? (mounted ? formatLocalDateTime(date) : " ") : "Pick a date and time"}</span>
       </PopoverTrigger>
       <PopoverContent align="start" className="w-auto gap-3 p-3">
         <Calendar mode="single" selected={date} onSelect={pickDay} defaultMonth={date} />

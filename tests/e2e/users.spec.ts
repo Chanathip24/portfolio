@@ -16,7 +16,11 @@ test.describe.serial("user management", () => {
   };
   const reload = async (page: Page) => { await page.goto("/admin/users"); await page.getByRole("searchbox", { name: "Search users" }).fill(email); };
 
-  test.afterAll(async () => { if (id) await service().auth.admin.deleteUser(id); });
+  let extraId = "";
+  test.afterAll(async () => {
+    if (id) await service().auth.admin.deleteUser(id);
+    if (extraId) await service().auth.admin.deleteUser(extraId);
+  });
 
   test("the list shows everyone; your own row cannot be demoted, blocked or deleted", async ({ page, admin }) => {
     await page.goto("/admin/users");
@@ -30,6 +34,9 @@ test.describe.serial("user management", () => {
   });
 
   test("search and filters narrow the list", async ({ page }) => {
+    // A fresh database has only the test admin, so make a plain user for the list to hold (and for the filter to leave out).
+    const { data: extra } = await service().auth.admin.createUser({ email: `e2e-plain-${rand()}@test.local`, password: STRONG, email_confirm: true });
+    extraId = extra.user!.id;
     await page.goto("/admin/users");
     await expect(page.getByRole("button", { name: /^Actions for/ }).first()).toBeVisible();
     const total = await page.getByRole("row").filter({ has: page.getByRole("button", { name: /^Actions for/ }) }).count();
