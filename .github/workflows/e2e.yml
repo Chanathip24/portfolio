@@ -19,7 +19,13 @@ jobs:
       - run: npm ci
       - uses: supabase/setup-cli@v1
         with: { version: 2.121.0 } # pinned, so a new release cannot change the images under a passing build
-      - run: supabase start -x studio,imgproxy,vector,logflare,edge-runtime,supavisor,postgres-meta
+      # The pulls open many outgoing connections, and Linux may hand one of them a port in Supabase's range (54322 is inside the
+      # temporary-port range). Reserving the range stops that clash; the retry covers anything else.
+      - name: Start Supabase
+        run: |
+          sudo sysctl -w net.ipv4.ip_local_reserved_ports=54320-54329
+          skip=studio,imgproxy,vector,logflare,edge-runtime,supavisor,postgres-meta
+          supabase start -x $skip || { supabase stop --no-backup; supabase start -x $skip; }
       - name: Point the app at the local stack
         run: |
           supabase status -o env > /tmp/sb.env
