@@ -2,11 +2,14 @@ import { DataToolsOff } from "@/components/admin/data-tools-off";
 import { MediaLibrary } from "@/components/admin/media-library";
 import { PageHeader } from "@/components/admin/page-header";
 import { getSettings, listMedia } from "@/lib/admin/data";
+import { Streamed } from "@/components/admin/page-loading";
+import { MediaSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
+export default function MediaPage() {
+  return <Streamed fallback={<MediaSkeleton />}><MediaPageContent /></Streamed>;
+}
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
-export default async function MediaPage() {
+async function MediaPageContent() {
   if (!(await getSettings()).dataToolsEnabled) return (<><PageHeader title="Media" /><DataToolsOff /></>);
   return (
     <>

@@ -1,15 +1,21 @@
 import { notFound } from "next/navigation";
 import { z } from "zod";
 import { ItemStats, RANGES } from "@/components/admin/item-stats";
-import { getCreator, getPostById, getSectionAnalytics, visibilityOf } from "@/lib/admin/data";
+import { Streamed } from "@/components/admin/page-loading";
+import { StatsSkeleton } from "@/components/admin/skeletons";
+import { getCreator, getPostSummary, getSectionAnalytics, visibilityOf } from "@/lib/admin/data";
 import { formatCount } from "@/lib/format";
 
-export const instant = false;
+type Props = { params: Promise<{ id: string }>; searchParams: Promise<{ range?: string }> };
 
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
-export default async function PostStats({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ range?: string }> }) {
+// Everything that waits for the session or the database sits inside <Streamed>, so the page opens at once with a placeholder.
+export default function PostStats(props: Props) {
+  return <Streamed fallback={<StatsSkeleton />}><PostStatsContent {...props} /></Streamed>;
+}
+
+async function PostStatsContent({ params, searchParams }: Props) {
   const [{ id }, { range }] = await Promise.all([params, searchParams]);
-  const post = z.uuid().safeParse(id).success ? await getPostById(id) : null;
+  const post = z.uuid().safeParse(id).success ? await getPostSummary(id) : null;
   if (!post) notFound();
   const days = RANGES.includes(Number(range)) ? Number(range) : 30;
   const [stats, creator] = await Promise.all([getSectionAnalytics("/blog/", days, `/blog/${post.slug}`), getCreator("posts", post.id)]);

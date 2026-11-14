@@ -6,13 +6,16 @@ import { SectionInsights } from "@/components/admin/section-insights";
 import { Button } from "@/components/ui/button";
 import { getSectionAnalytics, listPosts } from "@/lib/admin/data";
 import { formatCount } from "@/lib/format";
+import { Streamed } from "@/components/admin/page-loading";
+import { ListSkeleton } from "@/components/admin/skeletons";
 
-export const instant = false;
-
-// Admin pages read the signed-in session, so they render on request, never ahead of time.
 const DAYS = 30;
 
-export default async function PostsPage() {
+export default function PostsPage() {
+  return <Streamed fallback={<ListSkeleton />}><PostsPageContent /></Streamed>;
+}
+
+async function PostsPageContent() {
   const [posts, stats] = await Promise.all([listPosts(), getSectionAnalytics("/blog/", DAYS)]);
   const live = posts.filter((p) => p.visibility === "live");
   const total = posts.reduce((n, p) => n + p.views, 0);
