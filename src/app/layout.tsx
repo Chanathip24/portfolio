@@ -50,6 +50,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${geist.variable} ${geistMono.variable} ${instrument.variable} h-full antialiased`}
     >
+      {/* The display font comes from another host (see globals.css). Opening that connection while the page is still being read lets the
+          font start downloading the moment the stylesheet asks for it. React moves this into <head>; it needs crossOrigin, as fonts are fetched that way. */}
+      <link rel="preconnect" href="https://db.onlinewebfonts.com" crossOrigin="anonymous" />
       <body className="min-h-full flex flex-col">
         {/* beforeInteractive: Next injects it into <head> ahead of hydration, without React's script-tag warning. */}
         <Script id="theme" strategy="beforeInteractive">{themeScript}</Script>
