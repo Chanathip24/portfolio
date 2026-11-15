@@ -38,9 +38,10 @@ export default function ProjectPage(props: PageProps) {
 
 async function ProjectPageContent({ params }: PageProps) {
   const { slug } = await params;
-  const project = await getProject(slug);
+  // Both reads only need the slug, so start them together.
+  const [project, neighbors] = await Promise.all([getProject(slug), getProjectNeighbors(slug)]);
   if (!project) notFound();
-  const { related, prev, next } = await getProjectNeighbors(slug);
+  const { related, prev, next } = neighbors;
   const year = String(new Date(project.created_at).getUTCFullYear());
 
   return (

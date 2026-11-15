@@ -1,4 +1,5 @@
 import "server-only";
+import { allRows } from "../paging";
 import { db } from "./core";
 import type { Option } from "../fields";
 
@@ -13,9 +14,10 @@ export async function listTaxonomy(kind: TaxonomyKind): Promise<TaxonomyRow[]> {
   const { data } = await sb.from(taxonomyTable[kind]).select("slug,name,sort_order").order("sort_order").order("name");
   const rows = (data ?? []) as Omit<TaxonomyRow, "used">[];
   const used = new Map<string, number>();
-  if (kind === "postCategory") for (const r of (await sb.from("posts").select("category")).data ?? []) used.set(r.category, (used.get(r.category) ?? 0) + 1);
-  if (kind === "skillGroup") for (const r of (await sb.from("skills").select("group")).data ?? []) used.set(r.group, (used.get(r.group) ?? 0) + 1);
-  if (kind === "projectCategory") for (const r of (await sb.from("projects").select("tags")).data ?? []) for (const t of r.tags as string[]) used.set(t, (used.get(t) ?? 0) + 1);
+  // allRows pages past the API's 1000-row cap; a plain select would stop there and undercount.
+  if (kind === "postCategory") for (const r of await allRows<{ category: string }>((f, t) => sb.from("posts").select("category").order("id").range(f, t))) used.set(r.category, (used.get(r.category) ?? 0) + 1);
+  if (kind === "skillGroup") for (const r of await allRows<{ group: string }>((f, t) => sb.from("skills").select("group").order("id").range(f, t))) used.set(r.group, (used.get(r.group) ?? 0) + 1);
+  if (kind === "projectCategory") for (const r of await allRows<{ tags: string[] }>((f, t) => sb.from("projects").select("tags").order("id").range(f, t))) for (const t of r.tags) used.set(t, (used.get(t) ?? 0) + 1);
   return rows.map((r) => ({ ...r, used: used.get(r.slug) ?? 0 }));
 }
 

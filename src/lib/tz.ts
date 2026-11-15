@@ -6,7 +6,8 @@ import { owner } from "@/content/site";
 export const DEFAULT_TZ = owner.timeZone;
 
 /** True for "UTC" and every zone this runtime knows (the list Settings offers), so a stored or submitted value is safe to use. */
-export const isTimeZone = (tz: unknown): tz is string => typeof tz === "string" && (tz === "UTC" || Intl.supportedValuesOf("timeZone").includes(tz));
+let known: Set<string> | undefined; // built once: the runtime list has about 400 names
+export const isTimeZone = (tz: unknown): tz is string => typeof tz === "string" && (tz === "UTC" || (known ??= new Set(Intl.supportedValuesOf("timeZone"))).has(tz));
 
 const DAY = "yyyy-MM-dd";
 

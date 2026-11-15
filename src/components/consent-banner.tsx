@@ -1,20 +1,35 @@
 "use client";
 
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { setConsent, useConsent } from "@/lib/consent";
+
+// Measurement scripts are not needed to use the page: fetch them after the page is up and the browser is idle.
+const Analytics = dynamic(() => import("@vercel/analytics/next").then((m) => m.Analytics), { ssr: false });
+const SpeedInsights = dynamic(() => import("@vercel/speed-insights/next").then((m) => m.SpeedInsights), { ssr: false });
+function useIdle() {
+  const [idle, setIdle] = useState(false);
+  useEffect(() => {
+    const go = () => setIdle(true);
+    if ("requestIdleCallback" in window) { const id = requestIdleCallback(go, { timeout: 3000 }); return () => cancelIdleCallback(id); }
+    const id = setTimeout(go, 2000);
+    return () => clearTimeout(id);
+  }, []);
+  return idle;
+}
 
 /** Tells the visitor once that anonymous, cookieless measurement is on and lets them opt out. Opting out (or Do Not Track) stops every
  *  measurement, including Vercel analytics; the site works the same. Anything that sets cookies would need a real opt-in here. */
 export function ConsentBanner() {
   const consent = useConsent();
   const path = usePathname();
+  const idle = useIdle();
   return (
     <>
-      {(consent === null || consent === "accepted") && (
+      {idle && (consent === null || consent === "accepted") && (
         <>
           <Analytics />
           <SpeedInsights />

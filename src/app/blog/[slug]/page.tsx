@@ -38,9 +38,10 @@ export default function PostPage(props: PageProps) {
 
 async function PostPageContent({ params }: PageProps) {
   const { slug } = await params;
-  const post = await getPost(slug);
+  // Both reads only need the slug, so start them together.
+  const [post, neighbors] = await Promise.all([getPost(slug), getPostNeighbors(slug)]);
   if (!post) notFound();
-  const { related, newer, older } = await getPostNeighbors(slug);
+  const { related, newer, older } = neighbors;
   const edited = post.updated_at.slice(0, 10) !== post.published_at.slice(0, 10);
 
   return (
