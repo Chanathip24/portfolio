@@ -48,11 +48,12 @@ test.describe("admin form controls", () => {
     const category = page.getByRole("combobox", { name: "Category" });
     await expect(category).toContainText("Engineering");
     await category.click();
-    expect(await page.getByRole("option").count()).toBeGreaterThanOrEqual(4);
+    await expect.poll(() => page.getByRole("option").count()).toBeGreaterThanOrEqual(4); // the list renders after the click, so wait for it
     await page.getByRole("option", { name: "Design", exact: true }).click();
     await expect(category).toContainText("Design");
     await category.focus();
     await page.keyboard.press("Enter");
+    await expect(page.getByRole("option").first()).toBeVisible(); // the list is open before the arrow key goes into it
     await page.keyboard.press("ArrowDown");
     await page.keyboard.press("Enter");
     await expect(category).not.toContainText("Design");
