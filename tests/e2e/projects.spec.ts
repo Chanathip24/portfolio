@@ -1,6 +1,9 @@
 import { choose, expect, test } from "../support/fixtures";
 import { service } from "../support/db";
 
+// Opening a deleted project is a streamed 404, which React logs as error #419 in a production build.
+test.use({ allowConsoleErrors: true });
+
 test.describe.serial("projects in the admin", () => {
   const title = `E2E Project ${Math.random().toString(36).slice(2, 7)}`;
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
