@@ -8,6 +8,7 @@ import { EmptyState, SegmentedNav } from "@/components/admin/shared";
 import { StatTiles } from "@/components/admin/stat-tiles";
 import { Badge } from "@/components/ui/badge";
 import { type ErrorGroup, getErrorSummary } from "@/lib/admin/data";
+import { ResolveErrorButton } from "@/components/admin/resolve-error-button";
 import { formatDate, formatTime, timeAgo } from "@/lib/format";
 import { cn } from "cn";
 import { Streamed } from "@/components/admin/page-loading";
@@ -80,6 +81,7 @@ function GroupRow({ g }: { g: ErrorGroup }) {
         <div className="mt-3 flex flex-col gap-2 pl-7 text-xs text-muted-foreground">
           <p>First seen {formatDate(g.first_seen)}, {formatTime(g.first_seen)} UTC · last {formatDate(g.last_seen)}, {formatTime(g.last_seen)} UTC</p>
           {g.stack ? <pre className="max-h-64 overflow-auto rounded-lg bg-muted p-3 font-mono text-[11px] leading-relaxed whitespace-pre-wrap text-foreground">{g.stack}</pre> : <p>No stack trace was recorded.</p>}
+          <ResolveErrorButton fingerprint={g.fingerprint} />
         </div>
       </details>
     </li>

@@ -24,6 +24,7 @@ Open http://localhost:3000. The admin is at `/admin`.
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Your Supabase project. Safe to expose: Row Level Security decides what they can do. |
 | `NEXT_PUBLIC_SITE_URL` | The public address of the site, for share previews, the sitemap and the feed. Defaults to `http://localhost:3000`. |
 | `ANALYTICS_SALT` | Any long random string. Makes the daily visitor hash unguessable. |
+| `CRON_SECRET` | Any long random string. Lets Vercel Cron call `/api/cron/cleanup` daily (see Data retention below). Without it the route does not exist. |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server only. Needed for Users, the Inbox, rate limiting and security notices. Bypasses every security rule: never expose it. |
 
 Gmail needs no Google-specific environment variables: connect it from **Settings, Gmail** (see below).
@@ -73,6 +74,14 @@ The site measures visits, load times and errors without cookies: page views stor
 
 Errors from visitors' browsers (`src/components/error-reporter.tsx`, the error pages) go to `/api/errors`, and server errors are caught by `src/instrumentation.ts`. Both are stored in `error_events`, grouped by a fingerprint, and shown in **Admin, Errors** with counts, charts and stack traces. Nothing identifying is stored, and browser reports respect the opt-out above.
 
+The first time a new bug appears, the Inbox gets a notice (critical for a server error). **Resolve** on a bug clears its records; if it happens again it is listed as new and the Inbox is told again.
+
+## Data retention and abuse limits
+
+Page views, load times and errors are collected automatically, so they are kept for a limited time: `cleanup_old_data()` (a database function) deletes page views and load times after 180 days, errors after 90 and sign-in attempts after 7. Content, messages, the activity log and history are never touched. `vercel.json` runs it daily through `/api/cron/cleanup`, which needs `CRON_SECRET` (Vercel sends it as `Authorization: Bearer ...`); a wrong secret gets 401 and no secret means the route is 404. Change the periods in `supabase/migrations/20261127000000_retention_and_shared_limits.sql`.
+
+The three public intake routes (`/api/track`, `/api/vitals`, `/api/errors`) accept same-site requests only, skip bots and signed-in admins, and limit each address per minute (60, 120 and 20) plus a ceiling for everyone together (3000, 6000 and 300). The count lives in the database (`take_rate_slot`), so every server instance shares it, and a flood from many addresses still cannot fill the tables. These checks stop simple scripts, not a determined bot. For that, turn on Vercel's Bot Protection and a rate-limit rule in the project's Firewall settings, which block it before it reaches the app.
+
 ## Database
 
 Migrations are in `supabase/migrations`, applied in order by `npm run db:reset` (wipes and rebuilds) or `npx supabase migration up` (adds new ones). `npm run db:seed-sql` regenerates `supabase/seed.sql` from the sample data in `src/mock/api`. Security lives in the database: Row Level Security with an `is_admin()` rule that needs both the admins list and a verified second factor (`aal2`). See `supabase/README.md`.
@@ -90,6 +99,8 @@ npm run test:e2e        # the admin in a real browser, desktop and phone
 ```
 
 The Gmail tests talk to a fake Google (`tests/support/mock-google.mjs`), started automatically. See `tests/README.md`.
+
+`tests/e2e/a11y.spec.ts` runs axe (WCAG 2 A and AA) on the key public and admin pages and fails on serious or critical problems. It finds mechanical problems only (contrast, names, roles); it does not replace trying the site with a keyboard and a screen reader.
 
 ### Continuous integration
 

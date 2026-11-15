@@ -4,7 +4,7 @@ import { z } from "zod";
 import { BOT, KNOWN_PATH, cleanPath } from "@/lib/analytics";
 import { supabaseConfigured } from "@/lib/supabase/env";
 import { authAdmin, usersConfigured } from "@/lib/admin/users";
-import { withinLimit } from "@/lib/request-policy";
+import { sharedLimit } from "@/lib/shared-limit";
 import { sameOrigin, trustedClientIp } from "@/lib/request-security";
 
 const body = z.object({ path: z.string().max(300), referrer: z.string().max(500).optional() });
@@ -21,7 +21,8 @@ export async function POST(req: NextRequest) {
 
   // One address may log 60 views a minute (a browser sends one per page). With no trusted address everyone shares one bucket, so it is ten times larger.
   const ip = trustedClientIp(req.headers);
-  if (!withinLimit(`track:${ip || "unknown"}`, ip ? 60 : 600)) return done;
+  // 60 a minute per address, and 3000 a minute for everyone together, so a flood from many addresses cannot fill the table either.
+  if (!(await sharedLimit(`track:${ip || "unknown"}`, ip ? 60 : 600)) || !(await sharedLimit("track:all", 3000, { shared: true }))) return done;
 
   const parsed = body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return done;

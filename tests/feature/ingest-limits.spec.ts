@@ -22,6 +22,8 @@ test.describe("withinLimit", () => {
 
 // The test server trusts the x-test-ip header as the visitor's address (TRUSTED_PROXY_IP_HEADER in playwright.config.ts),
 // the way the app trusts Vercel's header in production.
+// The limit is kept in the database now, so it outlives one test run: every run uses addresses of its own.
+const address = (net: string) => `${net}.${1 + Math.floor(Math.random() * 250)}`; // from the documentation-only ranges
 test.describe("page-view and vitals beacons are limited per address", () => {
   const start = new Date(Date.now() - 1000).toISOString();
   const count = async (table: string) => (await service().from(table).select("id", { count: "exact", head: true }).gte("created_at", start)).count ?? 0;
@@ -29,19 +31,21 @@ test.describe("page-view and vitals beacons are limited per address", () => {
 
   test("one address can log 60 page views a minute; another address is unaffected", async ({ request }) => {
     const post = (ip: string) => request.post("/api/track", { data: { path: "/about" }, headers: { "user-agent": UA, "x-test-ip": ip } });
+    const [one, other] = [address("203.0.113"), address("198.51.100")];
     const before = await count("page_views");
-    for (let i = 0; i < 70; i++) expect((await post("203.0.113.10")).status()).toBe(204); // the answer never changes, so a script learns nothing
+    for (let i = 0; i < 70; i++) expect((await post(one)).status()).toBe(204); // the answer never changes, so a script learns nothing
     expect((await count("page_views")) - before).toBe(60);
-    await post("203.0.113.11");
+    await post(other);
     expect((await count("page_views")) - before).toBe(61);
   });
 
   test("one address can send 120 vitals a minute; another address is unaffected", async ({ request }) => {
     const post = (ip: string) => request.post("/api/vitals", { data: { metric: "LCP", value: 1200, rating: "good", path: "/about", device: "desktop" }, headers: { "user-agent": UA, "x-test-ip": ip } });
+    const [one, other] = [address("192.0.2"), address("198.18.0")];
     const before = await count("web_vitals");
-    for (let i = 0; i < 130; i++) expect((await post("203.0.113.20")).status()).toBe(204);
+    for (let i = 0; i < 130; i++) expect((await post(one)).status()).toBe(204);
     expect((await count("web_vitals")) - before).toBe(120);
-    await post("203.0.113.21");
+    await post(other);
     expect((await count("web_vitals")) - before).toBe(121);
   });
 });

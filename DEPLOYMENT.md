@@ -80,6 +80,7 @@ In Supabase, **Authentication**:
    | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | The publishable key |
    | `SUPABASE_SERVICE_ROLE_KEY` | The service role key. Never give it a `NEXT_PUBLIC_` name. |
    | `ANALYTICS_SALT` | A long random string (`openssl rand -hex 32`) |
+   | `CRON_SECRET` | A long random string (`openssl rand -hex 32`), Production only. Vercel Cron uses it to run the daily cleanup of old measurements (`vercel.json`). Without it nothing is cleaned up. |
    | `NEXT_PUBLIC_SITE_URL` | Your public address, no trailing slash |
 
    `NEXT_PUBLIC_` values are written into the page code at build time. If you add or change one, **redeploy** or the site keeps the old value (and, with no Supabase address at build time, runs on sample data with the admin switched off).

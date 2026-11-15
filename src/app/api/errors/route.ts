@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { BOT } from "@/lib/analytics";
 import { recordError } from "@/lib/errors";
-import { withinLimit } from "@/lib/request-policy";
+import { sharedLimit } from "@/lib/shared-limit";
 import { sameOrigin, trustedClientIp } from "@/lib/request-security";
 
 const body = z.object({
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   const ua = req.headers.get("user-agent") ?? "";
   if (BOT.test(ua) || !ua || !sameOrigin(req)) return done;
   const ip = trustedClientIp(req.headers);
-  if (!withinLimit(`errors:${ip || "unknown"}`, ip ? 20 : 200)) return done;
+  if (!(await sharedLimit(`errors:${ip || "unknown"}`, ip ? 20 : 200)) || !(await sharedLimit("errors:all", 300, { shared: true }))) return done;
   const parsed = body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return done;
   await recordError({ source: "client", ...parsed.data });
