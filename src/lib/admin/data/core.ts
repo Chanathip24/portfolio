@@ -2,6 +2,7 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { authAdmin, usersConfigured } from "@/lib/admin/users";
 import { createClient } from "@/lib/supabase/server";
+import { DEFAULT_TZ, isTimeZone } from "@/lib/tz";
 import { requireAdmin } from "../auth";
 
 export async function db() {
@@ -23,6 +24,20 @@ async function readCached<T>(fn: string, args: Record<string, unknown>): Promise
   cacheLife("minutes");
   cacheTag("admin-reports");
   return ((await authAdmin().rpc(fn, args)).data ?? null) as T | null;
+}
+
+/** The time zone the admin counts days in: the one chosen in Settings, else the site's own (owner.timeZone). Cached; saving the setting clears it. */
+export async function getTimeZone(): Promise<string> {
+  const sb = await db();
+  const stored = usersConfigured && process.env.ADMIN_CACHE !== "off" ? await readStoredTimeZone() : (await sb.from("app_settings").select("timezone").limit(1).maybeSingle()).data?.timezone;
+  return isTimeZone(stored) ? stored : DEFAULT_TZ;
+}
+
+async function readStoredTimeZone(): Promise<string | null> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("app-settings");
+  return (await authAdmin().from("app_settings").select("timezone").limit(1).maybeSingle()).data?.timezone ?? null;
 }
 
 /** published, scheduled (published but its time is still ahead), draft or archived: what the admin sees at a glance. */

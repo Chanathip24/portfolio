@@ -3,6 +3,7 @@ import { PageHeader } from "@/components/admin/page-header";
 import { UserInsights } from "@/components/admin/user-insights";
 import { UsersManager } from "@/components/admin/users-manager";
 import { requireAdmin } from "@/lib/admin/auth";
+import { getTimeZone } from "@/lib/admin/data";
 import { userStats } from "@/lib/admin/user-stats";
 import { listUsers, usersConfigured } from "@/lib/admin/users";
 import { Streamed } from "@/components/admin/page-loading";
@@ -15,12 +16,13 @@ export default function UsersPage() {
 async function UsersPageContent() {
   const me = await requireAdmin();
   const users = usersConfigured ? await listUsers() : null;
+  const tz = await getTimeZone();
   return (
     <>
       <PageHeader title="Users" description="Everyone with an account. Add people, make them admins, reset a lost authenticator, change a password, block or delete." />
       {users ? (
         <div className="flex flex-col gap-4 lg:gap-6">
-          <UserInsights stats={userStats(users)} />
+          <UserInsights stats={userStats(users, 30, undefined, tz)} />
           <div className="order-3 lg:order-4"><UsersManager users={users} meId={me.id} /></div>
         </div>
       ) : (

@@ -1,8 +1,8 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import { ChartPrefsHydrator } from "@/components/admin/chart-card";
 import { NavProgress } from "@/components/admin/nav-progress";
-import { AdminNav, MobileNav, UserMenu } from "@/components/admin/sidebar";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { AdminNav, Brand, MobileNav, UserMenu } from "@/components/admin/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { requireAdmin } from "@/lib/admin/auth";
@@ -41,19 +41,17 @@ async function Shell({ children }: { children: React.ReactNode }) {
     <TooltipProvider>
       <ChartPrefsHydrator />
       <div className="min-h-svh md:grid md:grid-cols-[16rem_minmax(0,1fr)]">
-        <aside className="hidden flex-col gap-6 overflow-y-auto border-r border-border p-4 md:sticky md:top-0 md:flex md:h-svh">
-          <p className="px-3 font-medium">Admin</p>
+        <aside className="hidden flex-col gap-6 overflow-y-auto border-r border-border bg-[color-mix(in_oklab,var(--background)_97%,black)] p-4 md:sticky md:top-0 md:flex md:h-svh">
+          <Link href="/admin" aria-label="Admin overview" className="block min-w-0 rounded-lg px-2 py-1 no-underline hover:bg-muted"><Brand /></Link>
           <AdminNav dataTools={settings.dataToolsEnabled} unread={unread} />
-          <div className="mt-auto flex items-center gap-1 border-t border-border pt-4">
+          <div className="mt-auto flex min-w-0 items-center gap-1 border-t border-border pt-4">
             <UserMenu me={me} />
-            <ThemeToggle />
           </div>
         </aside>
         <div className="min-w-0">
           <header className="sticky top-0 z-20 flex items-center gap-1 border-b border-border bg-background p-2 md:hidden">
             <MobileNav dataTools={settings.dataToolsEnabled} unread={unread} />
-            <p className="flex-1 font-medium">Admin</p>
-            <ThemeToggle />
+            <Link href="/admin" aria-label="Admin overview" className="min-w-0 flex-1 no-underline"><Brand /></Link>
             <UserMenu me={me} compact />
           </header>
           <main className="p-4 sm:px-8 sm:py-8 xl:px-12">

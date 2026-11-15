@@ -153,7 +153,10 @@ export function EntityForm({ entity, id, initial, submitLabel = "Save", onSaved,
     const v = values[f.name];
     const common = { id: fid, "aria-invalid": Boolean(err), "aria-describedby": desc } as const;
     const locked = Boolean(f.lockedOnEdit && id !== null);
-    const choices = options[f.name] ?? (f.type === "select" || f.type === "multiselect" ? f.options : []);
+    let choices = options[f.name] ?? (f.type === "select" || f.type === "multiselect" ? f.options : []);
+    // "Published" with a future date is a schedule: say so in the select itself, not only in the hint.
+    if (f.name === "status" && publishNote("published", values.published_at, mounted).startsWith("Scheduled"))
+      choices = choices.map((o) => (o.value === "published" ? { ...o, label: "Scheduled (goes live on the date below)" } : o));
     return (
       <div key={f.name} className={cn("flex min-w-0 flex-col gap-1.5", (f.wide || f.type === "richtext") && !f.aside && "sm:col-span-2")}>
         {f.type === "switch" ? (

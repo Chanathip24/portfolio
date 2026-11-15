@@ -1,9 +1,14 @@
+import { format } from "date-fns";
+
+// The public pages print these while being prerendered, where Next forbids `new Date()` with no value, and date-fns' TZDate makes one inside.
+// So the UTC formatters use Intl; date-fns is used where the time is not fixed at build time (the browser, the admin).
 const date = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+const time = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
+const dayMonth = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
 
 /** "14 Oct 2026". Fixed timezone and locale so server and browser print the same text. */
 export const formatDate = (iso: string) => date.format(new Date(iso));
 
-const time = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
 /** "09:41" (UTC, like formatDate). */
 export const formatTime = (iso: string) => time.format(new Date(iso));
 
@@ -20,13 +25,12 @@ const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFracti
 /** 12840 -> "12.8K" */
 export const formatCount = (n: number) => compact.format(n);
 
-const dayMonth = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
 /** "14 Oct" (UTC). */
 export const formatDayMonth = (iso: string) => dayMonth.format(new Date(iso));
 
-const localDateTime = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 /** "14 Oct 2026, 09:41" in the reader's own timezone (for admin fields that edit a local time). */
-export const formatLocalDateTime = (date: Date) => localDateTime.format(date);
+export const formatLocalDateTime = (date: Date) => format(date, "d MMM yyyy, HH:mm");
+
 /** "just now", "5 min ago", "3 h ago", "2 d ago", then a date. Rendered on the server, so the same for everyone. */
 export function timeAgo(iso: string, now = Date.now()) {
   const s = Math.max(0, Math.round((now - new Date(iso).getTime()) / 1000));
@@ -34,5 +38,5 @@ export function timeAgo(iso: string, now = Date.now()) {
   if (s < 3600) return `${Math.floor(s / 60)} min ago`;
   if (s < 86_400) return `${Math.floor(s / 3600)} h ago`;
   if (s < 7 * 86_400) return `${Math.floor(s / 86_400)} d ago`;
-  return dayMonth.format(new Date(iso));
+  return formatDayMonth(iso);
 }

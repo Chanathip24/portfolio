@@ -1,8 +1,9 @@
 import { MailSettings } from "@/components/admin/mail-settings";
 import { PageHeader } from "@/components/admin/page-header";
-import { SettingsPanel } from "@/components/admin/settings-panel";
+import { AppearanceSettings, SettingsPanel, TimeZoneSettings } from "@/components/admin/settings-panel";
 import { getSettings } from "@/lib/admin/data";
 import { getMailStatus, redirectUri } from "@/lib/admin/mail-connection";
+import { DEFAULT_TZ, timeZoneOptions } from "@/lib/tz";
 import { Streamed } from "@/components/admin/page-loading";
 import { FormSkeleton } from "@/components/admin/skeletons";
 
@@ -16,6 +17,8 @@ async function SettingsPageContent({ searchParams }: { searchParams: Promise<{ g
     <>
       <PageHeader title="Settings" description="How the admin itself behaves, and the accounts it connects to." />
       <div className="grid max-w-3xl gap-4">
+        <AppearanceSettings />
+        <TimeZoneSettings value={settings.timezone ?? "default"} options={[{ value: "default", label: `Site default (${DEFAULT_TZ})` }, ...timeZoneOptions()]} />
         <SettingsPanel dataTools={settings.dataToolsEnabled} />
         <MailSettings status={mail} redirectUri={uri} flash={gmail} />
       </div>

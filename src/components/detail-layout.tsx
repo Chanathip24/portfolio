@@ -14,6 +14,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbP
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RichContent } from "@/components/ui/rich-content";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SiteImage } from "@/components/ui/site-image";
 import { headingsOf } from "@/lib/headings";
 
@@ -227,6 +228,20 @@ export function DetailLayout({
       </main>
       {showToc && <MobileToc headings={headings} />}
       <SiteFooter />
+    </>
+  );
+}
+
+/** What a detail page shows while its post or project loads, so a click on a link answers at once. */
+export function DetailSkeleton() {
+  return (
+    <>
+      <SiteNav />
+      <main className="page-x flex-1 pt-28 sm:pt-36" aria-busy="true">
+        <Skeleton className="h-12 w-full max-w-2xl" />
+        <Skeleton className="mt-6 h-5 w-full max-w-xl" />
+        <Skeleton className="mt-12 aspect-[16/9] w-full" />
+      </main>
     </>
   );
 }

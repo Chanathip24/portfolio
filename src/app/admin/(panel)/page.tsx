@@ -11,7 +11,7 @@ import { RankList, SegmentedNav } from "@/components/admin/shared";
 import { UserTiles, roleSlices } from "@/components/admin/user-insights";
 import { Badge } from "@/components/ui/badge";
 import { requireAdmin } from "@/lib/admin/auth";
-import { type ContentSummary, getAdminStatus, getAnalytics, getContentSummary, listAudit, listPosts, listProjects } from "@/lib/admin/data";
+import { type ContentSummary, getAdminStatus, getAnalytics, getContentSummary, getTimeZone, listAudit, listPosts, listProjects } from "@/lib/admin/data";
 import { userStats } from "@/lib/admin/user-stats";
 import { listUsers, usersConfigured } from "@/lib/admin/users";
 import { formatCount, formatDate, timeAgo } from "@/lib/format";
@@ -31,7 +31,7 @@ async function OverviewContent({ searchParams }: { searchParams: Promise<{ range
   const [me, stats, twice, content, audit, admins, posts, projects, users] = await Promise.all([
     requireAdmin(), getAnalytics(days), getAnalytics(days * 2), getContentSummary(), listAudit({ limit: 6 }), getAdminStatus(), listPosts({ creators: false }), listProjects({ creators: false }), usersConfigured ? listUsers() : null,
   ]);
-  const people = users ? userStats(users) : null;
+  const people = users ? userStats(users, 30, undefined, await getTimeZone()) : null;
   // What still needs a decision: scheduled and draft items, soonest first, with where to edit them.
   const waiting = [
     ...posts.map((p) => ({ id: p.id, title: p.title, kind: "Post", href: `/admin/posts/${p.id}`, when: p.published_at, visibility: p.visibility })),
