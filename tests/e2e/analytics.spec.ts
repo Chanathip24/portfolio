@@ -25,8 +25,8 @@ test.describe.serial("analytics", () => {
     await expect.poll(count, { timeout: 10_000 }).toBeGreaterThanOrEqual(before + 4);
 
     const afterVisitors = await count();
-    await page.goto("/blog"); // the signed-in admin: the page sends nothing
-    await page.waitForTimeout(1500);
+    // the signed-in admin: the page does send its beacon, and the server answers 204 without storing it
+    await Promise.all([page.waitForResponse((r) => r.url().includes("/api/track")), page.goto("/blog")]);
     expect(await count()).toBe(afterVisitors);
   });
 

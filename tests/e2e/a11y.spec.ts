@@ -1,6 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import type { Page } from "@playwright/test";
 import { expect, test } from "../support/fixtures";
+import { settled } from "../support/settled";
 
 // Automated accessibility checks (axe, WCAG 2 A and AA). They find the mechanical problems (contrast, names, roles, labels); they do not
 // replace using the site with a keyboard and a screen reader. Only "serious" and "critical" problems fail a test.
@@ -18,7 +19,7 @@ test.describe("public pages (as a visitor)", () => {
       const context = await browser.newContext({ storageState: { cookies: [], origins: [] } });
       const page = await context.newPage();
       await page.goto(path);
-      await page.waitForTimeout(3500); // the home page's intro animation has to finish: axe reads colours as they are drawn
+      await settled(page); // the home page's intro has to finish drawing: axe reads colours as they are on screen
       await check(page);
       await context.close();
     });
@@ -30,7 +31,8 @@ test.describe("the admin (signed in)", () => {
     test(`${path} has no serious or critical accessibility problems`, async ({ page }) => {
       await page.goto(path);
       await expect(page.locator("main h1")).toBeVisible();
-      await page.waitForTimeout(800); // charts and skeletons settle
+      await expect(page.locator("[aria-busy=true]")).toHaveCount(0); // the loading skeleton is gone
+      await settled(page); // charts have finished drawing
       await check(page);
     });
   }

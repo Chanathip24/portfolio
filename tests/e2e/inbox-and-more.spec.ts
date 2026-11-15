@@ -1,6 +1,7 @@
 import { expect, test } from "../support/fixtures";
 import { BASE } from "../support/env";
 import { service } from "../support/db";
+import { settled } from "../support/settled";
 
 const rand = () => Math.random().toString(36).slice(2, 7);
 const REAL_BROWSER = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36";
@@ -197,28 +198,34 @@ test.describe("performance", () => {
 
   test("a real browser visit on the public site records vitals; the same visit signed in to the admin records nothing", async ({ browser, page }) => {
     test.setTimeout(90_000);
-    const count = async () => (await service().from("web_vitals").select("id", { count: "exact", head: true })).count ?? 0;
-    const visit = async (p: import("@playwright/test").Page) => {
-      await p.goto("/blog");
-      await p.waitForTimeout(2000);
+    const vitals = async (paths: string[], since: string) =>
+      (await service().from("web_vitals").select("id", { count: "exact", head: true }).in("path", paths).gte("created_at", since)).count ?? 0;
+    // Leaving a page is when the browser reports its final numbers: load a page, touch it, move on, then leave.
+    const visit = async (p: import("@playwright/test").Page, first: string, second: string) => {
+      await p.goto(first);
+      await settled(p);
       await p.mouse.click(200, 300);
-      await p.goto("/about"); // leaving a page is when the browser reports its final numbers
-      await p.waitForTimeout(2000);
+      await p.goto(second);
+      await settled(p);
       await p.goto("about:blank");
-      await new Promise((r) => setTimeout(r, 1500));
     };
     const start = new Date(Date.now() - 1000).toISOString();
 
-    const before = await count();
-    const ctx = await browser.newContext({ baseURL: BASE, userAgent: REAL_BROWSER, storageState: { cookies: [], origins: [] } });
-    await visit(await ctx.newPage());
-    await ctx.close();
-    const visitor = (await count()) - before;
-    expect(visitor).toBeGreaterThan(0);
+    const first = await visitorContext(browser);
+    await visit(await first.newPage(), "/blog", "/work");
+    await first.close();
+    await expect.poll(() => vitals(["/blog", "/work"], start), { timeout: 15_000 }).toBeGreaterThan(0);
 
-    const mid = await count();
-    await visit(page); // this page carries the admin session
-    expect((await count()) - mid).toBe(0);
+    // The page that carries the admin session visits other pages: it sends its numbers, and the server stores none of them.
+    await visit(page, "/about", "/work/tidewater");
+    // A second visitor is the marker: once its rows are in, rows from the admin visit (sent earlier) would be in too.
+    const mark = new Date().toISOString();
+    const second = await visitorContext(browser);
+    await visit(await second.newPage(), "/blog/sync-without-fear", "/blog");
+    await second.close();
+    await expect.poll(() => vitals(["/blog/sync-without-fear", "/blog"], mark), { timeout: 15_000 }).toBeGreaterThan(0);
+    expect(await vitals(["/about", "/work/tidewater"], start)).toBe(0);
+
     await service().from("web_vitals").delete().gte("created_at", start);
   });
 });
