@@ -9,7 +9,7 @@ test.describe("admin sign-in", () => {
   test.beforeEach(async () => { user = await createUser(); });
   test.afterEach(async () => { await deleteUser(user.id); });
 
-  test("anyone not signed in is sent to the sign-in page", async ({ page }) => {
+  test("anyone not signed in is sent to the sign-in page", { tag: "@smoke" }, async ({ page }) => {
     for (const path of ["/admin", "/admin/posts", "/admin/projects/new", "/admin/profile"]) {
       await page.goto(path);
       await expect(page).toHaveURL(/\/admin\/login$/);
@@ -60,7 +60,7 @@ test.describe("admin sign-in", () => {
     await expect(page.getByRole("heading", { name: "Overview" })).toBeVisible();
   });
 
-  test("later sign-ins ask for a code from the existing authenticator", async ({ page, browser }) => {
+  test("later sign-ins ask for a code from the existing authenticator", { tag: "@smoke" }, async ({ page, browser }) => {
     const secret = await signInWithMfa(page, user);
     const other = await browser.newContext({ baseURL: page.url().replace(/\/admin.*/, "") });
     const second = await other.newPage();

@@ -12,7 +12,7 @@ test.describe("database security", () => {
   });
 
   test.describe("a visitor (anonymous)", () => {
-    test("reads only published posts and projects", async () => {
+    test("reads only published posts and projects", { tag: "@smoke" }, async () => {
       const posts = await anon().from("posts").select("slug,status");
       expect(posts.data!.length).toBeGreaterThan(0);
       expect(posts.data!.every((p) => p.status === "published")).toBe(true);

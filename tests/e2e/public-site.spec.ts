@@ -5,7 +5,7 @@ import { smallTalk } from "../../src/content/site";
 const MONEY = /Money is an integer/;
 
 test.describe("the blog list", () => {
-  test("the search narrows the list, lives in the address, survives a reload, and an empty result can be cleared", async ({ visitor: page }) => {
+  test("the search narrows the list, lives in the address, survives a reload, and an empty result can be cleared", { tag: "@smoke" }, async ({ visitor: page }) => {
     await page.goto("/blog");
     const search = page.getByRole("searchbox", { name: "Search posts" });
     await search.fill("money");
@@ -77,7 +77,7 @@ test.describe("the home page", () => {
     await expect(page.getByText(smallTalk.items[0].a)).toHaveCount(0);
   });
 
-  test("the contact form needs both fields, shows what the server says, and says so when the network fails", async ({ visitor: page }) => {
+  test("the contact form needs both fields, shows what the server says, and says so when the network fails", { tag: "@smoke" }, async ({ visitor: page }) => {
     await page.goto("/");
     const send = page.getByRole("button", { name: "Send question" });
     await expect(send).toBeDisabled();
@@ -101,7 +101,7 @@ test.describe("the home page", () => {
 test.describe("light and dark", () => {
   test.use({ reducedMotion: "reduce" }); // skips the circle animation, which is not what is tested here
 
-  test("the toggle switches the theme, the choice is kept, and it is in place before the page paints", async ({ visitor: page }) => {
+  test("the toggle switches the theme, the choice is kept, and it is in place before the page paints", { tag: "@smoke" }, async ({ visitor: page }) => {
     await page.goto("/about");
     const html = page.locator("html");
     const wasDark = await html.evaluate((el) => el.classList.contains("dark"));
@@ -148,7 +148,7 @@ test.describe("an address that does not exist", () => {
   // A missing post is a 404 that Next streams after the page shell; React logs that as error #419 in a production build.
   test.use({ allowConsoleErrors: true });
 
-  test("is a real 404 with a way back, for a page, and a missing post says so and is hidden from search engines", async ({ visitor: page }) => {
+  test("is a real 404 with a way back, for a page, and a missing post says so and is hidden from search engines", { tag: "@smoke" }, async ({ visitor: page }) => {
     const missing = await page.goto("/no-such-page");
     expect(missing?.status()).toBe(404);
     await expect(page.getByRole("heading", { name: "Page not found" })).toBeVisible();

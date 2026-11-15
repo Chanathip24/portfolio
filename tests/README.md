@@ -16,7 +16,10 @@ npm run build         # the e2e and feature tests run against the production bui
 npm test              # component, then feature, then e2e
 ```
 
-Or one layer: `npm run test:ct`, `npm run test:feature`, `npm run test:e2e`. After a failure, `npm run test:report` opens the HTML report
+Or one layer: `npm run test:ct`, `npm run test:feature`, `npm run test:e2e`. `npm run test:smoke` runs the dozen tests tagged `@smoke`
+(sign-in, the public pages, the policy, the admin sections: about 40 seconds) as a quick "is anything badly broken?" check; on CI they run first in each
+shard and stop the job if one fails. A smoke test must stand alone: not belong to a `describe.serial` chain, because the other tests run in a
+separate command and cannot rely on it having run. After a failure, `npm run test:report` opens the HTML report
 (screenshots and traces are kept for failed tests). The app is started on port 3100 by the test run (`TEST_PORT` to change it), so it
 never clashes with `npm run dev`.
 
