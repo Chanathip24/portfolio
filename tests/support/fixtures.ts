@@ -36,7 +36,15 @@ export async function choose(page: Page, label: string | RegExp, option: string)
  *  as an error by the browser, and several tests cause those on purpose. Anything else the page logs as an error is a real problem. */
 const EXPECTED_CONSOLE = [/Failed to load resource/, /Refused to execute script from .*\/_vercel\/(speed-insights|insights)\/script\.js/]; // the second only happens locally, where Vercel serves no analytics script
 
-export const test = base.extend<{ admin: TestUser; allowConsoleErrors: boolean; consoleGuard: void }, { session: { user: TestUser; state: Awaited<ReturnType<import("@playwright/test").BrowserContext["storageState"]>> } }>({
+/** Collects what a page reports as errors; the list is checked when the test ends. */
+function watchConsole(page: Page) {
+  const problems: string[] = [];
+  page.on("console", (m) => { if (m.type() === "error" && !EXPECTED_CONSOLE.some((rx) => rx.test(m.text()))) problems.push(`console.error: ${m.text()}`); });
+  page.on("pageerror", (e) => problems.push(`uncaught: ${e.message}`));
+  return () => expect(problems, ["The page reported errors:", ...problems].join("\n")).toEqual([]);
+}
+
+export const test = base.extend<{ admin: TestUser; visitor: Page; allowConsoleErrors: boolean; consoleGuard: void }, { session: { user: TestUser; state: Awaited<ReturnType<import("@playwright/test").BrowserContext["storageState"]>> } }>({
   session: [
     async ({ browser }, give) => {
       const user = await createUser();
@@ -65,5 +73,14 @@ export const test = base.extend<{ admin: TestUser; allowConsoleErrors: boolean; 
     },
     { auto: true },
   ],
+  // A signed-out visitor on the same device settings as the project (desktop or phone), watched by the same guard.
+  visitor: async ({ browser, viewport, isMobile, hasTouch, deviceScaleFactor, allowConsoleErrors }, give) => {
+    const context = await browser.newContext({ baseURL: BASE, viewport, isMobile, hasTouch, deviceScaleFactor, storageState: { cookies: [], origins: [] } });
+    const page = await context.newPage();
+    const check = watchConsole(page);
+    await give(page);
+    await context.close();
+    if (!allowConsoleErrors) check();
+  },
   storageState: async ({ session }, give) => give(session.state),
 });
