@@ -1,6 +1,9 @@
 import { choose, expect, test } from "../support/fixtures";
 import { service } from "../support/db";
 
+// Opening a post that was taken off the site is a streamed 404, which React logs as error #419 in a production build.
+test.use({ allowConsoleErrors: true });
+
 // A post is created once and then edited, hidden, broken on purpose and deleted, so these tests run in order.
 test.describe.serial("blog posts in the admin", () => {
   const title = `E2E Post ${Math.random().toString(36).slice(2, 7)}`;

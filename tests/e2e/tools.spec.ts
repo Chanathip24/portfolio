@@ -1,6 +1,9 @@
 import { expect, test } from "../support/fixtures";
 import { service } from "../support/db";
 
+// The test feeds an unsafe logo address (javascript:) on purpose; the browser logs the blocked image.
+test.use({ allowConsoleErrors: true });
+
 const PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==", "base64");
 
 test.describe.serial("tools and their logos", () => {

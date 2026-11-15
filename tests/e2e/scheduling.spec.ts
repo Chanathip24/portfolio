@@ -11,6 +11,9 @@ async function scheduleForNextMonth(page: Page, day: string, time: string) {
   await page.keyboard.press("Escape");
 }
 
+// Opening a post that is not public yet is a 404 that Next streams after the page shell, which React logs as error #419 in a production build.
+test.use({ allowConsoleErrors: true });
+
 test.describe.serial("choosing the publish time", () => {
   const title = `E2E Scheduled ${Math.random().toString(36).slice(2, 7)}`;
   const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-");

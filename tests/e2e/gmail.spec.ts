@@ -1,6 +1,9 @@
 import { expect, test } from "../support/fixtures";
 import { service } from "../support/db";
 
+// The test sends the browser to a fake Google that is not running, so the browser logs a failed fetch.
+test.use({ allowConsoleErrors: true });
+
 const MOCK = `http://localhost:${process.env.MOCK_GOOGLE_PORT ?? "3199"}`;
 const mock = async (path: string) => (await fetch(`${MOCK}${path}`)).json() as Promise<{ expired: boolean; revoked: string[] }>;
 const row = async () => (await service().from("mail_connection").select("*").eq("id", true).single()).data!;

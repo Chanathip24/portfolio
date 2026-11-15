@@ -32,7 +32,11 @@ export async function choose(page: Page, label: string | RegExp, option: string)
 
 /** Tests that use `page` start already signed in as an admin (one throwaway admin per run, MFA done). Specs that test sign-in
  *  itself import `test` from @playwright/test instead and make their own users. */
-export const test = base.extend<{ admin: TestUser }, { session: { user: TestUser; state: Awaited<ReturnType<import("@playwright/test").BrowserContext["storageState"]>> } }>({
+/** Browser console messages that are not bugs in the page: a failed request (a 404 image, a refused sign-in, a rate limit) is logged
+ *  as an error by the browser, and several tests cause those on purpose. Anything else the page logs as an error is a real problem. */
+const EXPECTED_CONSOLE = [/Failed to load resource/, /Refused to execute script from .*\/_vercel\/(speed-insights|insights)\/script\.js/]; // the second only happens locally, where Vercel serves no analytics script
+
+export const test = base.extend<{ admin: TestUser; allowConsoleErrors: boolean; consoleGuard: void }, { session: { user: TestUser; state: Awaited<ReturnType<import("@playwright/test").BrowserContext["storageState"]>> } }>({
   session: [
     async ({ browser }, give) => {
       const user = await createUser();
@@ -47,5 +51,19 @@ export const test = base.extend<{ admin: TestUser }, { session: { user: TestUser
     { scope: "worker" },
   ],
   admin: async ({ session }, give) => give(session.user),
+  // `test.use({ allowConsoleErrors: true })` turns the guard off for a file or group that breaks the page on purpose.
+  allowConsoleErrors: [false, { option: true }],
+  // Fails a test whose page logs an unexpected console error or throws an uncaught exception, so a hydration mismatch or a broken
+  // handler cannot pass unnoticed behind assertions that only look at what is on screen.
+  consoleGuard: [
+    async ({ page, allowConsoleErrors }, give) => {
+      const problems: string[] = [];
+      page.on("console", (m) => { if (m.type() === "error" && !EXPECTED_CONSOLE.some((rx) => rx.test(m.text()))) problems.push(`console.error: ${m.text()}`); });
+      page.on("pageerror", (e) => problems.push(`uncaught: ${e.message}`));
+      await give();
+      if (!allowConsoleErrors) expect(problems, ["The page reported errors:", ...problems].join("\n")).toEqual([]);
+    },
+    { auto: true },
+  ],
   storageState: async ({ session }, give) => give(session.state),
 });
