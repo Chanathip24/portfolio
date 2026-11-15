@@ -34,9 +34,9 @@ test.describe("page-view and vitals beacons are limited per address", () => {
     const [one, other] = [address("203.0.113"), address("198.51.100")];
     const before = await count("page_views");
     for (let i = 0; i < 70; i++) expect((await post(one)).status()).toBe(204); // the answer never changes, so a script learns nothing
-    expect((await count("page_views")) - before).toBe(60);
+    await expect.poll(async () => (await count("page_views")) - before).toBe(60); // written after the answer, so wait for them
     await post(other);
-    expect((await count("page_views")) - before).toBe(61);
+    await expect.poll(async () => (await count("page_views")) - before).toBe(61);
   });
 
   test("one address can send 120 vitals a minute; another address is unaffected", async ({ request }) => {
@@ -44,8 +44,8 @@ test.describe("page-view and vitals beacons are limited per address", () => {
     const [one, other] = [address("192.0.2"), address("198.18.0")];
     const before = await count("web_vitals");
     for (let i = 0; i < 130; i++) expect((await post(one)).status()).toBe(204);
-    expect((await count("web_vitals")) - before).toBe(120);
+    await expect.poll(async () => (await count("web_vitals")) - before).toBe(120);
     await post(other);
-    expect((await count("web_vitals")) - before).toBe(121);
+    await expect.poll(async () => (await count("web_vitals")) - before).toBe(121);
   });
 });

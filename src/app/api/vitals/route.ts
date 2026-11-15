@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { after, NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { BOT, KNOWN_PATH, cleanPath } from "@/lib/analytics";
 import { supabaseConfigured } from "@/lib/supabase/env";
@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) return done;
   const path = cleanPath(parsed.data.path);
   if (!KNOWN_PATH.test(path)) return done;
-  await authAdmin().from("web_vitals").insert({ ...parsed.data, path });
+  // The browser is answered first; the row is written once the response has gone.
+  after(async () => { await authAdmin().from("web_vitals").insert({ ...parsed.data, path }); });
   return done;
 }

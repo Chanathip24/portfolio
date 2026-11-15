@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { after, NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { BOT } from "@/lib/analytics";
 import { recordError } from "@/lib/errors";
@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
   if (!(await sharedLimit(`errors:${ip || "unknown"}`, ip ? 20 : 200)) || !(await sharedLimit("errors:all", 300, { shared: true }))) return done;
   const parsed = body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return done;
-  await recordError({ source: "client", ...parsed.data });
+  // The browser is answered first; the report is stored (and the Inbox told, the first time) once the response has gone.
+  after(() => recordError({ source: "client", ...parsed.data }));
   return done;
 }

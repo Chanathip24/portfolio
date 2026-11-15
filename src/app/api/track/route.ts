@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { NextResponse, type NextRequest } from "next/server";
+import { after, NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { BOT, KNOWN_PATH, cleanPath } from "@/lib/analytics";
 import { supabaseConfigured } from "@/lib/supabase/env";
@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
 
   const day = new Date().toISOString().slice(0, 10);
   const visitor = createHash("sha256").update(`${process.env.ANALYTICS_SALT ?? "dev-salt"}:${day}:${ip}:${ua}`).digest("hex").slice(0, 32);
-  await authAdmin().from("page_views").insert({ path, referrer, visitor });
+  // The visitor is answered first; the row is written once the response has gone.
+  after(async () => { await authAdmin().from("page_views").insert({ path, referrer, visitor }); });
   return done;
 }

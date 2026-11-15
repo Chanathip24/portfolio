@@ -8,6 +8,8 @@ const address = (net: string) => `${net}.${1 + Math.floor(Math.random() * 250)}`
 test.describe("browser error reports", () => {
   const tag = `E2E error ${Date.now().toString(36)}`;
   const rows = async (like = `${tag}%`) => (await service().from("error_events").select("fingerprint,message,path,source,stack").like("message", like).order("id")).data ?? [];
+  // The endpoint answers first and stores afterwards, so a test waits for the rows to appear.
+  const stored = (n: number, like = `${tag}%`) => expect.poll(async () => (await rows(like)).length).toBe(n);
   const notices = async () => (await service().from("messages").select("subject,body,severity,is_read").like("subject", `%${tag}%`)).data ?? [];
 
   test.afterAll(async () => {
@@ -22,19 +24,19 @@ test.describe("browser error reports", () => {
     const stack = "Error: boom\n    at render (app.js:10:5)";
     expect((await report(request, baseURL!, { message: `${tag} one 123`, stack, path: "/blog/hello?utm=x#top" })).status()).toBe(204);
     expect((await report(request, baseURL!, { message: `${tag} one 456`, stack, path: "/blog/hello" })).status()).toBe(204);
-    const stored = await rows();
-    expect(stored).toHaveLength(2);
-    expect(stored[0]).toMatchObject({ source: "client", path: "/blog/hello", message: `${tag} one 123` }); // query and fragment dropped
-    expect(stored[0].fingerprint).toMatch(/^[0-9a-f]{16}$/);
-    expect(stored[1].fingerprint).toBe(stored[0].fingerprint); // only the number in the message differs
+    await stored(2);
+    const saved = await rows();
+    expect(saved[0]).toMatchObject({ source: "client", path: "/blog/hello", message: `${tag} one 123` }); // query and fragment dropped
+    expect(saved[0].fingerprint).toMatch(/^[0-9a-f]{16}$/);
+    expect(saved[1].fingerprint).toBe(saved[0].fingerprint); // only the number in the message differs
   });
 
   test("a different bug gets a different fingerprint", async ({ request, baseURL }) => {
     // Two bugs of its own, so it does not depend on what an earlier test stored.
     await report(request, baseURL!, { message: `${tag} apart one`, stack: "Error: first\n    at here (a.js:1:1)", path: "/about" });
     await report(request, baseURL!, { message: `${tag} apart two`, stack: "Error: other\n    at somewhere (other.js:1:1)", path: "/about" });
+    await stored(2, `${tag} apart%`);
     const mine = await rows(`${tag} apart%`);
-    expect(mine).toHaveLength(2);
     expect(new Set(mine.map((r) => r.fingerprint)).size).toBe(2);
   });
 
@@ -47,7 +49,7 @@ test.describe("browser error reports", () => {
     expect(notice.body).toContain(message);
     expect(notice.body).toContain("/work/tidewater");
     expect(notice.is_read).toBe(false);
-    expect((await rows(`${message}%`)).length).toBe(3); // every occurrence is still counted
+    await stored(3, `${message}%`); // every occurrence is still counted
   });
 
   test("bots, other sites and malformed reports are ignored without an error", async ({ request, baseURL }) => {
@@ -59,7 +61,10 @@ test.describe("browser error reports", () => {
     expect((await report(request, baseURL!, { message: "x".repeat(501), path: "/" })).status()).toBe(204); // too long
     expect((await report(request, baseURL!, { path: "/" })).status()).toBe(204); // no message
     expect((await report(request, baseURL!, "not json")).status()).toBe(204);
-    expect((await rows()).length).toBe(before);
+    // Nothing was scheduled for any of them. A valid report after them is the marker: once it is stored, anything they had written would be too.
+    await report(request, baseURL!, { message: `${tag} marker`, path: "/" });
+    await stored(1, `${tag} marker`);
+    expect((await rows()).length).toBe(before + 1);
   });
 
   test("a flood spread over many addresses is capped overall", async ({ request, baseURL }) => {
@@ -68,7 +73,8 @@ test.describe("browser error reports", () => {
     try {
       const message = `${tag} wide`;
       for (const net of ["203.0.113", "198.51.100", "192.0.2", "198.18.0"]) expect((await report(request, baseURL!, { message, path: "/" }, address(net))).status()).toBe(204);
-      expect((await rows(`${message}%`)).length).toBe(1); // the 300th got in; the rest were turned away, each from an address of its own
+      await stored(1, `${message}%`); // the 300th got in; the rest were turned away, each from an address of its own
+      expect((await rows(`${message}%`)).length).toBe(1);
     } finally {
       await service().from("rate_limits").delete().eq("key", "errors:all");
     }
@@ -78,8 +84,8 @@ test.describe("browser error reports", () => {
     const [one, other] = [address("198.51.100"), address("192.0.2")];
     const message = `${tag} flood`;
     for (let i = 0; i < 25; i++) expect((await report(request, baseURL!, { message, path: "/" }, one)).status()).toBe(204); // the answer never changes
-    expect((await rows(`${message}%`)).length).toBe(20);
+    await stored(20, `${message}%`);
     await report(request, baseURL!, { message, path: "/" }, other);
-    expect((await rows(`${message}%`)).length).toBe(21);
+    await stored(21, `${message}%`);
   });
 });
