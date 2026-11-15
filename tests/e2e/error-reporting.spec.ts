@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { service } from "../support/db";
+import { settled } from "../support/settled";
 
 // Playwright's own Chrome calls itself "HeadlessChrome", which the error endpoint (rightly) treats as a bot.
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
@@ -30,10 +31,13 @@ test.describe("errors thrown in a visitor's browser", () => {
     const context = await browser.newContext({ userAgent: UA });
     await context.addInitScript(() => localStorage.setItem("analytics-consent", "declined"));
     const page = await context.newPage();
+    const reports: string[] = [];
+    page.on("request", (r) => { if (r.url().includes("/api/errors")) reports.push(r.url()); });
     await page.goto("/about");
-    await page.waitForLoadState("networkidle"); // same readiness as above, without the notice (an opted-out visitor does not get one)
+    await settled(page); // the error listener is attached (an opted-out visitor gets no notice to wait for)
     await throwLater(page, `${tag} private`);
-    await page.waitForTimeout(2500);
+    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 0))); // the error event was queued first, so it has run by now
+    expect(reports).toHaveLength(0); // the browser did not even try to send it
     expect(await stored(`${tag} private`)).toHaveLength(0);
     await context.close();
   });

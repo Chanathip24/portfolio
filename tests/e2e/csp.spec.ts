@@ -1,4 +1,5 @@
 import { test, expect } from "../support/fixtures";
+import { settled } from "../support/settled";
 
 test("public pages hydrate under CSP and the policy limits where scripts and data can go", async ({ browser }) => {
   const context = await browser.newContext({ storageState: { cookies: [], origins: [] } });
@@ -19,7 +20,7 @@ test("public pages hydrate under CSP and the policy limits where scripts and dat
     // Scripts may come from this site only (plus inline ones, which Next needs so pages can be pre-rendered).
     expect(/script-src ([^;]+)/.exec(csp)![1]).not.toMatch(/https?:\/\/(?!va\.vercel-scripts\.com)/);
     await expect(page.locator("body")).toBeVisible();
-    await page.waitForTimeout(250);
+    await settled(page); // scripts have run, so any violation has been reported
     expect(await page.evaluate(() => (window as unknown as { violations: string[] }).violations)).toEqual([]);
   }
   await context.close();
