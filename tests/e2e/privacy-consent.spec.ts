@@ -22,7 +22,7 @@ test.describe("privacy and consent", () => {
     expect(sitemap).toContain("/privacy");
   });
 
-  test("a new visitor sees the notice and is counted; Opt out stops the counting and the notice does not come back", async ({ browser }) => {
+  test("a new visitor sees the notice and is counted; Opt out stops the counting and the notice does not come back", { tag: "@smoke" }, async ({ browser }) => {
     const context = await browser.newContext();
     const page = await context.newPage();
     const sent = sentViews(page);

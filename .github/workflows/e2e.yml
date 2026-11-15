@@ -1,6 +1,6 @@
 name: End-to-end
 
-# Feature and end-to-end tests in three shards at once. Each shard has its own local Supabase and build, so data never collides.
+# Feature and end-to-end tests in three shards at once, the @smoke ones first in each. Each shard has its own local Supabase and build, so data never collides.
 # Called by ci.yml.
 on: workflow_call
 
@@ -42,7 +42,16 @@ jobs:
           key: next-e2e-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**') }}
           restore-keys: next-e2e-${{ hashFiles('package-lock.json') }}-
       - run: npm run build
-      - run: npx playwright test --shard=${{ matrix.shard }}/3
+      # The few tests that must always pass run first (tagged @smoke). If one fails the job stops there, so a broken build is reported after
+      # about a minute of tests instead of after all of them. Each run writes its own blob, so the smoke one goes to a folder of its own.
+      - name: Smoke tests
+        run: npx playwright test --shard=${{ matrix.shard }}/3 --grep @smoke
+        env: { PLAYWRIGHT_BLOB_OUTPUT_DIR: blob-report-smoke }
+      - name: The rest of the tests
+        run: npx playwright test --shard=${{ matrix.shard }}/3 --grep-invert @smoke
+      - name: Gather the reports
+        if: ${{ !cancelled() }}
+        run: mkdir -p blob-report && cp blob-report-smoke/*.zip blob-report/ || true
       - uses: actions/upload-artifact@v7
         if: ${{ !cancelled() }}
         with:
