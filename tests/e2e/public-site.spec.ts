@@ -99,7 +99,7 @@ test.describe("the home page", () => {
 });
 
 test.describe("light and dark", () => {
-  test.use({ reducedMotion: "reduce" }); // skips the circle animation, which is not what is tested here
+  test.use({ contextOptions: { reducedMotion: "reduce" } }); // skips the circle animation, which is not what is tested here
 
   test("the toggle switches the theme, the choice is kept, and it is in place before the page paints", async ({ visitor: page }) => {
     await page.goto("/about");
