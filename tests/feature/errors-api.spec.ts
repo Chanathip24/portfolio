@@ -30,9 +30,12 @@ test.describe("browser error reports", () => {
   });
 
   test("a different bug gets a different fingerprint", async ({ request, baseURL }) => {
-    await report(request, baseURL!, { message: `${tag} two`, stack: "Error: other\n    at somewhere (other.js:1:1)", path: "/about" });
-    const all = await rows();
-    expect(new Set(all.map((r) => r.fingerprint)).size).toBe(2);
+    // Two bugs of its own, so it does not depend on what an earlier test stored.
+    await report(request, baseURL!, { message: `${tag} apart one`, stack: "Error: first\n    at here (a.js:1:1)", path: "/about" });
+    await report(request, baseURL!, { message: `${tag} apart two`, stack: "Error: other\n    at somewhere (other.js:1:1)", path: "/about" });
+    const mine = await rows(`${tag} apart%`);
+    expect(mine).toHaveLength(2);
+    expect(new Set(mine.map((r) => r.fingerprint)).size).toBe(2);
   });
 
   test("the Inbox is told once, the first time a new bug appears", async ({ request, baseURL }) => {
