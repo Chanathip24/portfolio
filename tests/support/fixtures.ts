@@ -74,8 +74,8 @@ export const test = base.extend<{ admin: TestUser; visitor: Page; allowConsoleEr
     { auto: true },
   ],
   // A signed-out visitor on the same device settings as the project (desktop or phone), watched by the same guard.
-  visitor: async ({ browser, viewport, isMobile, hasTouch, deviceScaleFactor, allowConsoleErrors }, give) => {
-    const context = await browser.newContext({ baseURL: BASE, viewport, isMobile, hasTouch, deviceScaleFactor, storageState: { cookies: [], origins: [] } });
+  visitor: async ({ browser, contextOptions, viewport, isMobile, hasTouch, deviceScaleFactor, allowConsoleErrors }, give) => {
+    const context = await browser.newContext({ ...contextOptions, baseURL: BASE, viewport, isMobile, hasTouch, deviceScaleFactor, storageState: { cookies: [], origins: [] } });
     const page = await context.newPage();
     const check = watchConsole(page);
     await give(page);
