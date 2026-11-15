@@ -2,13 +2,35 @@
 
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
-import { useEffect, useRef } from "react";
-import { Globe } from "@/components/globe";
+import dynamic from "next/dynamic";
+import { type ComponentProps, useEffect, useRef, useState } from "react";
+import type { Globe as GlobeCanvasType } from "@/components/globe";
 import { onThemeChange } from "@/lib/site-store";
 import { EASE } from "@/lib/constants";
 import { SectionId } from "@/lib/enums";
 
 type Pin = { label: string; lat: number; lon: number };
+
+// The globe (and the map data it draws from) is the heaviest thing on the home page, and its scene is far below the first screen,
+// so it is fetched only when the scene is about a screen away: the box keeps its size meanwhile, so nothing moves when it arrives.
+const GlobeCanvas = dynamic(() => import("@/components/globe").then((m) => m.Globe), { ssr: false });
+
+function Globe({ near, className, ...props }: ComponentProps<typeof GlobeCanvasType> & { near: boolean }) {
+  return <div className={`relative ${className ?? ""}`}>{near && <GlobeCanvas {...props} className="size-full" />}</div>;
+}
+
+/** True once the element is within a screen of the viewport, and stays true. */
+function useNear(ref: React.RefObject<Element | null>) {
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || near) return;
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), { rootMargin: "100% 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ref, near]);
+  return near;
+}
 
 /* ---------------------------------------------------------------------------
  * About scene (320vh), matching the reference's sequence:
@@ -26,6 +48,7 @@ export function GlobeScene({ pin, heading, body, primary }: {
   primary: { label: string; href: string };
 }) {
   const ref = useRef<HTMLElement>(null);
+  const near = useNear(ref);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
   const p = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.6 });
@@ -50,7 +73,7 @@ export function GlobeScene({ pin, heading, body, primary }: {
   if (reduce) {
     return (
       <section ref={ref} id={SectionId.About} aria-labelledby="about-title" className="sky-scene relative bg-brand-ink py-24">
-        <Globe focus={reducedFocus} pin={pin} className="mx-auto size-[min(80vw,26rem)]" />
+        <Globe near={near} focus={reducedFocus} pin={pin} className="mx-auto size-[min(80vw,26rem)]" />
         <Copy heading={heading} body={body} primary={primary} />
       </section>
     );
@@ -63,7 +86,7 @@ export function GlobeScene({ pin, heading, body, primary }: {
       <div className="sticky top-0 h-svh [clip-path:inset(-100vh_0_0_0)]">
         <motion.div aria-hidden style={{ opacity: bg }} className="absolute inset-0 bg-brand-ink" />
         <motion.div style={{ scale, y }} className="absolute left-1/2 top-1/2 size-[min(80vw,80vh)] -translate-x-1/2 -translate-y-1/2">
-          <Globe focus={focus} pin={pin} outerScale={scale} className="size-full" />
+          <Globe near={near} focus={focus} pin={pin} outerScale={scale} className="size-full" />
         </motion.div>
         <motion.div style={{ opacity: copyOpacity, y: copyY }} className="absolute inset-x-0 bottom-0 pb-12 sm:pb-16">
           <Copy heading={heading} body={body} primary={primary} />
