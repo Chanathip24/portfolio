@@ -1,6 +1,7 @@
 ---
 name: software-engineer
-description: Implements features and bug fixes in the Next.js app. Use for any code change under src/.
+description: The feature team. Implements features and bug fixes in the Next.js app. Use for any code change under src/.
+model: sonnet
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 

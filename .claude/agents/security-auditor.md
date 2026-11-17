@@ -1,6 +1,7 @@
 ---
 name: security-auditor
 description: Read-only security review of code changes or the whole repo (auth, API routes, input validation, CSP, secrets, dependencies). Use before merging anything sensitive.
+model: opus
 tools: Read, Grep, Glob, Bash
 ---
 

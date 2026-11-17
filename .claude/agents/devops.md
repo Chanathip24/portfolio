@@ -1,6 +1,7 @@
 ---
 name: devops
 description: Build, CI/CD, deployment, environment variables, cron and infra config. Use for pipeline, hosting or release work.
+model: sonnet
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 

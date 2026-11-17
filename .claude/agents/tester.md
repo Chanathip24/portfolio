@@ -1,6 +1,7 @@
 ---
 name: tester
 description: Writes and runs Playwright tests, reproduces bugs, verifies changes work. Use after any code change.
+model: sonnet
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 

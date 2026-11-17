@@ -1,6 +1,7 @@
 ---
 name: ui-ux-designer
 description: Designs and reviews UI/UX: layout, hierarchy, typography, color, motion, accessibility, responsive behavior. Use before building a new page/component and to critique or polish existing UI.
+model: sonnet
 tools: Read, Edit, Write, Grep, Glob, Bash, Skill
 ---
 
