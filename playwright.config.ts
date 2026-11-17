@@ -30,7 +30,7 @@ export default defineConfig({
   projects: [
     { name: "feature", testMatch: /feature\/.*\.spec\.ts/ },
     { name: "e2e-desktop", testMatch: /e2e\/(?!phone).*\.spec\.ts/ },
-    { name: "e2e-phone", testMatch: /e2e\/phone.*\.spec\.ts/, use: { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 } },
+    { name: "e2e-phone", testMatch: /e2e\/(phone.*|public-query|contact-form)\.spec\.ts/, use: { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 } },
   ],
   webServer: [
     // A fake Google for the "Connect Gmail" tests (tests/support/mock-google.mjs).
