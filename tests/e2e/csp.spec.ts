@@ -1,7 +1,7 @@
 import { test, expect } from "../support/fixtures";
 import { settled } from "../support/settled";
 
-test("public pages hydrate under CSP and the policy limits where scripts and data can go", async ({ browser }) => {
+test("public pages hydrate under CSP and the policy limits where scripts and data can go", { tag: "@smoke" }, async ({ browser }) => {
   const context = await browser.newContext({ storageState: { cookies: [], origins: [] } });
   const page = await context.newPage();
   await page.addInitScript(() => {
@@ -26,7 +26,7 @@ test("public pages hydrate under CSP and the policy limits where scripts and dat
   await context.close();
 });
 
-test("every admin section works under the policy", async ({ page }) => {
+test("every admin section works under the policy", { tag: "@smoke" }, async ({ page }) => {
   const violations: string[] = [];
   page.on("console", (message) => { if (/Content Security Policy|violates.*directive/i.test(message.text())) violations.push(message.text()); });
   for (const path of ["", "/posts", "/posts/new", "/projects", "/projects/new", "/profile", "/about", "/categories", "/users", "/account", "/activity", "/settings", "/inbox", "/history", "/performance", "/data", "/media"]) {

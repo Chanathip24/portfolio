@@ -15,6 +15,7 @@
     "test": "npm run test:ct && npm run test:feature && npm run test:e2e",
     "test:ct": "playwright test -c playwright-ct.config.ts",
     "test:feature": "playwright test --project=feature",
+    "test:smoke": "playwright test --grep @smoke",
     "test:e2e": "playwright test --project=e2e-desktop --project=e2e-phone",
     "test:report": "playwright show-report"
   },

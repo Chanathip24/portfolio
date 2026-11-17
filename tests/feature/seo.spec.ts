@@ -61,7 +61,7 @@ test.describe("search and sharing", () => {
     expect((await request.get("/opengraph-image")).headers()["content-type"]).toBe("image/png");
   });
 
-  test("a missing page answers 404 with the site's own page, and a missing post or project shows it too, marked noindex", async ({ request }) => {
+  test("a missing page answers 404 with the site's own page, and a missing post or project shows it too, marked noindex", { tag: "@smoke" }, async ({ request }) => {
     const gone = await request.get("/nowhere-at-all");
     expect(gone.status()).toBe(404);
     expect(await gone.text()).toContain("Page not found");

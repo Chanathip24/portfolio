@@ -15,7 +15,7 @@ const check = async (page: Page) => {
 
 test.describe("public pages (as a visitor)", () => {
   for (const path of ["/", "/blog", "/about", "/privacy", "/blog/sync-without-fear", "/work/tidewater"]) {
-    test(`${path} has no serious or critical accessibility problems`, async ({ browser }) => {
+    test(`${path} has no serious or critical accessibility problems`, path === "/" ? { tag: "@smoke" } : {}, async ({ browser }) => {
       const context = await browser.newContext({ storageState: { cookies: [], origins: [] } });
       const page = await context.newPage();
       await page.goto(path);
@@ -28,7 +28,7 @@ test.describe("public pages (as a visitor)", () => {
 
 test.describe("the admin (signed in)", () => {
   for (const path of ["/admin", "/admin/posts", "/admin/activity", "/admin/errors", "/admin/settings", "/admin/users"]) {
-    test(`${path} has no serious or critical accessibility problems`, async ({ page }) => {
+    test(`${path} has no serious or critical accessibility problems`, path === "/admin" ? { tag: "@smoke" } : {}, async ({ page }) => {
       await page.goto(path);
       await expect(page.locator("main h1")).toBeVisible();
       await expect(page.locator("[aria-busy=true]")).toHaveCount(0); // the loading skeleton is gone
