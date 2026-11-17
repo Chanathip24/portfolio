@@ -4,6 +4,8 @@ This takes the site from your machine to a live address: the public site and `/a
 
 Do the steps in order. The most common mistake is deploying before the environment variables are set (see step 4).
 
+Not on Vercel? Set `TRUSTED_PROXY_IP_HEADER` (README, Request and session security).
+
 ## What you need
 
 - A GitHub (or GitLab, Bitbucket) repository with this project pushed to it.
@@ -147,6 +149,7 @@ Vercel builds every pull request as a preview. Keep previews away from your real
 | Sign-in does nothing, or "Wrong email or password" with the right password | The Email provider is off, or you never created the user (step 3). |
 | Signed in, then sent back to the sign-in page | The email is not in the `admins` table (step 3.2), or MFA is not enabled in Supabase Auth. |
 | "Too many attempts" | Five wrong passwords for one address in ten minutes. Wait ten minutes. |
+| Not on Vercel: visitors get 429 ("Too many requests") or contact says "a few messages already" | `TRUSTED_PROXY_IP_HEADER` is unset, so every visitor shares one "unknown" limit. See README, Request and session security. |
 | Users, Inbox, rate limiting or security notices do nothing | `SUPABASE_SERVICE_ROLE_KEY` is missing on Vercel. |
 | Images from uploads do not show | The Supabase URL variable is missing or wrong, or the build used an old one. Fix it and redeploy. |
 | Share links show the wrong address | `NEXT_PUBLIC_SITE_URL` is missing or has a trailing slash. |
