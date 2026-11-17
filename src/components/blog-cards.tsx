@@ -37,7 +37,7 @@ export function Marked({ text, query }: { text: string; query: string }) {
  */
 export function PostCard({ post, query }: { post: Post; query: string }) {
   return (
-    <Link href={`/blog/${post.slug}`} className="group grid h-full grid-cols-[6.5rem_minmax(0,1fr)] gap-x-4 no-underline sm:flex sm:flex-col">
+    <Link href={`/blog/${post.slug}`} prefetch className="group grid h-full grid-cols-[6.5rem_minmax(0,1fr)] gap-x-4 no-underline sm:flex sm:flex-col">
       <span className="block self-start overflow-hidden rounded-xl bg-tile sm:rounded-2xl">
         <SiteImage
           src={post.image}

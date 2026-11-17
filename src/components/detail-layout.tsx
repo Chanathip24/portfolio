@@ -179,7 +179,7 @@ export function DetailLayout({
             <Separator />
             <div className="grid md:grid-cols-2">
               {adjacent.prev ? (
-                <Link href={adjacent.prev.href} className="group block py-8 no-underline md:pr-8">
+                <Link href={adjacent.prev.href} prefetch className="group block py-8 no-underline md:pr-8">
                   <span className="flex items-center gap-2 text-sm text-muted-foreground">
                     <ArrowLeft aria-hidden className="size-4 transition-transform duration-300 group-hover:-translate-x-1" strokeWidth={2} />
                     {adjacent.prev.label}
@@ -190,7 +190,7 @@ export function DetailLayout({
                 <span aria-hidden />
               )}
               {adjacent.next && (
-                <Link href={adjacent.next.href} className="group block border-t border-border py-8 no-underline md:border-l md:border-t-0 md:pl-8 md:text-right">
+                <Link href={adjacent.next.href} prefetch className="group block border-t border-border py-8 no-underline md:border-l md:border-t-0 md:pl-8 md:text-right">
                   <span className="flex items-center gap-2 text-sm text-muted-foreground md:justify-end">
                     {adjacent.next.label}
                     <ArrowRight aria-hidden className="size-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2} />
@@ -209,7 +209,7 @@ export function DetailLayout({
             <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {related.items.map((r) => (
                 <li key={r.href}>
-                  <Link href={r.href} className="group block h-full no-underline">
+                  <Link href={r.href} prefetch className="group block h-full no-underline">
                     <Card className="h-full gap-0 py-0 transition-shadow duration-300 group-hover:ring-foreground/30">
                       <span className="block overflow-hidden bg-tile">
                         <SiteImage src={r.image} alt="" width={720} height={540} sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw" className="aspect-[4/3] w-full object-cover transition-[scale] duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]" />

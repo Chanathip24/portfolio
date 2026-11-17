@@ -32,6 +32,7 @@ export async function BlogSection() {
           <li key={p.slug} className="border-t border-border">
             <Link
               href={`/blog/${p.slug}`}
+              prefetch
               className="dim-item group grid items-center gap-x-10 gap-y-5 py-8 no-underline md:grid-cols-[7rem_minmax(0,1fr)_15rem] md:py-10"
             >
               <time dateTime={p.publishedAt} className="hidden text-sm tabular-nums text-muted-foreground md:block">{formatDate(p.publishedAt)}</time>
