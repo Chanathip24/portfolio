@@ -1,3 +1,4 @@
+import { HydrationBoundary } from "@tanstack/react-query";
 import type { Metadata } from "next";
 import { Career } from "@/components/about/career";
 import { Intro } from "@/components/about/intro";
@@ -5,7 +6,8 @@ import { Skills } from "@/components/about/skills";
 import { Testimonials } from "@/components/about/testimonials";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
-import { getCareer, getProfile, getSkillGroups, getSkills, getTestimonials, getTools } from "@/lib/api/about";
+import { getProfile, getTools } from "@/lib/api/about";
+import { aboutState } from "@/lib/api/public";
 
 export const metadata: Metadata = {
   title: "About · Your Name",
@@ -13,15 +15,17 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const [profile, career, skills, groups, tools, testimonials] = await Promise.all([getProfile(), getCareer(), getSkills(), getSkillGroups(), getTools(), getTestimonials()]);
+  const [profile, tools, state] = await Promise.all([getProfile(), getTools(), aboutState()]);
   return (
     <>
       <SiteNav />
       <main className="flex-1 overflow-x-clip">
         <Intro profile={profile} tools={tools} />
-        <Testimonials items={testimonials} />
-        <Career entries={career} />
-        <Skills skills={skills} groups={groups} />
+        <HydrationBoundary state={state}>
+          <Testimonials />
+          <Career />
+          <Skills />
+        </HydrationBoundary>
       </main>
       <SiteFooter />
     </>

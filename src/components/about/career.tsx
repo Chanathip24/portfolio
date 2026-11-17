@@ -1,9 +1,11 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Parallax } from "@/components/ui/parallax";
+import { publicQueries } from "@/lib/api/queries";
 import type { CareerRow } from "@/lib/api/types";
 import { EASE } from "@/lib/constants";
 import { CareerKind } from "@/lib/enums";
@@ -88,7 +90,8 @@ function Entry({ entry }: { entry: CareerRow }) {
  * between entries fills as you read down it, and pixel squares float at three depths behind. All of it holds still
  * when reduced motion is on.
  */
-export function Career({ entries }: { entries: CareerRow[] }) {
+export function Career() {
+  const entries = useSuspenseQuery(publicQueries.about).data.career; // hydrated by the About page
   return (
     <section aria-labelledby="career-title" className="relative pt-40">
       <PixelDepth />

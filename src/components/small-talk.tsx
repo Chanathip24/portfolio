@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation } from "@tanstack/react-query";
 import { ArrowUp, Plus } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useId, useState } from "react";
@@ -18,22 +19,25 @@ export function SmallTalk() {
   const [open, setOpen] = useState<number | null>(null);
   const [q, setQ] = useState("");
   const [email, setEmail] = useState("");
-  const [state, setState] = useState<{ ok: boolean; text: string } | null>(null);
-  const [busy, setBusy] = useState(false);
   const base = useId();
 
-  /** Sends the question to the site owner's inbox (see /api/contact). */
-  const ask = async (e: React.FormEvent) => {
+  /** Sends the question to the site owner's inbox (see /api/contact). The server's reply, good or bad, is what the visitor reads. */
+  const send = useMutation({
+    networkMode: "always", // offline should fail and say so, not wait silently for the connection
+    mutationFn: async (body: { email: string; message: string; website: FormDataEntryValue }) => {
+      const res = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const data = (await res.json().catch(() => ({}))) as { message?: string };
+      return { ok: res.ok, text: data.message ?? (res.ok ? "Sent." : "Could not send that.") };
+    },
+    onSuccess: ({ ok }) => { if (ok) { setQ(""); setEmail(""); } },
+  });
+  const busy = send.isPending;
+  const state = send.isError ? { ok: false, text: "Could not send that. Check your connection." } : send.data;
+
+  const ask = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!q.trim() || busy) return;
-    setBusy(true); setState(null);
-    try {
-      const res = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, message: q, website: new FormData(e.currentTarget as HTMLFormElement).get("website") ?? "" }) });
-      const data = (await res.json().catch(() => ({}))) as { message?: string };
-      setState({ ok: res.ok, text: data.message ?? (res.ok ? "Sent." : "Could not send that.") });
-      if (res.ok) { setQ(""); setEmail(""); }
-    } catch { setState({ ok: false, text: "Could not send that. Check your connection." }); }
-    setBusy(false);
+    send.mutate({ email, message: q, website: new FormData(e.currentTarget).get("website") ?? "" });
   };
 
   return (
