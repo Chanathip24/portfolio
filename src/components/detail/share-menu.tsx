@@ -1,15 +1,16 @@
 "use client";
 
-import { Check, Link2, Mail, Share2 } from "lucide-react";
+import { Check, Share2 } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { FaLinkedinIn } from "react-icons/fa6";
-import { SiX } from "react-icons/si";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
 // Static facts about the device: nothing to subscribe to. false on the server, so the first render matches.
 const noSubscribe = () => () => {};
+// The menu list is its own chunk: fetched when the pointer or focus reaches the button, mounted on the first open.
+const loadList = () => import("./share-menu-list");
+const ShareMenuList = dynamic(loadList, { ssr: false });
 const canShareNatively = () => matchMedia("(hover: none)").matches && typeof navigator.share === "function";
 
 /**
@@ -19,6 +20,9 @@ const canShareNatively = () => matchMedia("(hover: none)").matches && typeof nav
 export function ShareMenu({ title, className }: { title: string; className?: string }) {
   const native = useSyncExternalStore(noSubscribe, canShareNatively, () => false);
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
+  const [listOpen, setListOpen] = useState(false);
+  const [listMounted, setListMounted] = useState(false);
+  const trigger = useRef<HTMLButtonElement>(null);
   const timer = useRef(0);
 
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -37,8 +41,6 @@ export function ShareMenu({ title, className }: { title: string; className?: str
       flash("failed");
     }
   };
-  const open = (url: string) => window.open(url, "_blank", "noopener,noreferrer");
-  const enc = encodeURIComponent;
 
   const label = state === "copied" ? "Link copied" : state === "failed" ? "Copy failed" : "Share";
   const content = (
@@ -66,22 +68,24 @@ export function ShareMenu({ title, className }: { title: string; className?: str
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger render={<Button type="button" variant="outline" className={buttonClass} />}>{content}</DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-56">
-        <DropdownMenuItem onClick={copy}>
-          <Link2 aria-hidden /> Copy link
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => open(`https://twitter.com/intent/tweet?text=${enc(title)}&url=${enc(location.href)}`)}>
-          <SiX aria-hidden /> Post on X
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => open(`https://www.linkedin.com/sharing/share-offsite/?url=${enc(location.href)}`)}>
-          <FaLinkedinIn aria-hidden /> Share on LinkedIn
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => (location.href = `mailto:?subject=${enc(title)}&body=${enc(location.href)}`)}>
-          <Mail aria-hidden /> Send by email
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <Button
+        ref={trigger}
+        type="button"
+        variant="outline"
+        className={buttonClass}
+        aria-haspopup="menu"
+        aria-expanded={listOpen}
+        onPointerEnter={loadList}
+        onFocus={loadList}
+        onClick={() => {
+          setListMounted(true);
+          setListOpen((o) => !o);
+        }}
+      >
+        {content}
+      </Button>
+      {listMounted && <ShareMenuList trigger={trigger} open={listOpen} onOpenChange={setListOpen} title={title} onCopy={copy} />}
+    </>
   );
 }
