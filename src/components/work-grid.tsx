@@ -1,5 +1,6 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowUpRight, Plus } from "lucide-react";
 import dynamic from "next/dynamic";
 import { motion, useReducedMotion } from "motion/react";
@@ -9,6 +10,7 @@ import { SiteImage } from "@/components/ui/site-image";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link } from "next-view-transitions";
 import type { WorkItem } from "@/lib/api/projects";
+import { publicQueries } from "@/lib/api/queries";
 import { EASE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -60,7 +62,8 @@ type TagFilter = string;
  * on the right). Clicking any project opens a live preview in a dialog instead of leaving the page; from there the visitor
  * goes to the project's detail page or to the project itself.
  */
-export function WorkShowcase({ signature, others, categories }: { signature: WorkItem[]; others: WorkItem[]; categories: string[] }) {
+export function WorkShowcase() {
+  const { signature, others, categories } = useSuspenseQuery(publicQueries.work).data; // hydrated by the home page
   const [tag, setTag] = useState<TagFilter>("all");
   const [preview, setPreview] = useState<WorkItem | null>(null);
   const [previewUsed, setPreviewUsed] = useState(false);

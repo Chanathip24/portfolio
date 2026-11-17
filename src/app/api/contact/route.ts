@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { authAdmin, usersConfigured } from "@/lib/admin/users";
 import { supabaseConfigured } from "@/lib/supabase/env";
+import { withRequestLog } from "@/lib/request-log";
 import { privateKey, sameOrigin, trustedClientIp } from "@/lib/request-security";
 
 const body = z.object({
@@ -14,7 +15,7 @@ const json = (status: number, message: string) => NextResponse.json({ message },
 
 /** The contact form. Stores a plain message in the admin's inbox. Same-site requests only, a hidden field catches simple bots, and one
  *  address can send at most three messages an hour (counted with the service key, which is only ever used here, on the server). */
-export async function POST(req: NextRequest) {
+export const POST = withRequestLog(async (req: NextRequest) => {
   if (!supabaseConfigured || !usersConfigured) return json(503, "Messages are not switched on here. Write to the address in the footer instead.");
   if (!sameOrigin(req)) return json(403, "Not allowed.");
   const parsed = body.safeParse(await req.json().catch(() => null));
@@ -32,4 +33,4 @@ export async function POST(req: NextRequest) {
   const { error } = await authAdmin().from("messages").insert({ source: "contact", kind: "message", severity: "info", from_name: name, from_email: email, subject, body: message });
   if (error) return json(500, "Could not send that. Try again in a moment.");
   return NextResponse.json({ message: "Sent. Thank you, I will write back." }, { status: 201 });
-}
+});

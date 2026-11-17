@@ -18,7 +18,7 @@ export default function PrivacyPage() {
       <SiteNav />
       <main className="page-x flex-1 pt-28 sm:pt-36">
         <article className="max-w-2xl text-base leading-relaxed">
-          <p className="text-sm text-muted-foreground">Last updated 14 November 2026</p>
+          <p className="text-sm text-muted-foreground">Last updated 17 November 2026</p>
           <h1 className="mt-2 text-[clamp(2.5rem,5vw,4rem)] font-medium leading-[0.95] tracking-[-0.03em]">Privacy</h1>
           <p className="mt-6 text-lg text-muted-foreground">
             This is a personal site. It collects very little, it has no ads, and it sets no tracking cookies. Here is exactly what happens.
@@ -45,6 +45,7 @@ export default function PrivacyPage() {
             <li><span className="text-foreground">Server errors.</span> If the site itself fails, the error and the page address are recorded. No personal details about you are included.</li>
             <li><span className="text-foreground">Hosting.</span> Like any web host, the servers that deliver this site can see your IP address and browser while they answer a request, and may keep that in their own logs.</li>
             <li><span className="text-foreground">Fonts.</span> A display font is loaded from a font service (onlinewebfonts.com), which therefore sees your IP address when the page loads.</li>
+            <li><span className="text-foreground">Saved page content.</span> To load faster, your browser keeps a copy of the public posts, work and about content in its local storage, under &quot;public-query-cache&quot;, for up to 24 hours. It holds no personal data and is never sent anywhere. To clear it, clear this site&apos;s data in your browser settings.</li>
           </ul>
 
           <h2 className={h2}>Who handles the data</h2>

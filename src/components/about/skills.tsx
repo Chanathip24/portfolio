@@ -1,13 +1,14 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { getSkills } from "@/lib/api/about";
+import { publicQueries } from "@/lib/api/queries";
 import { Parallax } from "@/components/ui/parallax";
 
-type Skills = Awaited<ReturnType<typeof getSkills>>;
 
 /** Skills by area. Each is a name, one honest line about how it is used, and years; a list, not a grid of badges. */
-export function Skills({ skills, groups: allGroups }: { skills: Skills; groups: { slug: string; name: string }[] }) {
+export function Skills() {
+  const { skills, groups: allGroups } = useSuspenseQuery(publicQueries.about).data; // hydrated by the About page
   // A group with no skills yet is not shown.
   const groups = allGroups.filter((g) => skills.some((s) => s.group === g.slug));
   if (groups.length === 0) return null;

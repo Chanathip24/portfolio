@@ -1,5 +1,6 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useLenis } from "lenis/react";
 import { ArrowUpDown, Search, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -10,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { Post } from "@/lib/api/posts";
+import { publicQueries } from "@/lib/api/queries";
 import { EASE } from "@/lib/constants";
 import { PostSort } from "@/lib/enums";
 import { cn } from "@/lib/utils";
@@ -37,7 +38,8 @@ type Next = { category?: string | null; q?: string; sort?: PostSort; page?: numb
  * and pagination. Everything the reader chose lives in the URL (?category=data&q=money&sort=views&page=2), so a view
  * can be shared and survives a reload; the URL is the state.
  */
-export function BlogList({ posts, categories }: { posts: Post[]; categories: { slug: string; name: string }[] }) {
+export function BlogList() {
+  const { posts, categories } = useSuspenseQuery(publicQueries.posts).data; // hydrated by the page, so it never suspends on first paint
   const pathname = usePathname();
   const params = useSearchParams();
   const lenis = useLenis();

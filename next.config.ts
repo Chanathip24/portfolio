@@ -7,6 +7,8 @@ const localSupabase = supabaseUrl !== null && ["127.0.0.1", "localhost"].include
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  // Busts the browser's saved query cache (src/app/providers.tsx) on every build, so data saved in an older shape is never read back.
+  env: { NEXT_PUBLIC_BUILD_ID: process.env.VERCEL_DEPLOYMENT_ID ?? String(Date.now()) },
   partialPrefetching: true,
   images: supabaseUrl
     ? {

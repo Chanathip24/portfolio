@@ -46,7 +46,10 @@ const supabaseAdapter: AxiosAdapter = async (config) => {
   return respond(config, status, data);
 };
 
+/** Where reads are answered from; also written to the request log. */
+export const dataSource = process.env.API_URL ? "api" : supabaseConfigured ? "supabase" : "mock";
+
 export const api = axios.create({
   baseURL: process.env.API_URL,
-  adapter: process.env.API_URL ? undefined : supabaseConfigured ? supabaseAdapter : mockAdapter,
+  adapter: { api: undefined, supabase: supabaseAdapter, mock: mockAdapter }[dataSource],
 });

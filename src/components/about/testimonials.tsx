@@ -1,16 +1,16 @@
 "use client";
 
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Parallax } from "@/components/ui/parallax";
-import type { getTestimonials } from "@/lib/api/about";
+import { publicQueries } from "@/lib/api/queries";
 import { EASE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-type Testimonials = Awaited<ReturnType<typeof getTestimonials>>;
 
 const initials = (name: string) => name.split(" ").map((w) => w[0]).slice(0, 2).join("");
 const AUTOPLAY_MS = 7000;
@@ -21,7 +21,8 @@ const quoteClass = "max-w-[28ch] text-balance font-display text-[clamp(1.875rem,
  * advances by itself until the reader hovers, focuses or has asked for reduced motion. The quote slides and unblurs
  * out and in, in the direction you are going.
  */
-export function Testimonials({ items }: { items: Testimonials }) {
+export function Testimonials() {
+  const items = useSuspenseQuery(publicQueries.about).data.testimonials; // hydrated by the About page
   const reduce = useReducedMotion();
   const [state, setState] = useState({ index: 0, dir: 1 });
   const [paused, setPaused] = useState(false);

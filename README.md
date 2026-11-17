@@ -37,9 +37,26 @@ Apply all migrations before deploying the matching app version (`npx supabase mi
 Public pages are pre-rendered and their data is cached (Next.js Cache Components: `use cache` with tags, 60-second and one-hour revalidation; the admin's saves clear the matching tags). Admin pages render on request and every admin response is `private, no-store` (`src/proxy.ts`).
 The Content Security Policy is one fixed policy, built in `src/lib/csp.ts` and set in `next.config.ts`: scripts only from this site (inline scripts are allowed because Next and the theme script are inline, and a per-request nonce would stop pages being pre-rendered), no plugins, and `base-uri`, `form-action`, `connect-src` and `img-src` limited. Public framing is same-origin only; admin framing is denied.
 
-Off Vercel, forwarded IP headers are ignored unless `TRUSTED_PROXY_IP_HEADER` names a header overwritten by your ingress.
-Only set it when direct access to Next is blocked. Unknown networks share a conservative contact quota; sign-in uses a browser-scoped
-counter instead of locking an email globally. Supabase's own Auth limits remain important when the ingress is unknown.
+The visitor's IP comes from one header (`trustedClientIp`, `src/lib/request-security.ts`). On Vercel it is `x-vercel-forwarded-for`, and `TRUSTED_PROXY_IP_HEADER` is ignored there.
+Anywhere else, forwarded IP headers are ignored unless `TRUSTED_PROXY_IP_HEADER` names one. Without it every visitor is "unknown" and shares one bucket per limit:
+
+| Endpoint | Per IP, a minute | All "unknown" visitors together | Also |
+|---|---|---|---|
+| `/api/public/*` | 120 | 1200 | Counted in each server instance's memory; returns 429 |
+| `/api/track` | 60 | 600 | 3000 a minute for everyone; extra views are dropped (204) |
+| `/api/vitals` | 120 | 1200 | 6000 a minute for everyone; extra samples are dropped |
+| `/api/errors` | 20 | 200 | 300 a minute for everyone; extra reports are dropped |
+| `/api/contact` | Quota per network | Everyone is one network | Returns 429 |
+
+Without the header, sign-in skips its per-network limit and counts per browser instead of locking an email globally, so Supabase's own Auth limits matter more. The analytics visitor hash loses the IP (only the day and user agent are left).
+
+To set it up:
+- Your ingress must **overwrite** the header on every request, not append to it: the app takes the first comma-separated value. Block direct access to Next so nobody can reach it without passing through the ingress.
+- The value must be a bare IP (`203.0.113.7`, no port). Anything else counts as "unknown".
+- nginx: `proxy_set_header X-Real-IP $remote_addr;` and `TRUSTED_PROXY_IP_HEADER=x-real-ip`.
+- Cloudflare: `TRUSTED_PROXY_IP_HEADER=cf-connecting-ip`, but only if the origin accepts connections from Cloudflare's IP ranges alone.
+- Do not use `x-forwarded-for`. Most proxies append to it, so its first value is whatever the client sent.
+
 New security notices omit network addresses, and rate-limit identifiers are keyed hashes. Historical notices are retained as-is;
 review their retention and any privacy notice for previously stored addresses.
 
