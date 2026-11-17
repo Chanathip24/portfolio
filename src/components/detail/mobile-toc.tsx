@@ -1,11 +1,15 @@
 "use client";
 
-import { Check, List } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { List } from "lucide-react";
+import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
 import type { Heading } from "@/lib/headings";
 import { cn } from "@/lib/utils";
 import { useActiveHeading, useGoToHeading } from "./use-headings";
+
+// The sheet is its own chunk: fetched when the pointer or focus reaches the button, mounted on the first open.
+const loadSheet = () => import("./toc-sheet");
+const TocSheet = dynamic(loadSheet, { ssr: false });
 
 /**
  * Topics below `xl`, where there is no room for a side list. Once the reader is past the title, a pill rides at
@@ -16,6 +20,8 @@ export function MobileToc({ headings }: { headings: Heading[] }) {
   const [active, setActive] = useActiveHeading(headings);
   const go = useGoToHeading();
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const trigger = useRef<HTMLButtonElement>(null);
   const [past, setPast] = useState(false);
 
   useEffect(() => {
@@ -41,8 +47,16 @@ export function MobileToc({ headings }: { headings: Heading[] }) {
         )}
       >
         <button
+          ref={trigger}
           type="button"
-          onClick={() => setOpen(true)}
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          onPointerEnter={loadSheet}
+          onFocus={loadSheet}
+          onClick={() => {
+            setMounted(true);
+            setOpen(true);
+          }}
           tabIndex={past ? 0 : -1}
           aria-label={`On this page: ${headings[index]?.text}, section ${index + 1} of ${headings.length}. Open all sections`}
           className="pointer-events-auto flex h-12 w-full items-center gap-3 rounded-full bg-foreground pl-5 pr-4 text-background shadow-[0_10px_28px_-10px_rgba(0,0,0,0.5)]"
@@ -53,32 +67,7 @@ export function MobileToc({ headings }: { headings: Heading[] }) {
         </button>
       </div>
 
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="bottom" className="max-h-[80dvh] rounded-t-3xl px-2 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-          <SheetHeader>
-            <SheetTitle className="text-xl font-medium">On this page</SheetTitle>
-          </SheetHeader>
-          <ol className="overflow-y-auto px-2">
-            {headings.map((h) => (
-              <li key={h.id}>
-                <button
-                  type="button"
-                  onClick={() => pick(h.id)}
-                  aria-current={h.id === active ? "location" : undefined}
-                  className={cn(
-                    "flex min-h-12 w-full items-center justify-between gap-4 rounded-xl px-4 py-3 text-left text-lg leading-snug",
-                    h.level === 3 && "pl-8 text-base",
-                    h.id === active ? "bg-muted font-medium" : "text-muted-foreground active:bg-muted",
-                  )}
-                >
-                  {h.text}
-                  {h.id === active && <Check aria-hidden className="size-4 shrink-0" strokeWidth={2} />}
-                </button>
-              </li>
-            ))}
-          </ol>
-        </SheetContent>
-      </Sheet>
+      {mounted && <TocSheet trigger={trigger} open={open} onOpenChange={setOpen} headings={headings} active={active} onPick={pick} />}
     </div>
   );
 }
