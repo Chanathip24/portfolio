@@ -22,6 +22,8 @@ const eslintConfig = defineConfig([
     "playwright/.cache/**",
     "playwright-report/**",
     "test-results/**",
+    // Other agents' checkouts.
+    ".claude/worktrees/**",
   ]),
 ]);
 

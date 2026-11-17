@@ -35,6 +35,7 @@ const options = <R extends PublicResource>(resource: R) =>
       return res.json();
     },
     // a 4xx (403, 404, 429) will not change on retry; only network errors and 5xx are retried
+    refetchOnMount: false, // the hydrated snapshot's age comes from "use cache", not from this visit
     retry: (failures, error) => failures < 3 && ((error as { status?: number }).status ?? 500) >= 500,
   });
 
